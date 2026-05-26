@@ -71,7 +71,7 @@
     .wrapper.active { display: block; }
 
     /* ============================================================
-       POP-UP D'OUVERTURE : DEVENU 100% UNIQUE ESPACE FAMILLE
+       POP-UP D'OUVERTURE (ESPACE FAMILLE UNIQUEMENT)
     ============================================================ */
     .auth-screen {
       position: fixed; inset: 0; z-index: 10000; display: flex; align-items: center; justify-content: center;
@@ -89,26 +89,26 @@
     .auth-logo { font-family: var(--font-serif); font-size: 2.8rem; font-weight: 400; color: var(--gold); letter-spacing: 3px; margin-bottom: 5px; }
     .auth-subtitle { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 4px; color: var(--text-muted); margin-bottom: 35px; }
     
-    .form-group { display: flex; flex-direction: column; gap: 8px; width: 100%; text-align: left; }
+    .form-group { display: flex; flex-direction: column; gap: 8px; width: 100%; text-align: left; margin-bottom: 15px; }
     .form-group label { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 2px; color: var(--text-muted); font-weight: 600; }
     
     .form-input, select, textarea {
       background: rgba(17, 10, 5, 0.4); border: 1px solid var(--border-fine); padding: 12px 16px;
       color: var(--text-light); font-family: inherit; font-size: 0.85rem; letter-spacing: 1px; outline: none; transition: all 0.3s; width: 100%; border-radius: 6px;
     }
-    [data-theme="light"] .form-input, [data-theme="light"] select, [data-theme="light"] textarea { background: rgba(255, 255, 255, 0.6); }
+    [data-theme="light"] .form-input, [data-theme="light"] select, [data-theme="light"] textarea { background: rgba(255, 255, 255, 0.6); color: #110a05; }
     .form-input:focus, select:focus, textarea:focus { border-color: var(--gold); background: rgba(197, 168, 128, 0.05); }
     
     .btn-luxe {
       background: var(--gold); color: #110a05; border: none; padding: 14px; font-family: var(--font-sans);
       font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 2px; cursor: pointer;
-      transition: all 0.3s ease; border-radius: 6px; margin-top: 20px; text-align: center; width: 100%;
+      transition: all 0.3s ease; border-radius: 6px; text-align: center; width: 100%;
     }
     .btn-luxe:hover { background: var(--text-light); color: var(--bg-salon); transform: translateY(-1px); }
     .auth-error { color: #d66b53; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; margin-top: 15px; display: none; font-weight: 500; }
 
     /* ============================================================
-       HEADER (CHANGÉ DE STICKY A ABSOLUTE POUR DISPARAITRE AU SCROLL)
+       HEADER (ABSOLUTE - DISPARAÎT AU DEFILEMENT)
     ============================================================ */
     header {
       position: absolute; top: 0; left: 0; right: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between;
@@ -144,11 +144,10 @@
     .btn-quit { background: none; border: none; color: var(--text-muted); font-family: inherit; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1px; cursor: pointer; transition: color 0.3s; }
     .btn-quit:hover { color: var(--gold); }
 
-    /* COMPENSATION DU CORPS POUR LE COUPLAGE ABSOLUTE */
     .main-body-content { padding-top: 90px; }
 
     /* ============================================================
-       TABLEAU DE BORD ADMIN
+       TABLEAU DE BORD & CATALOGUE ADMIN
     ============================================================ */
     .top-dashboard-admin { display: none; max-width: 1300px; margin: 25px auto 0 auto; padding: 0 40px; }
     .dashboard-container { background: var(--panel-bg); backdrop-filter: blur(var(--blur)); border: 1px solid var(--border-fine); border-top: 4px solid var(--gold); padding: 25px; box-shadow: var(--shadow-luxe); margin-bottom: 25px; border-radius: 4px; }
@@ -157,9 +156,9 @@
     
     .btn-clear-all-orders { background: rgba(214, 107, 83, 0.1); border: 1px solid rgba(214, 107, 83, 0.3); color: #e57c67; padding: 6px 12px; font-size: 0.65rem; font-weight: 600; text-transform: uppercase; cursor: pointer; transition: all 0.3s; }
     .btn-clear-all-orders:hover { background: #d66b53; color: #fff; }
-    .order-grid-horizontal { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 15px; max-height: 400px; overflow-y: auto; }
+    .order-grid-horizontal { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 15px; max-height: 300px; overflow-y: auto; margin-bottom: 10px; }
     
-    .order-ticket-luxe { background: rgba(17, 10, 5, 0.3); border: 1px solid var(--border-fine); padding: 15px; border-radius: 6px; display: flex; flex-direction: column; gap: 10px; transition: all 0.2s; cursor: pointer; }
+    .order-ticket-luxe { background: rgba(17, 10, 5, 0.3); border: 1px solid var(--border-fine); padding: 15px; border-radius: 6px; display: flex; flex-direction: column; gap: 10px; }
     .ticket-guest { font-family: var(--font-serif); font-size: 1.25rem; color: var(--gold); font-weight: 600; }
     .ticket-drink { font-size: 0.85rem; font-weight: 600; }
     .ticket-customs-content { font-size: 0.75rem; color: var(--text-muted); background: rgba(197, 168, 128, 0.05); padding: 8px; border-left: 2px solid var(--gold); font-style: italic; white-space: pre-line; }
@@ -167,8 +166,12 @@
     .btn-single-action { width: 100%; border: 1px solid var(--gold); background: transparent; color: var(--gold); font-size: 0.65rem; text-transform: uppercase; letter-spacing: 1px; padding: 10px; cursor: pointer; transition: all 0.3s; font-weight: 600; text-align: center; border-radius: 4px; }
     .btn-single-action:hover { background: var(--gold); color: #110a05; }
 
+    .admin-catalog-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 15px; max-height: 400px; overflow-y: auto; }
+    .admin-catalog-card { background: rgba(17, 10, 5, 0.3); border: 1px solid var(--border-fine); padding: 15px; border-radius: 6px; display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+    .admin-catalog-card span { font-family: var(--font-serif); font-size: 1.1rem; }
+
     /* ============================================================
-       HERO & MENU (DESIGN PRÉSERVÉ)
+       HERO & CRÉATIONS
     ============================================================ */
     .hero-cinematic {
       min-height: 40vh; display: grid; grid-template-columns: 1.2fr 0.8fr; align-items: center;
@@ -204,7 +207,7 @@
     .menu-grid-luxe { display: grid; grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); gap: 30px; }
     
     /* CARTES DU MENU */
-    .carte-item { background: var(--panel-bg); border: 1px solid var(--border-fine); padding: 18px; position: relative; transition: all 0.3s ease; display: flex; flex-direction: column; gap: 12px; box-shadow: var(--shadow-luxe); border-radius: 6px; }
+    .carte-item { background: var(--panel-bg); border: 1px solid var(--border-fine); padding: 18px; position: relative; transition: all 0.3s ease; display: flex; flex-direction: column; gap: 12px; box-shadow: var(--shadow-luxe); border-radius: 6px; cursor: pointer; }
     .carte-item:hover { border-color: var(--gold); transform: translateY(-3px); }
     
     .item-media { width: 100%; aspect-ratio: 16/10; overflow: hidden; position: relative; border-radius: 4px; background: #1a120b; border: 1px solid rgba(197, 168, 128, 0.1); }
@@ -221,23 +224,32 @@
     .item-price { font-family: var(--font-serif); font-size: 1.2rem; color: var(--gold); font-weight: 600; }
     
     .item-description { font-size: 0.75rem; color: var(--text-muted); line-height: 1.5; min-height: 3em; }
-    .item-notes-techniques { display: flex; gap: 12px; font-size: 0.6rem; text-transform: uppercase; letter-spacing: 1px; color: var(--gold-dim); border-top: 1px solid rgba(197, 168, 128, 0.1); padding-top: 8px; margin-top: auto; }
     
-    .btn-order-elixir { background: transparent; border: 1px solid var(--gold); color: var(--gold); padding: 10px; font-family: var(--font-sans); font-size: 0.65rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; cursor: pointer; transition: all 0.3s; text-align: center; border-radius: 4px; }
-    .btn-order-elixir:hover { background: var(--gold); color: #110a05; }
+    .btn-view-product { background: transparent; border: 1px solid var(--gold); color: var(--gold); padding: 10px; font-family: var(--font-sans); font-size: 0.65rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; text-align: center; border-radius: 4px; transition: all 0.3s; margin-top: auto; }
+    .carte-item:hover .btn-view-product { background: var(--gold); color: #110a05; }
 
-    /* SYSTEME DE FENÊTRES MODALES */
+    /* ============================================================
+       ONGLETS DE LA FICHE PRODUIT IMMERSIVE
+    ============================================================ */
+    .tabs-nav-product { display: flex; border-bottom: 1px solid var(--border-fine); margin-bottom: 20px; gap: 20px; }
+    .tab-link-product { background: none; border: none; font-family: var(--font-serif); font-size: 1.2rem; color: var(--text-muted); padding-bottom: 8px; cursor: pointer; position: relative; }
+    .tab-link-product.active { color: var(--gold); }
+    .tab-link-product.active::after { content: ''; position: absolute; bottom: -1px; left: 0; right: 0; height: 2px; background: var(--gold); }
+    .tab-pane-product { display: none; font-size: 0.85rem; color: var(--text-light); line-height: 1.6; white-space: pre-line; min-height: 120px; }
+    .tab-pane-product.active { display: block; }
+    .product-meta-badge { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 1px; color: var(--gold); background: rgba(197, 168, 128, 0.1); padding: 4px 8px; border-radius: 4px; display: inline-block; margin-bottom: 15px; border: 1px solid var(--border-fine); }
+
+    /* MODALES SYSTEM */
     .modal-backdrop-luxe { position: fixed; inset: 0; z-index: 200; background: rgba(17, 10, 5, 0.85); backdrop-filter: blur(8px); display: none; align-items: center; justify-content: center; padding: 15px; }
     .modal-backdrop-luxe.active { display: flex; }
     .modal-box-luxe { background: var(--panel-bg); border: 1px solid var(--gold); padding: 30px; max-width: 520px; width: 100%; border-top: 4px solid var(--gold); box-shadow: var(--shadow-luxe); border-radius: 8px; max-height: 95vh; overflow-y: auto; }
-    .modal-title-luxe { font-family: var(--font-serif); font-size: 1.6rem; color: var(--gold); font-weight: 400; margin-bottom: 20px; }
+    .modal-title-luxe { font-family: var(--font-serif); font-size: 1.6rem; color: var(--gold); font-weight: 400; margin-bottom: 15px; }
     .modal-form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 25px; }
     .span-full { grid-column: 1 / -1; }
 
     /* TOASTS */
     .toast-luxe { position: fixed; bottom: 25px; right: 25px; z-index: 1000; background: var(--panel-bg); border: 1px solid var(--gold); padding: 15px 20px; box-shadow: var(--shadow-luxe); border-radius: 6px; transform: translateY(100px); opacity: 0; transition: all 0.4s ease; pointer-events: none; }
     .toast-luxe.show { transform: translateY(0); opacity: 1; }
-    .toast-text { font-size: 0.8rem; color: var(--text-light); font-weight: 500; }
 
     footer { border-top: 1px solid var(--border-fine); padding: 30px; text-align: center; max-width: 1300px; margin: 0 auto; }
     footer p { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 2px; color: var(--text-muted); }
@@ -265,10 +277,9 @@
 
       .grid-container { padding: 0 20px 50px; }
       .menu-grid-luxe { grid-template-columns: 1fr; gap: 20px; }
-      .top-dashboard-admin { padding: 0 10px; }
+      .top-dashboard-admin { padding: 0 15px; }
       .modal-box-luxe { padding: 20px; }
       .modal-form-grid { grid-template-columns: 1fr; }
-      .toast-luxe { left: 15px; right: 15px; bottom: 15px; text-align: center; }
     }
   </style>
 </head>
@@ -282,9 +293,9 @@
       <h1 class="auth-logo">Sip & Savour</h1>
       <p class="auth-subtitle">Maison de Torréfaction — Espace Famille</p>
       
-      <div class="form-group" style="margin-top: 10px;">
+      <div class="form-group">
         <label for="gateway-password-input">Clé du Salon Privé</label>
-        <input type="password" id="gateway-password-input" class="form-input" placeholder="Entrez le mot de passe famille..." onkeydown="if(event.key === 'Enter') validateGatewayLogin()">
+        <input type="password" id="gateway-password-input" class="form-input" placeholder="Entrez la clé famille..." onkeydown="if(event.key === 'Enter') validateGatewayLogin()">
       </div>
       
       <button type="button" class="btn-luxe" onclick="validateGatewayLogin()">Rejoindre la Table</button>
@@ -312,6 +323,7 @@
     </header>
 
     <div class="main-body-content">
+      
       <section class="top-dashboard-admin" id="adminDashboardZone">
         <div class="dashboard-container">
           <div class="dashboard-header">
@@ -319,6 +331,14 @@
             <button type="button" class="btn-clear-all-orders" onclick="clearAllOrders()">Purger les commandes</button>
           </div>
           <div class="order-grid-horizontal" id="adminOrdersContainer"></div>
+        </div>
+
+        <div class="dashboard-container" style="border-top-color: var(--gold-dim);">
+          <div class="dashboard-header">
+            <h2 class="dashboard-title">Gestion de la Carte des Élixirs</h2>
+            <button type="button" class="btn-luxe" style="width: auto; padding: 8px 16px; margin: 0;" onclick="openRecipeAdminModal(null)">+ Ajouter une création</button>
+          </div>
+          <div class="admin-catalog-grid" id="adminCatalogContainer"></div>
         </div>
       </section>
 
@@ -371,12 +391,32 @@
     </div>
   </div>
 
+  <div class="modal-backdrop-luxe" id="productModal">
+    <div class="modal-box-luxe" style="max-width: 580px;">
+      <h3 class="modal-title-luxe" id="prodModalTitle">Nom du Produit</h3>
+      <div class="product-meta-badge" id="prodModalBadge">Café d'exception</div>
+      
+      <div class="tabs-nav-product">
+        <button type="button" class="tab-link-product active" onclick="switchProductTab('history')">📜 Histoire & Terroir</button>
+        <button type="button" class="tab-link-product" onclick="switchProductTab('recipe')">⏳ Recette & Ratios</button>
+      </div>
+
+      <div id="prodTabHistory" class="tab-pane-product active">Contenu Histoire...</div>
+      <div id="prodTabRecipe" class="tab-pane-product">Contenu Recette...</div>
+
+      <div style="display: flex; gap: 12px; margin-top: 30px; border-top: 1px solid var(--border-fine); padding-top: 20px;">
+        <button type="button" class="btn-luxe" style="background:transparent; border: 1px solid var(--border-fine); color:var(--text-light); flex:1;" onclick="closeProductModal()">Retour au Salon</button>
+        <button type="button" class="btn-luxe" style="flex:1;" id="prodModalOrderActionBtn">Passer la commande</button>
+      </div>
+    </div>
+  </div>
+
   <div class="modal-backdrop-luxe" id="orderModal">
     <div class="modal-box-luxe">
       <h3 class="modal-title-luxe" id="modalDrinkTitle">Ajuster votre préparation</h3>
       <input type="hidden" id="modalDrinkId" />
       
-      <div class="form-group" style="margin-bottom: 15px;">
+      <div class="form-group">
         <label for="guestNameInput">Votre Prénom</label>
         <input type="text" id="guestNameInput" class="form-input" placeholder="Ex: Papa, Maman, Lucas..." />
       </div>
@@ -422,13 +462,68 @@
       </div>
 
       <div class="form-group" style="margin-bottom: 20px;">
-        <label for="customNotesInput">Exigences ou mots doux au barista</label>
-        <input type="text" id="customNotesInput" class="form-input" placeholder="Ex: Servi très chaud, double shot..." />
+        <label for="customNotesInput">Mots doux ou exigences particulières</label>
+        <input type="text" id="customNotesInput" class="form-input" placeholder="Ex: Très chaud, double shot..." />
       </div>
 
       <div style="display: flex; gap: 12px;">
-        <button type="button" class="btn-luxe" style="background:transparent; border: 1px solid var(--border-fine); color:var(--text-light); flex:1; margin-top:0;" onclick="closeOrderModal()">Retour</button>
-        <button type="button" class="btn-luxe send-btn-submit" style="flex:1; margin-top:0;">Transmettre</button>
+        <button type="button" class="btn-luxe" style="background:transparent; border: 1px solid var(--border-fine); color:var(--text-light); flex:1;" onclick="closeOrderModal()">Annuler</button>
+        <button type="button" class="btn-luxe send-btn-submit" style="flex:1;">Transmettre</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-backdrop-luxe" id="recipeAdminModal">
+    <div class="modal-box-luxe" style="max-width: 550px;">
+      <h3 class="modal-title-luxe" id="recipeAdminTitle">Nouvelle Création</h3>
+      <input type="hidden" id="recipeAdminId" />
+      
+      <div class="modal-form-grid">
+        <div class="form-group span-full">
+          <label for="recipeNameInput">Nom de l'élixir</label>
+          <input type="text" id="recipeNameInput" class="form-input" placeholder="Ex: Espresso Bourbon Pointu" />
+        </div>
+        <div class="form-group">
+          <label for="recipePriceInput">Prix (€)</label>
+          <input type="text" id="recipePriceInput" class="form-input" placeholder="6.50" />
+        </div>
+        <div class="form-group">
+          <label for="recipeCatInput">Catégorie</label>
+          <select id="recipeCatInput" class="form-input">
+            <option value="signature">Cafés Signature</option>
+            <option value="prestige">Thés & Infusions</option>
+            <option value="douceurs">Douceurs</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="recipeTempInput">Service</label>
+          <select id="recipeTempInput" class="form-input">
+            <option value="hot">Chaud</option>
+            <option value="cold">Givré</option>
+            <option value="all">Les deux</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="recipeImgInput">Lien de l'image (URL)</label>
+          <input type="text" id="recipeImgInput" class="form-input" placeholder="https://images.unsplash.com/..." />
+        </div>
+        <div class="form-group span-full">
+          <label for="recipeDescInput">Description courte (S'affiche sur la carte)</label>
+          <input type="text" id="recipeDescInput" class="form-input" placeholder="Variété rare, notes de chocolat noir..." />
+        </div>
+        <div class="form-group span-full">
+          <label for="recipeHistoryInput">📜 Onglet Histoire & Origines</label>
+          <textarea id="recipeHistoryInput" rows="4" class="form-input" placeholder="Racontez la légende de ce grain, sa provenance, ses notes de dégustation..."></textarea>
+        </div>
+        <div class="form-group span-full">
+          <label for="recipeFormulaInput">⏳ Onglet Recette & Ratios</label>
+          <textarea id="recipeFormulaInput" rows="3" class="form-input" placeholder="Ex: 18g de café de mouture fine / Extraction 28s / Eau à 93°C."></textarea>
+        </div>
+      </div>
+
+      <div style="display: flex; gap: 12px;">
+        <button type="button" class="btn-luxe" style="background:transparent; border: 1px solid var(--border-fine); color:var(--text-light); flex:1;" onclick="closeRecipeAdminModal()">Fermer</button>
+        <button type="button" class="btn-luxe" style="flex:1;" onclick="saveRecipeFromAdminForm()">Sauvegarder</button>
       </div>
     </div>
   </div>
@@ -439,9 +534,9 @@
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-    import { getFirestore, collection, addDoc, onSnapshot, doc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+    import { getFirestore, collection, addDoc, onSnapshot, doc, deleteDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-    const firebaseConfig = {
+   const firebaseConfig = {
   apiKey: "AIzaSyAZiw4PTPzWiaCRE3rT06iCS012ZzoywOE",
   authDomain: "sipandsavour-672f8.firebaseapp.com",
   databaseURL: "https://sipandsavour-672f8-default-rtdb.europe-west1.firebasedatabase.app",
@@ -456,17 +551,16 @@
       app = initializeApp(firebaseConfig);
       db = getFirestore(app);
     } catch (e) {
-      console.error("Échec Firebase :", e);
+      console.warn("Mode local activé (Firebase non configuré)");
     }
 
-    // LISTE INITIALE DES BOISSONS DU SALON
+    // BASE DE DONNÉES PAR DÉFAUT ÉLÉGANTE ET STRUCTURÉE AVEC HISTOIRE ET RECETTES
     const defaultCatalog = [
-      { id: 1, name: "Espresso Bourbon Pointu", price: "6.50", category: "signature", temp: "hot", img: "https://images.unsplash.com/photo-1510972527409-cac19ff31d7c?w=600&q=80", desc: "Variété rare cultivée sur sols volcaniques. Notes intenses de cacao fin et de litchi Oriental." },
-      { id: 2, name: "Latte Macchiato Maison", price: "7.00", category: "signature", temp: "hot", img: "https://images.unsplash.com/photo-1534778101976-62847782c213?w=600&q=80", desc: "Espresso velouté, crème micro-texturée et coulée d'un caramel au beurre salé maison." },
-      { id: 3, name: "Cold Brew Infusion Azur", price: "7.50", category: "signature", temp: "cold", img: "https://images.unsplash.com/photo-1517701604599-bb29b565090c?w=600&q=80", desc: "Macération lente de 18 heures à froid. Profil aromatique fruité, aérien et d'une fraîcheur totale." },
-      { id: 4, name: "Matcha Cérémoniel Fouetté", price: "8.00", category: "prestige", temp: "hot", img: "https://images.unsplash.com/photo-1536256263959-770b48d82b0a?w=600&q=80", desc: "Poudre pure de thé de Kyoto battue au chasen traditionnel. Texture onctueuse végétale douce." },
-      { id: 5, name: "Iced Chai Latte Secret", price: "7.50", category: "prestige", temp: "cold", img: "https://images.unsplash.com/photo-1551024601-bec78aea704b?w=600&q=80", desc: "Mélange secret d'épices de la maison, extrait noir de Ceylan, frappé intensément sur glace." },
-      { id: 6, name: "Cookie Triple Chocolat & Sel", price: "5.00", category: "douceurs", temp: "all", img: "https://images.unsplash.com/photo-1499636136210-6f4ee915583e?w=600&q=80", desc: "Pâte fine pur beurre, pépites massives de chocolat noir 72% et cristaux de sel de Guérande." }
+      { id: "1", name: "Espresso Bourbon Pointu", price: "6.50", category: "signature", temp: "hot", img: "https://images.unsplash.com/photo-1510972527409-cac19ff31d7c?w=600&q=80", desc: "Variété rare cultivée sur sols volcaniques. Notes de cacao et de fruits tropicaux.", history: "Le Bourbon Pointu est une variété endémique de l'Île de la Réunion, redécouverte au début des années 2000. Historiquement apprécié par Louis XV, ce café d'exception se distingue par sa faible teneur naturelle en caféine et son profil aromatique complexe mariant le litchi frais et le chocolat fin.", recipe: "• Grammage : 16.5g de café moulu fin\n• Extraction : 24 secondes pour 35ml en tasse\n• Eau : Filtrée et calibrée à 92.5°C" },
+      { id: "2", name: "Latte Macchiato Cavale", price: "7.00", category: "signature", temp: "hot", img: "https://images.unsplash.com/photo-1534778101976-62847782c213?w=600&q=80", desc: "Espresso velouté, crème micro-texturée et coulée de caramel filant cuit au chaudron.", history: "Un hommage à la gourmandise des hivers passés près de la cheminée. Notre caramel au beurre salé est fait maison chaque matin par le barista, puis délicatement marbré dans une mousse de lait dense.", recipe: "• Base : 1 shot d'espresso Signature Blend (Brésil/Éthiopie)\n• Lait : 180ml texturé à 65°C pour une micro-mousse soyeuse\n• Caramel : 1 cuillère nappée sur les parois du verre transparent." },
+      { id: "3", name: "Cold Brew Céleste Infusé", price: "7.50", category: "signature", temp: "cold", img: "https://images.unsplash.com/photo-1517701604599-bb29b565090c?w=600&q=80", desc: "Macération lente de 18 heures à froid. Profil aérien et fraîcheur florale absolue.", history: "Issu d'une extraction à froid de près d'une journée complète, cette méthode évite de dissoudre l'amertume du grain pour n'en garder que la douceur pure. Le grain utilisé provient des hauts plateaux du Honduras, apportant des notes de jasmin et d'écorce d'orange douce.", recipe: "• Ratio : 60g de café grossièrement moulu pour 1L d'eau glacée\n• Temps : Infusion de 18 heures à l'abri de la lumière en chambre froide\n• Service : Filtré sur glace limpide dans un verre givré." },
+      { id: "4", name: "Matcha Cérémoniel Fouetté", price: "8.00", category: "prestige", temp: "hot", img: "https://images.unsplash.com/photo-1536256263959-770b48d82b0a?w=600&q=80", desc: "Poudre pure de thé vert de Kyoto battue au chasen. Texture onctueuse et végétale.", history: "Notre Matcha provient de la prestigieuse région d'Uji à Kyoto. Récolté à l'ombre pour concentrer la chlorophylle et les acides aminés, il offre cette couleur émeraude vibrante et cette saveur Umami inimitable, à la fois douce et herbacée.", recipe: "• Quantité : 2g de Matcha de grade impérial tamisé\n• Eau : 70ml d'eau pure chauffée à 75°C précisément\n• Technique : Battu énergiquement en mouvement 'W' à l'aide d'un fouet en bambou traditionnel (Chasen) jusqu'à obtention d'une mousse parfaite." },
+      { id: "5", name: "Cookie Triple Chocolat Noir", price: "5.00", category: "douceurs", temp: "all", img: "https://images.unsplash.com/photo-1499636136210-6f4ee915583e?w=600&q=80", desc: "Pur beurre, pépites de chocolat 72% et cristaux de fleur de sel de Guérande.", history: "Cuit tout doucement tout au long de la journée pour conserver un cœur intensément fondant. Nous marions trois origines de fèves de cacao (Pérou, Équateur, Madagascar) pour un équilibre parfait entre puissance et acidité.", recipe: "• Cuisson : 9 minutes au four à thermostat précis\n• Sortie : Parsemé immédiatement de cristaux fins de fleur de sel de Guérande récoltée à la main." }
     ];
 
     if (!localStorage.getItem('sip_catalog')) {
@@ -479,13 +573,13 @@
     let searchQuery = "";
     let toastTimer = null;
     let unsubscribeOrders = null;
+    let selectedItemForModal = null; // Stocke l'item en cours de visualisation
 
     function validateGatewayLogin() {
       const password = document.getElementById('gateway-password-input').value.trim();
       if (password === 'famille') {
         executeLogin('famille');
       } else if (password === 'admin') {
-        // Permet aussi d'entrer en admin directement si on connaît la clé secrete barista
         executeLogin('admin');
       } else {
         document.getElementById('gateway-global-error').style.display = 'block';
@@ -496,7 +590,7 @@
       const code = prompt("Mode Maître Barista — Entrez votre clé d'accès :");
       if (code === 'admin') {
         executeLogin('admin');
-        showToastNotification("Bienvenue, Maître Barista.");
+        showToastNotification("Bienvenue à votre poste, Chef.");
       } else if (code !== null) {
         alert("Clé incorrecte.");
       }
@@ -527,6 +621,7 @@
         badge.textContent = "Maître Barista / Admin";
         adminZone.style.display = "block";
         startListeningOrdersRealtime();
+        renderAdminCatalogList();
       } else {
         badge.textContent = "Salon Famille";
         adminZone.style.display = "none";
@@ -534,6 +629,7 @@
     }
 
     function getCatalog() { return JSON.parse(localStorage.getItem('sip_catalog')) || []; }
+    function saveCatalog(cat) { localStorage.setItem('sip_catalog', JSON.stringify(cat)); }
 
     function startListeningOrdersRealtime() {
       if (unsubscribeOrders) unsubscribeOrders();
@@ -575,7 +671,29 @@
       });
     }
 
-    // LOGIQUE DE FILTRAGE PARFAITE ET SÉCURISÉE
+    /* ============================================================
+       Nouveau : LISTE DU CATALOGUE POUR AFFICHAGE ET MODIF ADMIN
+    ============================================================ */
+    function renderAdminCatalogList() {
+      const container = document.getElementById('adminCatalogContainer');
+      container.innerHTML = "";
+      const catalog = getCatalog();
+      
+      catalog.forEach(item => {
+        const row = document.createElement('div');
+        row.className = "admin-catalog-card";
+        row.innerHTML = `
+          <span style="font-weight:600;">${item.name}</span>
+          <button type="button" class="btn-single-action" style="width:auto; padding:5px 10px;">Modifier</button>
+        `;
+        row.querySelector('button').addEventListener('click', () => {
+          openRecipeAdminModal(item);
+        });
+        container.appendChild(row);
+      });
+    }
+
+    /* RENDU GÉNÉRAL DE LA GRILLE */
     function renderGrid() {
       const grid = document.getElementById('menuGrid');
       grid.innerHTML = "";
@@ -589,7 +707,7 @@
       });
 
       if(filtered.length === 0) {
-        grid.innerHTML = `<div style="grid-column:1/-1; text-align:center; color:var(--text-muted); padding:40px; font-size:0.9rem;">Aucun élixir ne correspond à vos critères actuels.</div>`;
+        grid.innerHTML = `<div style="grid-column:1/-1; text-align:center; color:var(--text-muted); padding:40px; font-size:0.9rem;">Aucun élixir ne correspond.</div>`;
         return;
       }
 
@@ -606,21 +724,143 @@
             <span class="item-price">${item.price} €</span>
           </div>
           <p class="item-description">${item.desc}</p>
-          <button type="button" class="btn-order-elixir" data-id="${item.id}" data-name="${item.name}">Commander</button>
+          <button type="button" class="btn-view-product">Découvrir l'Élixir</button>
         `;
+        
+        // Clic n'importe où sur la carte pour ouvrir la Fiche Produit Immersion
+        card.addEventListener('click', () => {
+          openProductImmersiveModal(item);
+        });
+
         grid.appendChild(card);
       });
     }
 
+    /* ============================================================
+       Nouveau : LOGIQUE DE LA FICHE IMMERSIVE (TABS HISTOIRE / RECETTE)
+    ============================================================ */
+    function openProductImmersiveModal(item) {
+      selectedItemForModal = item;
+      document.getElementById('prodModalTitle').textContent = item.name;
+      
+      let catText = item.category === 'signature' ? "Café d'Exception — Signature" : (item.category === 'prestige' ? "Thé & Infusion de Prestige" : "Douceur de la Maison");
+      document.getElementById('prodModalBadge').textContent = catText;
+      
+      document.getElementById('prodTabHistory').textContent = item.history || "L'histoire de cet élixir est jalousement gardée par notre maître artisan.";
+      document.getElementById('prodTabRecipe').textContent = item.recipe || "Mouture sur-mesure, eau filtrée purifiée. Ajustements secrets réalisés au comptoir.";
+      
+      switchProductTab('history'); // reset sur premier onglet
+      
+      // Configuration du bouton de commande attaché à cet item
+      const orderActionBtn = document.getElementById('prodModalOrderActionBtn');
+      orderActionBtn.onclick = () => {
+        closeProductModal();
+        openOrderModal(item.id, item.name);
+      };
+
+      document.getElementById('productModal').classList.add('active');
+    }
+
+    function closeProductModal() {
+      document.getElementById('productModal').classList.remove('active');
+    }
+
+    function switchProductTab(tabName) {
+      const links = document.querySelectorAll('.tab-link-product');
+      const panes = document.querySelectorAll('.tab-pane-product');
+      
+      links.forEach(l => l.classList.remove('active'));
+      panes.forEach(p => p.classList.remove('active'));
+      
+      if (tabName === 'history') {
+        links[0].classList.add('active');
+        document.getElementById('prodTabHistory').classList.add('active');
+      } else {
+        links[1].classList.add('active');
+        document.getElementById('prodTabRecipe').classList.add('active');
+      }
+    }
+
+    /* MODAL DE CONFIGURATION FORMULAIRE CLIENT DE COMMANDE */
     function openOrderModal(id, name) {
       document.getElementById('modalDrinkId').value = id;
       const title = document.getElementById('modalDrinkTitle');
-      title.textContent = `Ajuster — ${name}`;
+      title.textContent = `Personnaliser — ${name}`;
       title.setAttribute('data-drink-name', name);
       document.getElementById('orderModal').classList.add('active');
     }
-
     function closeOrderModal() { document.getElementById('orderModal').classList.remove('active'); }
+
+    /* ============================================================
+       Nouveau : OUVERTURE MODAL RECETTE/BOISSON POUR L'ADMIN
+    ============================================================ */
+    function openRecipeAdminModal(item = null) {
+      const title = document.getElementById('recipeAdminTitle');
+      if (item) {
+        title.textContent = `Modifier — ${item.name}`;
+        document.getElementById('recipeAdminId').value = item.id;
+        document.getElementById('recipeNameInput').value = item.name;
+        document.getElementById('recipePriceInput').value = item.price;
+        document.getElementById('recipeCatInput').value = item.category;
+        document.getElementById('recipeTempInput').value = item.temp;
+        document.getElementById('recipeImgInput').value = item.img;
+        document.getElementById('recipeDescInput').value = item.desc;
+        document.getElementById('recipeHistoryInput').value = item.history || "";
+        document.getElementById('recipeFormulaInput').value = item.recipe || "";
+      } else {
+        title.textContent = "Créer un nouvel Élixir";
+        document.getElementById('recipeAdminId').value = "";
+        document.getElementById('recipeNameInput').value = "";
+        document.getElementById('recipePriceInput').value = "6.00";
+        document.getElementById('recipeCatInput').value = "signature";
+        document.getElementById('recipeTempInput').value = "hot";
+        document.getElementById('recipeImgInput').value = "https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?w=600&q=80";
+        document.getElementById('recipeDescInput').value = "";
+        document.getElementById('recipeHistoryInput').value = "";
+        document.getElementById('recipeFormulaInput').value = "";
+      }
+      document.getElementById('recipeAdminModal').classList.add('active');
+    }
+
+    function closeRecipeAdminModal() {
+      document.getElementById('recipeAdminModal').classList.remove('active');
+    }
+
+    /* Nouveau : SAUVEGARDE DE LA RECCETE DANS LE CATALOGUE (ADMIN) */
+    async function saveRecipeFromAdminForm() {
+      const id = document.getElementById('recipeAdminId').value || String(Date.now());
+      const name = document.getElementById('recipeNameInput').value.trim() || "Nouvel Élixir";
+      const price = document.getElementById('recipePriceInput').value.trim() || "6.00";
+      const category = document.getElementById('recipeCatInput').value;
+      const temp = document.getElementById('recipeTempInput').value;
+      const img = document.getElementById('recipeImgInput').value.trim();
+      const desc = document.getElementById('recipeDescInput').value.trim() || "Description à venir.";
+      const history = document.getElementById('recipeHistoryInput').value.trim();
+      const recipeText = document.getElementById('recipeFormulaInput').value.trim();
+
+      let catalog = getCatalog();
+      const itemIndex = catalog.findIndex(x => x.id === id);
+
+      const payload = { id, name, price, category, temp, img, desc, history, recipe: recipeText };
+
+      if (itemIndex > -1) {
+        catalog[itemIndex] = payload;
+      } else {
+        catalog.push(payload);
+      }
+
+      saveCatalog(catalog);
+      
+      // Optionnel : pousser sur cloud Firebase si configuré
+      if(db) {
+        try { await setDoc(doc(db, "catalog", id), payload); } catch(err) { console.error(err); }
+      }
+
+      closeRecipeAdminModal();
+      showToastNotification(`✨ La carte a été mise à jour !`);
+      renderGrid();
+      renderAdminCatalogList();
+    }
 
     function showToastNotification(text) {
       if (toastTimer) clearTimeout(toastTimer);
@@ -642,18 +882,20 @@
       }
     }
 
-    // EXPOSITION DES FONCTIONS GLOBALES
+    // EXPOSITION GLOBALE WINDOW
     window.validateGatewayLogin = validateGatewayLogin;
     window.triggerAdminAccessSecret = triggerAdminAccessSecret;
     window.logout = logout;
     window.toggleThemeSystem = toggleThemeSystem;
     window.closeOrderModal = closeOrderModal;
+    window.closeProductModal = closeProductModal;
+    window.switchProductTab = switchProductTab;
+    window.openRecipeAdminModal = openRecipeAdminModal;
+    window.closeRecipeAdminModal = closeRecipeAdminModal;
+    window.saveRecipeFromAdminForm = saveRecipeFromAdminForm;
 
+    // ÉCOUTEURS
     document.addEventListener("click", async (e) => {
-      if (e.target && e.target.classList.contains("btn-order-elixir")) {
-        openOrderModal(e.target.getAttribute('data-id'), e.target.getAttribute('data-name'));
-      }
-      
       if (e.target && e.target.classList.contains("send-btn-submit")) {
         const drinkName = document.getElementById('modalDrinkTitle').getAttribute('data-drink-name');
         const guestName = document.getElementById('guestNameInput').value.trim() || "Un membre de la famille";
@@ -689,7 +931,6 @@
         renderGrid();
       });
 
-      // ACTIVATION CORRIGÉE DU FILTRE DE CATÉGORIES
       document.querySelectorAll('.filter-btn-luxe').forEach(btn => {
         btn.addEventListener('click', () => {
           document.querySelectorAll('.filter-btn-luxe').forEach(p => p.classList.remove('active'));
@@ -699,7 +940,6 @@
         });
       });
 
-      // CORRECTION ET CORRÉLATION ACTIVE POUR LES FILTRES CHAUD / GIVRÉ
       document.querySelectorAll('.temp-btn-luxe').forEach(btn => {
         btn.addEventListener('click', () => {
           document.querySelectorAll('.temp-btn-luxe').forEach(p => p.classList.remove('active'));
