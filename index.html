@@ -229,10 +229,10 @@
     .carte-item:hover .btn-view-product { background: var(--gold); color: #110a05; }
 
     /* ============================================================
-       ONGLETS DE LA FICHE PRODUIT IMMERSIVE
+       ONGLETS DE LA FICHE PRODUIT IMMERSIVE (3 ONGLETS)
     ============================================================ */
-    .tabs-nav-product { display: flex; border-bottom: 1px solid var(--border-fine); margin-bottom: 20px; gap: 20px; }
-    .tab-link-product { background: none; border: none; font-family: var(--font-serif); font-size: 1.2rem; color: var(--text-muted); padding-bottom: 8px; cursor: pointer; position: relative; }
+    .tabs-nav-product { display: flex; border-bottom: 1px solid var(--border-fine); margin-bottom: 20px; gap: 15px; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+    .tab-link-product { background: none; border: none; font-family: var(--font-serif); font-size: 1.15rem; color: var(--text-muted); padding-bottom: 8px; cursor: pointer; position: relative; white-space: nowrap; }
     .tab-link-product.active { color: var(--gold); }
     .tab-link-product.active::after { content: ''; position: absolute; bottom: -1px; left: 0; right: 0; height: 2px; background: var(--gold); }
     .tab-pane-product { display: none; font-size: 0.85rem; color: var(--text-light); line-height: 1.6; white-space: pre-line; min-height: 120px; }
@@ -399,10 +399,12 @@
       <div class="tabs-nav-product">
         <button type="button" class="tab-link-product active" onclick="switchProductTab('history')">📜 Histoire & Terroir</button>
         <button type="button" class="tab-link-product" onclick="switchProductTab('recipe')">⏳ Recette & Ratios</button>
+        <button type="button" class="tab-link-product" onclick="switchProductTab('gear')">🛠️ Matériel utilisé</button>
       </div>
 
       <div id="prodTabHistory" class="tab-pane-product active">Contenu Histoire...</div>
       <div id="prodTabRecipe" class="tab-pane-product">Contenu Recette...</div>
+      <div id="prodTabGear" class="tab-pane-product">Contenu Matériel...</div>
 
       <div style="display: flex; gap: 12px; margin-top: 30px; border-top: 1px solid var(--border-fine); padding-top: 20px;">
         <button type="button" class="btn-luxe" style="background:transparent; border: 1px solid var(--border-fine); color:var(--text-light); flex:1;" onclick="closeProductModal()">Retour au Salon</button>
@@ -513,11 +515,15 @@
         </div>
         <div class="form-group span-full">
           <label for="recipeHistoryInput">📜 Onglet Histoire & Origines</label>
-          <textarea id="recipeHistoryInput" rows="4" class="form-input" placeholder="Racontez la légende de ce grain, sa provenance, ses notes de dégustation..."></textarea>
+          <textarea id="recipeHistoryInput" rows="3" class="form-input" placeholder="Racontez la légende de ce grain, sa provenance..."></textarea>
         </div>
         <div class="form-group span-full">
           <label for="recipeFormulaInput">⏳ Onglet Recette & Ratios</label>
-          <textarea id="recipeFormulaInput" rows="3" class="form-input" placeholder="Ex: 18g de café de mouture fine / Extraction 28s / Eau à 93°C."></textarea>
+          <textarea id="recipeFormulaInput" rows="3" class="form-input" placeholder="Ex: 18g de café / Extraction 28s / Eau à 93°C."></textarea>
+        </div>
+        <div class="form-group span-full">
+          <label for="recipeGearInput">🛠️ Onglet Matériel utilisé</label>
+          <textarea id="recipeGearInput" rows="2" class="form-input" placeholder="Ex: Machine Expresso, Moulin à meules plates, Balance connectée..."></textarea>
         </div>
       </div>
 
@@ -554,13 +560,13 @@
       console.warn("Mode local activé (Firebase non configuré)");
     }
 
-    // BASE DE DONNÉES PAR DÉFAUT ÉLÉGANTE ET STRUCTURÉE AVEC HISTOIRE ET RECETTES
+    // BASE DE DONNÉES CATALOGUE AVEC LES 3 PLANS D'INFORMATION
     const defaultCatalog = [
-      { id: "1", name: "Espresso Bourbon Pointu", price: "6.50", category: "signature", temp: "hot", img: "https://images.unsplash.com/photo-1510972527409-cac19ff31d7c?w=600&q=80", desc: "Variété rare cultivée sur sols volcaniques. Notes de cacao et de fruits tropicaux.", history: "Le Bourbon Pointu est une variété endémique de l'Île de la Réunion, redécouverte au début des années 2000. Historiquement apprécié par Louis XV, ce café d'exception se distingue par sa faible teneur naturelle en caféine et son profil aromatique complexe mariant le litchi frais et le chocolat fin.", recipe: "• Grammage : 16.5g de café moulu fin\n• Extraction : 24 secondes pour 35ml en tasse\n• Eau : Filtrée et calibrée à 92.5°C" },
-      { id: "2", name: "Latte Macchiato Cavale", price: "7.00", category: "signature", temp: "hot", img: "https://images.unsplash.com/photo-1534778101976-62847782c213?w=600&q=80", desc: "Espresso velouté, crème micro-texturée et coulée de caramel filant cuit au chaudron.", history: "Un hommage à la gourmandise des hivers passés près de la cheminée. Notre caramel au beurre salé est fait maison chaque matin par le barista, puis délicatement marbré dans une mousse de lait dense.", recipe: "• Base : 1 shot d'espresso Signature Blend (Brésil/Éthiopie)\n• Lait : 180ml texturé à 65°C pour une micro-mousse soyeuse\n• Caramel : 1 cuillère nappée sur les parois du verre transparent." },
-      { id: "3", name: "Cold Brew Céleste Infusé", price: "7.50", category: "signature", temp: "cold", img: "https://images.unsplash.com/photo-1517701604599-bb29b565090c?w=600&q=80", desc: "Macération lente de 18 heures à froid. Profil aérien et fraîcheur florale absolue.", history: "Issu d'une extraction à froid de près d'une journée complète, cette méthode évite de dissoudre l'amertume du grain pour n'en garder que la douceur pure. Le grain utilisé provient des hauts plateaux du Honduras, apportant des notes de jasmin et d'écorce d'orange douce.", recipe: "• Ratio : 60g de café grossièrement moulu pour 1L d'eau glacée\n• Temps : Infusion de 18 heures à l'abri de la lumière en chambre froide\n• Service : Filtré sur glace limpide dans un verre givré." },
-      { id: "4", name: "Matcha Cérémoniel Fouetté", price: "8.00", category: "prestige", temp: "hot", img: "https://images.unsplash.com/photo-1536256263959-770b48d82b0a?w=600&q=80", desc: "Poudre pure de thé vert de Kyoto battue au chasen. Texture onctueuse et végétale.", history: "Notre Matcha provient de la prestigieuse région d'Uji à Kyoto. Récolté à l'ombre pour concentrer la chlorophylle et les acides aminés, il offre cette couleur émeraude vibrante et cette saveur Umami inimitable, à la fois douce et herbacée.", recipe: "• Quantité : 2g de Matcha de grade impérial tamisé\n• Eau : 70ml d'eau pure chauffée à 75°C précisément\n• Technique : Battu énergiquement en mouvement 'W' à l'aide d'un fouet en bambou traditionnel (Chasen) jusqu'à obtention d'une mousse parfaite." },
-      { id: "5", name: "Cookie Triple Chocolat Noir", price: "5.00", category: "douceurs", temp: "all", img: "https://images.unsplash.com/photo-1499636136210-6f4ee915583e?w=600&q=80", desc: "Pur beurre, pépites de chocolat 72% et cristaux de fleur de sel de Guérande.", history: "Cuit tout doucement tout au long de la journée pour conserver un cœur intensément fondant. Nous marions trois origines de fèves de cacao (Pérou, Équateur, Madagascar) pour un équilibre parfait entre puissance et acidité.", recipe: "• Cuisson : 9 minutes au four à thermostat précis\n• Sortie : Parsemé immédiatement de cristaux fins de fleur de sel de Guérande récoltée à la main." }
+      { id: "1", name: "Espresso Bourbon Pointu", price: "6.50", category: "signature", temp: "hot", img: "https://images.unsplash.com/photo-1510972527409-cac19ff31d7c?w=600&q=80", desc: "Variété rare cultivée sur sols volcaniques. Notes de cacao et de fruits tropicaux.", history: "Le Bourbon Pointu est une variété endémique de l'Île de la Réunion, redécouverte au début des années 2000. Historiquement apprécié par Louis XV, ce café d'exception se distingue par sa faible teneur naturelle en caféine et son profil aromatique complexe mariant le litchi frais et le chocolat fin.", recipe: "• Grammage : 16.5g de café moulu fin\n• Extraction : 24 secondes pour 35ml en tasse\n• Eau : Filtrée et calibrée à 92.5°C", gear: "• Machine Expresso Professionnelle\n• Moulin de précision (Meules plates de 64mm)\n• Balance connectée de Barista\n• Tamper rotatif de distribution" },
+      { id: "2", name: "Latte Macchiato Cavale", price: "7.00", category: "signature", temp: "hot", img: "https://images.unsplash.com/photo-1534778101976-62847782c213?w=600&q=80", desc: "Espresso velouté, crème micro-texturée et coulée de caramel filant cuit au chaudron.", history: "Un hommage à la gourmandise des hivers passés près de la cheminée. Notre caramel au beurre salé est fait maison chaque matin par le barista, puis délicatement marbré dans une mousse de lait dense.", recipe: "• Base : 1 shot d'espresso Signature Blend (Brésil/Éthiopie)\n• Lait : 180ml texturé à 65°C pour une micro-mousse soyeuse\n• Caramel : 1 cuillère nappée sur les parois du verre transparent.", gear: "• Buse vapeur haute pression (Texturation du lait)\n• Pichet d'extraction en Inox (350ml)\n• Chaudron en cuivre (pour la cuisson matinale du caramel)" },
+      { id: "3", name: "Cold Brew Céleste Infusé", price: "7.50", category: "signature", temp: "cold", img: "https://images.unsplash.com/photo-1517701604599-bb29b565090c?w=600&q=80", desc: "Macération lente de 18 heures à froid. Profil aérien et fraîcheur florale absolue.", history: "Issu d'une extraction à froid de près d'une journée complète, cette méthode évite de dissoudre l'amertume du grain pour n'en garder que la douceur pure. Le grain utilisé provient des hauts plateaux du Honduras, apportant des notes de jasmin et d'écorce d'orange douce.", recipe: "• Ratio : 60g de café grossièrement moulu pour 1L d'eau glacée\n• Temps : Infusion de 18 heures à l'abri de la lumière en chambre froide\n• Service : Filtré sur glace limpide dans un verre givré.", gear: "• Tour de filtration à froid en verre borosilicate\n• Filtres en tissu organique réutilisables\n• Carafe de stockage hermétique" },
+      { id: "4", name: "Matcha Cérémoniel Fouetté", price: "8.00", category: "prestige", temp: "hot", img: "https://images.unsplash.com/photo-1536256263959-770b48d82b0a?w=600&q=80", desc: "Poudre pure de thé vert de Kyoto battue au chasen. Texture onctueuse et végétale.", history: "Notre Matcha provient de la prestigieuse région d'Uji à Kyoto. Récolté à l'ombre pour concentrer la chlorophylle et les acides aminés, il offre cette couleur émeraude vibrante et cette saveur Umami inimitable, à la fois douce et herbacée.", recipe: "• Quantité : 2g de Matcha de grade impérial tamisé\n• Eau : 70ml d'eau pure chauffée à 75°C précisément\n• Technique : Battu énergiquement en mouvement 'W' jusqu'à obtention d'une mousse parfaite.", gear: "• Chawan (Bol traditionnel en céramique japonaise)\n• Chasen (Fouet 100 brins en bambou doré)\n• Chashaku (Cuillère doseuse fine en bambou)\n• Tamis à thé ultra-fin" },
+      { id: "5", name: "Cookie Triple Chocolat Noir", price: "5.00", category: "douceurs", temp: "all", img: "https://images.unsplash.com/photo-1499636136210-6f4ee915583e?w=600&q=80", desc: "Pur beurre, pépites de chocolat 72% et cristaux de fleur de sel de Guérande.", history: "Cuit tout doucement tout au long de la journée pour conserver un cœur intensément fondant. Nous marions trois origines de fèves de cacao (Pérou, Équateur, Madagascar) pour un équilibre parfait entre puissance et acidité.", recipe: "• Cuisson : 9 minutes au four à thermostat précis\n• Sortie : Parsemé immédiatement de cristaux fins de fleur de sel de Guérande récoltée à la main.", gear: "• Four à chaleur tournante calibré\n• Toile de cuisson en silicone alimentaire\n• Grille de refroidissement d'orfèvre" }
     ];
 
     if (!localStorage.getItem('sip_catalog')) {
@@ -573,17 +579,13 @@
     let searchQuery = "";
     let toastTimer = null;
     let unsubscribeOrders = null;
-    let selectedItemForModal = null; // Stocke l'item en cours de visualisation
+    let selectedItemForModal = null;
 
     function validateGatewayLogin() {
       const password = document.getElementById('gateway-password-input').value.trim();
-      if (password === 'famille') {
-        executeLogin('famille');
-      } else if (password === 'admin') {
-        executeLogin('admin');
-      } else {
-        document.getElementById('gateway-global-error').style.display = 'block';
-      }
+      if (password === 'famille') executeLogin('famille');
+      else if (password === 'admin') executeLogin('admin');
+      else document.getElementById('gateway-global-error').style.display = 'block';
     }
 
     function triggerAdminAccessSecret() {
@@ -671,14 +673,10 @@
       });
     }
 
-    /* ============================================================
-       Nouveau : LISTE DU CATALOGUE POUR AFFICHAGE ET MODIF ADMIN
-    ============================================================ */
     function renderAdminCatalogList() {
       const container = document.getElementById('adminCatalogContainer');
       container.innerHTML = "";
       const catalog = getCatalog();
-      
       catalog.forEach(item => {
         const row = document.createElement('div');
         row.className = "admin-catalog-card";
@@ -686,14 +684,11 @@
           <span style="font-weight:600;">${item.name}</span>
           <button type="button" class="btn-single-action" style="width:auto; padding:5px 10px;">Modifier</button>
         `;
-        row.querySelector('button').addEventListener('click', () => {
-          openRecipeAdminModal(item);
-        });
+        row.querySelector('button').addEventListener('click', () => { openRecipeAdminModal(item); });
         container.appendChild(row);
       });
     }
 
-    /* RENDU GÉNÉRAL DE LA GRILLE */
     function renderGrid() {
       const grid = document.getElementById('menuGrid');
       grid.innerHTML = "";
@@ -726,19 +721,12 @@
           <p class="item-description">${item.desc}</p>
           <button type="button" class="btn-view-product">Découvrir l'Élixir</button>
         `;
-        
-        // Clic n'importe où sur la carte pour ouvrir la Fiche Produit Immersion
-        card.addEventListener('click', () => {
-          openProductImmersiveModal(item);
-        });
-
+        card.addEventListener('click', () => { openProductImmersiveModal(item); });
         grid.appendChild(card);
       });
     }
 
-    /* ============================================================
-       Nouveau : LOGIQUE DE LA FICHE IMMERSIVE (TABS HISTOIRE / RECETTE)
-    ============================================================ */
+    /* GESTION COMPLÈTE DE LA FICHE IMMERSIVE À 3 ONGLETS */
     function openProductImmersiveModal(item) {
       selectedItemForModal = item;
       document.getElementById('prodModalTitle').textContent = item.name;
@@ -746,12 +734,12 @@
       let catText = item.category === 'signature' ? "Café d'Exception — Signature" : (item.category === 'prestige' ? "Thé & Infusion de Prestige" : "Douceur de la Maison");
       document.getElementById('prodModalBadge').textContent = catText;
       
-      document.getElementById('prodTabHistory').textContent = item.history || "L'histoire de cet élixir est jalousement gardée par notre maître artisan.";
-      document.getElementById('prodTabRecipe').textContent = item.recipe || "Mouture sur-mesure, eau filtrée purifiée. Ajustements secrets réalisés au comptoir.";
+      document.getElementById('prodTabHistory').textContent = item.history || "L'histoire de cet élixir est gardée par notre maître artisan.";
+      document.getElementById('prodTabRecipe').textContent = item.recipe || "Ajustements et ratios précis réalisés au comptoir.";
+      document.getElementById('prodTabGear').textContent = item.gear || "Matériel de précision standard de baristerie.";
       
-      switchProductTab('history'); // reset sur premier onglet
+      switchProductTab('history'); 
       
-      // Configuration du bouton de commande attaché à cet item
       const orderActionBtn = document.getElementById('prodModalOrderActionBtn');
       orderActionBtn.onclick = () => {
         closeProductModal();
@@ -761,9 +749,7 @@
       document.getElementById('productModal').classList.add('active');
     }
 
-    function closeProductModal() {
-      document.getElementById('productModal').classList.remove('active');
-    }
+    function closeProductModal() { document.getElementById('productModal').classList.remove('active'); }
 
     function switchProductTab(tabName) {
       const links = document.querySelectorAll('.tab-link-product');
@@ -775,13 +761,15 @@
       if (tabName === 'history') {
         links[0].classList.add('active');
         document.getElementById('prodTabHistory').classList.add('active');
-      } else {
+      } else if (tabName === 'recipe') {
         links[1].classList.add('active');
         document.getElementById('prodTabRecipe').classList.add('active');
+      } else {
+        links[2].classList.add('active');
+        document.getElementById('prodTabGear').classList.add('active');
       }
     }
 
-    /* MODAL DE CONFIGURATION FORMULAIRE CLIENT DE COMMANDE */
     function openOrderModal(id, name) {
       document.getElementById('modalDrinkId').value = id;
       const title = document.getElementById('modalDrinkTitle');
@@ -791,9 +779,6 @@
     }
     function closeOrderModal() { document.getElementById('orderModal').classList.remove('active'); }
 
-    /* ============================================================
-       Nouveau : OUVERTURE MODAL RECETTE/BOISSON POUR L'ADMIN
-    ============================================================ */
     function openRecipeAdminModal(item = null) {
       const title = document.getElementById('recipeAdminTitle');
       if (item) {
@@ -807,6 +792,7 @@
         document.getElementById('recipeDescInput').value = item.desc;
         document.getElementById('recipeHistoryInput').value = item.history || "";
         document.getElementById('recipeFormulaInput').value = item.recipe || "";
+        document.getElementById('recipeGearInput').value = item.gear || "";
       } else {
         title.textContent = "Créer un nouvel Élixir";
         document.getElementById('recipeAdminId').value = "";
@@ -818,15 +804,13 @@
         document.getElementById('recipeDescInput').value = "";
         document.getElementById('recipeHistoryInput').value = "";
         document.getElementById('recipeFormulaInput').value = "";
+        document.getElementById('recipeGearInput').value = "";
       }
       document.getElementById('recipeAdminModal').classList.add('active');
     }
 
-    function closeRecipeAdminModal() {
-      document.getElementById('recipeAdminModal').classList.remove('active');
-    }
+    function closeRecipeAdminModal() { document.getElementById('recipeAdminModal').classList.remove('active'); }
 
-    /* Nouveau : SAUVEGARDE DE LA RECCETE DANS LE CATALOGUE (ADMIN) */
     async function saveRecipeFromAdminForm() {
       const id = document.getElementById('recipeAdminId').value || String(Date.now());
       const name = document.getElementById('recipeNameInput').value.trim() || "Nouvel Élixir";
@@ -837,21 +821,18 @@
       const desc = document.getElementById('recipeDescInput').value.trim() || "Description à venir.";
       const history = document.getElementById('recipeHistoryInput').value.trim();
       const recipeText = document.getElementById('recipeFormulaInput').value.trim();
+      const gearText = document.getElementById('recipeGearInput').value.trim();
 
       let catalog = getCatalog();
       const itemIndex = catalog.findIndex(x => x.id === id);
 
-      const payload = { id, name, price, category, temp, img, desc, history, recipe: recipeText };
+      const payload = { id, name, price, category, temp, img, desc, history, recipe: recipeText, gear: gearText };
 
-      if (itemIndex > -1) {
-        catalog[itemIndex] = payload;
-      } else {
-        catalog.push(payload);
-      }
+      if (itemIndex > -1) catalog[itemIndex] = payload;
+      else catalog.push(payload);
 
       saveCatalog(catalog);
       
-      // Optionnel : pousser sur cloud Firebase si configuré
       if(db) {
         try { await setDoc(doc(db, "catalog", id), payload); } catch(err) { console.error(err); }
       }
@@ -894,7 +875,6 @@
     window.closeRecipeAdminModal = closeRecipeAdminModal;
     window.saveRecipeFromAdminForm = saveRecipeFromAdminForm;
 
-    // ÉCOUTEURS
     document.addEventListener("click", async (e) => {
       if (e.target && e.target.classList.contains("send-btn-submit")) {
         const drinkName = document.getElementById('modalDrinkTitle').getAttribute('data-drink-name');
