@@ -7,7 +7,7 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght=0,400;0,600;0,700;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght=0,400;0,600;0,700;1,400&family=Montserrat:wght=300;400;500;600&display=swap" rel="stylesheet" />
 
   <style>
     /* ============================================================
@@ -53,14 +53,12 @@
       transition: background-color 0.4s ease, color 0.4s ease;
     }
 
-    /* Grain de papier de fond subtil pour éviter l'effet "plat" */
     body::before {
       content: '';
       position: fixed; inset: 0; z-index: 9999; pointer-events: none;
       background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
     }
 
-    /* Lueurs d'ambiance de fond qui créent le style haut de gamme */
     .ambiance-glow {
       position: fixed; width: 450px; height: 450px; border-radius: 50%;
       background: radial-gradient(circle, rgba(197, 168, 128, 0.08) 0%, transparent 70%);
@@ -73,11 +71,11 @@
     .wrapper.active { display: block; }
 
     /* ============================================================
-       POP-UP D'OUVERTURE / ACCÈS PRIVÉ INITIAL
+       POP-UP D'OUVERTURE : DEVENU 100% UNIQUE ESPACE FAMILLE
     ============================================================ */
     .auth-screen {
       position: fixed; inset: 0; z-index: 10000; display: flex; align-items: center; justify-content: center;
-      background: linear-gradient(rgba(17, 10, 5, 0.8), rgba(17, 10, 5, 0.98)), 
+      background: linear-gradient(rgba(17, 10, 5, 0.85), rgba(17, 10, 5, 0.98)), 
                   url('https://images.unsplash.com/photo-1447933601403-0c6688de566e?w=1200&q=80') center/cover no-repeat;
       padding: 20px; transition: opacity 0.5s ease, transform 0.5s ease;
     }
@@ -85,15 +83,11 @@
     
     .auth-card {
       background: var(--panel-bg); backdrop-filter: blur(var(--blur)); -webkit-backdrop-filter: blur(var(--blur));
-      border: 1px solid var(--border-fine); padding: 45px 35px; border-radius: 12px; max-width: 450px; width: 100%;
+      border: 1px solid var(--border-fine); padding: 45px 35px; border-radius: 12px; max-width: 420px; width: 100%;
       box-shadow: var(--shadow-luxe); text-align: center; border-top: 4px solid var(--gold);
     }
     .auth-logo { font-family: var(--font-serif); font-size: 2.8rem; font-weight: 400; color: var(--gold); letter-spacing: 3px; margin-bottom: 5px; }
     .auth-subtitle { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 4px; color: var(--text-muted); margin-bottom: 35px; }
-    
-    .gateway-selection-tabs { display: flex; gap: 12px; margin-bottom: 25px; }
-    .gateway-btn { flex: 1; padding: 12px; border: 1px solid var(--border-fine); background: transparent; color: var(--text-muted); font-family: var(--font-sans); font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 2px; cursor: pointer; transition: all 0.3s; rounded-radius: 4px; }
-    .gateway-btn.selected { background: var(--gold); color: #110a05; border-color: var(--gold); }
     
     .form-group { display: flex; flex-direction: column; gap: 8px; width: 100%; text-align: left; }
     .form-group label { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 2px; color: var(--text-muted); font-weight: 600; }
@@ -108,16 +102,16 @@
     .btn-luxe {
       background: var(--gold); color: #110a05; border: none; padding: 14px; font-family: var(--font-sans);
       font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 2px; cursor: pointer;
-      transition: all 0.3s ease; border-radius: 6px; margin-top: 10px; text-align: center; width: 100%;
+      transition: all 0.3s ease; border-radius: 6px; margin-top: 20px; text-align: center; width: 100%;
     }
     .btn-luxe:hover { background: var(--text-light); color: var(--bg-salon); transform: translateY(-1px); }
     .auth-error { color: #d66b53; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; margin-top: 15px; display: none; font-weight: 500; }
 
     /* ============================================================
-       HEADER & NAV (STABLE ET RESPONSIVE)
+       HEADER (CHANGÉ DE STICKY A ABSOLUTE POUR DISPARAITRE AU SCROLL)
     ============================================================ */
     header {
-      position: sticky; top: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between;
+      position: absolute; top: 0; left: 0; right: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between;
       padding: 15px 40px; background: var(--panel-bg); backdrop-filter: blur(var(--blur)); -webkit-backdrop-filter: blur(var(--blur));
       border-bottom: 1px solid var(--border-fine); transition: background-color 0.4s ease;
     }
@@ -145,9 +139,13 @@
     .search-luxe input:focus { width: 180px; border-color: var(--gold); }
     .search-luxe svg { position: absolute; left: 0; width: 12px; height: 12px; color: var(--gold-dim); }
 
-    .club-badge { font-size: 0.6rem; font-weight: 600; text-transform: uppercase; letter-spacing: 2px; border: 1px solid var(--gold); padding: 4px 10px; color: var(--gold); border-radius: 3px; }
+    .club-badge { font-size: 0.6rem; font-weight: 600; text-transform: uppercase; letter-spacing: 2px; border: 1px solid var(--gold); padding: 4px 10px; color: var(--gold); border-radius: 3px; cursor: pointer; transition: background 0.3s; }
+    .club-badge:hover { background: rgba(197, 168, 128, 0.1); }
     .btn-quit { background: none; border: none; color: var(--text-muted); font-family: inherit; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1px; cursor: pointer; transition: color 0.3s; }
     .btn-quit:hover { color: var(--gold); }
+
+    /* COMPENSATION DU CORPS POUR LE COUPLAGE ABSOLUTE */
+    .main-body-content { padding-top: 90px; }
 
     /* ============================================================
        TABLEAU DE BORD ADMIN
@@ -162,18 +160,15 @@
     .order-grid-horizontal { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 15px; max-height: 400px; overflow-y: auto; }
     
     .order-ticket-luxe { background: rgba(17, 10, 5, 0.3); border: 1px solid var(--border-fine); padding: 15px; border-radius: 6px; display: flex; flex-direction: column; gap: 10px; transition: all 0.2s; cursor: pointer; }
-    .order-ticket-luxe:hover { border-color: var(--gold); }
     .ticket-guest { font-family: var(--font-serif); font-size: 1.25rem; color: var(--gold); font-weight: 600; }
     .ticket-drink { font-size: 0.85rem; font-weight: 600; }
     .ticket-customs-content { font-size: 0.75rem; color: var(--text-muted); background: rgba(197, 168, 128, 0.05); padding: 8px; border-left: 2px solid var(--gold); font-style: italic; white-space: pre-line; }
 
     .btn-single-action { width: 100%; border: 1px solid var(--gold); background: transparent; color: var(--gold); font-size: 0.65rem; text-transform: uppercase; letter-spacing: 1px; padding: 10px; cursor: pointer; transition: all 0.3s; font-weight: 600; text-align: center; border-radius: 4px; }
     .btn-single-action:hover { background: var(--gold); color: #110a05; }
-    .catalog-admin-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 12px; }
-    .catalog-admin-item { background: rgba(17, 10, 5, 0.2); border: 1px solid var(--border-fine); padding: 12px; display: flex; justify-content: space-between; align-items: center; border-radius: 4px; }
 
     /* ============================================================
-       HERO & MENU (IDENTITÉ INTÉGRALE PRÉSERVÉE)
+       HERO & MENU (DESIGN PRÉSERVÉ)
     ============================================================ */
     .hero-cinematic {
       min-height: 40vh; display: grid; grid-template-columns: 1.2fr 0.8fr; align-items: center;
@@ -202,13 +197,13 @@
     .filter-btn-luxe.active::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 1px; background: var(--gold); }
     
     .temp-selector-luxe { display: flex; border: 1px solid var(--border-fine); padding: 2px; border-radius: 4px; }
-    .temp-btn-luxe { background: none; border: none; color: var(--text-muted); padding: 5px 12px; font-size: 0.65rem; font-weight: 600; text-transform: uppercase; cursor: pointer; }
+    .temp-btn-luxe { background: none; border: none; color: var(--text-muted); padding: 5px 12px; font-size: 0.65rem; font-weight: 600; text-transform: uppercase; cursor: pointer; transition: all 0.2s; }
     .temp-btn-luxe.active { background: var(--gold); color: #110a05; border-radius: 2px; }
 
     .grid-container { max-width: 1300px; margin: 0 auto; padding: 0 40px 80px; }
     .menu-grid-luxe { display: grid; grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); gap: 30px; }
     
-    /* CARTES DU MENU : L'ÉLÉGANCE AVEC LES IMAGES */
+    /* CARTES DU MENU */
     .carte-item { background: var(--panel-bg); border: 1px solid var(--border-fine); padding: 18px; position: relative; transition: all 0.3s ease; display: flex; flex-direction: column; gap: 12px; box-shadow: var(--shadow-luxe); border-radius: 6px; }
     .carte-item:hover { border-color: var(--gold); transform: translateY(-3px); }
     
@@ -231,7 +226,7 @@
     .btn-order-elixir { background: transparent; border: 1px solid var(--gold); color: var(--gold); padding: 10px; font-family: var(--font-sans); font-size: 0.65rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; cursor: pointer; transition: all 0.3s; text-align: center; border-radius: 4px; }
     .btn-order-elixir:hover { background: var(--gold); color: #110a05; }
 
-    /* SYSTEME DE FENÊTRES MODALES (PROPRES ET AJUSTÉES) */
+    /* SYSTEME DE FENÊTRES MODALES */
     .modal-backdrop-luxe { position: fixed; inset: 0; z-index: 200; background: rgba(17, 10, 5, 0.85); backdrop-filter: blur(8px); display: none; align-items: center; justify-content: center; padding: 15px; }
     .modal-backdrop-luxe.active { display: flex; }
     .modal-box-luxe { background: var(--panel-bg); border: 1px solid var(--gold); padding: 30px; max-width: 520px; width: 100%; border-top: 4px solid var(--gold); box-shadow: var(--shadow-luxe); border-radius: 8px; max-height: 95vh; overflow-y: auto; }
@@ -239,7 +234,7 @@
     .modal-form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 25px; }
     .span-full { grid-column: 1 / -1; }
 
-    /* TOAST DE NOTIFICATION ACCUEIL */
+    /* TOASTS */
     .toast-luxe { position: fixed; bottom: 25px; right: 25px; z-index: 1000; background: var(--panel-bg); border: 1px solid var(--gold); padding: 15px 20px; box-shadow: var(--shadow-luxe); border-radius: 6px; transform: translateY(100px); opacity: 0; transition: all 0.4s ease; pointer-events: none; }
     .toast-luxe.show { transform: translateY(0); opacity: 1; }
     .toast-text { font-size: 0.8rem; color: var(--text-light); font-weight: 500; }
@@ -247,11 +242,10 @@
     footer { border-top: 1px solid var(--border-fine); padding: 30px; text-align: center; max-width: 1300px; margin: 0 auto; }
     footer p { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 2px; color: var(--text-muted); }
 
-    /* ============================================================
-       ⚡ ADAPTATION MOBILE COMPLÈTE (CONSERVE LE DESIGN MAIS ADAPTE L'ÉCRAN)
-    ============================================================ */
+    /* RESPONSIVE MOBILE */
     @media (max-width: 850px) {
-      header { padding: 15px 20px; flex-direction: column; gap: 15px; }
+      header { padding: 15px 20px; flex-direction: column; gap: 15px; position: absolute; }
+      .main-body-content { padding-top: 140px; }
       .nav-controls { width: 100%; justify-content: center; flex-wrap: wrap; gap: 12px; }
       
       .hero-cinematic { grid-template-columns: 1fr; padding: 25px 20px; gap: 25px; text-align: center; }
@@ -263,7 +257,6 @@
       .seasonal-indicator { flex-direction: column; text-align: center; gap: 4px; }
       .curation-tabs-row { flex-direction: column; gap: 15px; }
       
-      /* Permet de faire défiler les catégories au doigt horizonalement sans retour à la ligne affreux */
       .filter-group-luxe { 
         width: 100vw; overflow-x: auto; padding: 5px 20px; gap: 20px;
         -webkit-overflow-scrolling: touch; display: flex; white-space: nowrap;
@@ -272,14 +265,9 @@
 
       .grid-container { padding: 0 20px 50px; }
       .menu-grid-luxe { grid-template-columns: 1fr; gap: 20px; }
-
       .top-dashboard-admin { padding: 0 10px; }
-      .order-grid-horizontal { grid-template-columns: 1fr; }
-      .catalog-admin-list { grid-template-columns: 1fr; }
-
       .modal-box-luxe { padding: 20px; }
       .modal-form-grid { grid-template-columns: 1fr; }
-      
       .toast-luxe { left: 15px; right: 15px; bottom: 15px; text-align: center; }
     }
   </style>
@@ -292,27 +280,20 @@
   <div class="auth-screen" id="authGate">
     <div class="auth-card">
       <h1 class="auth-logo">Sip & Savour</h1>
-      <p class="auth-subtitle">Maison de Torréfaction — Accès Privé</p>
+      <p class="auth-subtitle">Maison de Torréfaction — Espace Famille</p>
       
-      <div class="gateway-selection-tabs">
-        <button type="button" class="gateway-btn" id="gateway-tab-famille" onclick="selectGatewayRole('famille')">Espace Famille</button>
-        <button type="button" class="gateway-btn" id="gateway-tab-admin" onclick="selectGatewayRole('admin')">Maître Barista</button>
-      </div>
-
-      <div id="gateway-password-zone" style="display: none;">
-        <div class="form-group">
-          <label id="gateway-password-label" for="gateway-password-input">Code secret</label>
-          <input type="password" id="gateway-password-input" class="form-input" placeholder="Entrez la clé d'accès..." onkeydown="if(event.key === 'Enter') validateGatewayLogin()">
-        </div>
-        <button type="button" class="btn-luxe" onclick="validateGatewayLogin()">Rejoindre le Salon</button>
+      <div class="form-group" style="margin-top: 10px;">
+        <label for="gateway-password-input">Clé du Salon Privé</label>
+        <input type="password" id="gateway-password-input" class="form-input" placeholder="Entrez le mot de passe famille..." onkeydown="if(event.key === 'Enter') validateGatewayLogin()">
       </div>
       
-      <div class="auth-error" id="gateway-global-error">Clé incorrecte. Veuillez réessayer.</div>
+      <button type="button" class="btn-luxe" onclick="validateGatewayLogin()">Rejoindre la Table</button>
+      <div class="auth-error" id="gateway-global-error">Code incorrect. Veuillez vérifier avec le barista.</div>
     </div>
   </div>
 
   <div class="wrapper" id="appWrapper">
-    <header>
+    <header id="mainHeader">
       <a href="#" class="brand-signature">
         Sip & Savour
         <span>Salon Privé & Haute Torréfaction</span>
@@ -325,75 +306,69 @@
         </div>
 
         <button type="button" class="theme-toggle-btn" id="themeToggle" onclick="toggleThemeSystem()">Mode Clair</button>
-        <div class="club-badge" id="roleBadge">Membre Privé</div>
+        <div class="club-badge" id="roleBadge" onclick="triggerAdminAccessSecret()">Salon Famille</div>
         <button type="button" class="btn-quit" onclick="logout()">Quitter</button>
       </div>
     </header>
 
-    <section class="top-dashboard-admin" id="adminDashboardZone">
-      <div class="dashboard-container">
-        <div class="dashboard-header">
-          <h2 class="dashboard-title">Commandes au Comptoir</h2>
-          <button type="button" class="btn-clear-all-orders" onclick="clearAllOrders()">Purger le tableau</button>
+    <div class="main-body-content">
+      <section class="top-dashboard-admin" id="adminDashboardZone">
+        <div class="dashboard-container">
+          <div class="dashboard-header">
+            <h2 class="dashboard-title">Commandes au Comptoir (Admin)</h2>
+            <button type="button" class="btn-clear-all-orders" onclick="clearAllOrders()">Purger les commandes</button>
+          </div>
+          <div class="order-grid-horizontal" id="adminOrdersContainer"></div>
         </div>
-        <div class="order-grid-horizontal" id="adminOrdersContainer"></div>
-      </div>
+      </section>
 
-      <div class="dashboard-container" style="border-top-color: var(--gold-dim);">
-        <div class="dashboard-header">
-          <h2 class="dashboard-title" style="font-size:1.4rem;">Ajustement du Catalogue</h2>
-          <button type="button" style="background: var(--gold); color: #110a05; padding: 6px 12px; font-weight:600; border:none; cursor:pointer; border-radius:4px;" onclick="openRecipeModal(null)">+ Créer un élixir</button>
+      <section class="hero-cinematic">
+        <div class="hero-poetry">
+          <span class="hero-tagline">Une expérience sensorielle intemporelle</span>
+          <h3 class="hero-title-luxe">L'art secret de la torréfaction <em>sur-mesure</em></h3>
+          <p class="hero-manifesto">Bienvenue dans votre espace de dégustation privé. Chaque tasse est une œuvre éphémère, assemblée et calibrée à la demande selon vos exigences.</p>
         </div>
-        <div class="catalog-admin-list" id="adminCatalogContainer"></div>
-      </div>
-    </section>
-
-    <section class="hero-cinematic">
-      <div class="hero-poetry">
-        <span class="hero-tagline">Une expérience sensorielle intemporelle</span>
-        <h3 class="hero-title-luxe">L'art secret de la torréfaction <em>sur-mesure</em></h3>
-        <p class="hero-manifesto">Bienvenue dans votre espace de dégustation privé. Chaque tasse est une oeuvre éphémère, assemblée et calibrée à la demande selon vos exigences.</p>
-      </div>
-      <div class="hero-showcase">
-        <div class="frame-artisan">
-          <img src="https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?w=600&q=80" alt="Café d'Exception" />
-          <div class="frame-caption">
-            <h4>Élixir du Moment</h4>
-            <p>Geisha Bourbon — Collection Privée</p>
+        <div class="hero-showcase">
+          <div class="frame-artisan">
+            <img src="https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?w=600&q=80" alt="Café d'Exception" />
+            <div class="frame-caption">
+              <h4>Élixir du Moment</h4>
+              <p>Geisha Bourbon — Collection Privée</p>
+            </div>
           </div>
         </div>
-      </div>
-    </section>
+      </section>
 
-    <section class="salon-curation">
-      <div class="seasonal-indicator">
-        <div class="season-label">La Curation du Torréfacteur</div>
-        <div class="season-desc">Éditions Limitées & Rituels du Salon</div>
-      </div>
-
-      <div class="curation-tabs-row">
-        <div class="filter-group-luxe">
-          <button type="button" class="filter-btn-luxe active" data-cat="all">Toutes nos Créations</button>
-          <button type="button" class="filter-btn-luxe" data-cat="signature">Cafés Signature</button>
-          <button type="button" class="filter-btn-luxe" data-cat="prestige">Thés & Infusions</button>
-          <button type="button" class="filter-btn-luxe" data-cat="douceurs">Douceurs</button>
+      <section class="salon-curation">
+        <div class="seasonal-indicator">
+          <div class="season-label">La Curation du Torréfacteur</div>
+          <div class="season-desc">Éditions Limitées & Rituels du Salon</div>
         </div>
 
-        <div class="temp-selector-luxe">
-          <button type="button" class="temp-btn-luxe active" data-temp="all">Tous</button>
-          <button type="button" class="temp-btn-luxe" data-temp="hot">Chaud</button>
-          <button type="button" class="temp-btn-luxe" data-temp="cold">Givré</button>
+        <div class="curation-tabs-row">
+          <div class="filter-group-luxe">
+            <button type="button" class="filter-btn-luxe active" data-cat="all">Toutes nos Créations</button>
+            <button type="button" class="filter-btn-luxe" data-cat="signature">Cafés Signature</button>
+            <button type="button" class="filter-btn-luxe" data-cat="prestige">Thés & Infusions</button>
+            <button type="button" class="filter-btn-luxe" data-cat="douceurs">Douceurs</button>
+          </div>
+
+          <div class="temp-selector-luxe">
+            <button type="button" class="temp-btn-luxe active" data-temp="all">Tous</button>
+            <button type="button" class="temp-btn-luxe" data-temp="hot">Chaud</button>
+            <button type="button" class="temp-btn-luxe" data-temp="cold">Givré</button>
+          </div>
         </div>
-      </div>
-    </section>
+      </section>
 
-    <main class="grid-container">
-      <div class="menu-grid-luxe" id="menuGrid"></div>
-    </main>
+      <main class="grid-container">
+        <div class="menu-grid-luxe" id="menuGrid"></div>
+      </main>
 
-    <footer>
-      <p>© 2026 Sip & Savour — Salon de Dégustation Privé — Conçu pour la Famille</p>
-    </footer>
+      <footer>
+        <p>© 2026 Sip & Savour — Salon de Dégustation Privé — Conçu pour la Famille</p>
+      </footer>
+    </div>
   </div>
 
   <div class="modal-backdrop-luxe" id="orderModal">
@@ -429,10 +404,10 @@
         <div class="form-group">
           <label for="orderMilkInput">Sélection Lait</label>
           <select id="orderMilkInput" class="form-input">
-            <option value="Aucun">Classique / Aucun</option>
+            <option value="Lait de vache">Classique (Lait de vache)</option>
             <option value="Lait d'Avoine">Lait d'Avoine</option>
             <option value="Lait d'Amande">Lait d'Amande</option>
-            <option value="Mousse Entière">Crème veloutée</option>
+            <option value="Aucun">Aucun</option>
           </select>
         </div>
 
@@ -458,65 +433,14 @@
     </div>
   </div>
 
-  <div class="modal-backdrop-luxe" id="recipeModal">
-    <div class="modal-box-luxe">
-      <h3 class="modal-title-luxe" id="recipeModalTitle">Édition de l'Élixir</h3>
-      <input type="hidden" id="recipeIdInput" />
-      
-      <div class="modal-form-grid">
-        <div class="form-group span-full">
-          <label for="recipeNameInput">Nom commercial</label>
-          <input type="text" id="recipeNameInput" class="form-input" />
-        </div>
-        <div class="form-group">
-          <label for="recipePriceInput">Prix de présentation (€)</label>
-          <input type="number" id="recipePriceInput" class="form-input" step="0.10" />
-        </div>
-        <div class="form-group">
-          <label for="recipeCatInput">Famille</label>
-          <select id="recipeCatInput" class="form-input">
-            <option value="signature">Cafés Signature</option>
-            <option value="prestige">Thés & Infusions</option>
-            <option value="douceurs">Douceurs</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label for="recipeTempInput">Service</label>
-          <select id="recipeTempInput" class="form-input">
-            <option value="hot">Chaud</option>
-            <option value="cold">Givré</option>
-            <option value="all">Les deux</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label for="recipeIntensityInput">Force / Profil</label>
-          <input type="text" id="recipeIntensityInput" class="form-input" />
-        </div>
-        <div class="form-group span-full">
-          <label for="recipeImgInput">Lien de l'image (URL)</label>
-          <input type="text" id="recipeImgInput" class="form-input" />
-        </div>
-        <div class="form-group span-full">
-          <label for="recipeDescInput">Notes d'accompagnement & description</label>
-          <textarea id="recipeDescInput" rows="3"></textarea>
-        </div>
-      </div>
-      <div style="display: flex; gap: 12px;">
-        <button type="button" class="btn-luxe" style="background:transparent; border: 1px solid var(--border-fine); color:var(--text-light); flex:1; margin-top:0;" onclick="closeRecipeModal()">Fermer</button>
-        <button type="button" class="btn-luxe" style="flex:1; margin-top:0;" onclick="saveRecipe()">Enregistrer</button>
-      </div>
-    </div>
-  </div>
-
   <div class="toast-luxe" id="toastLuxe">
     <span class="toast-text" id="toastMsg">Opération validée.</span>
   </div>
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-    import { getFirestore, collection, addDoc, onSnapshot, doc, deleteDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+    import { getFirestore, collection, addDoc, onSnapshot, doc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-    // VOS CONFIGURATIONS FIREBASE INTERNES CLIBLES
     const firebaseConfig = {
   apiKey: "AIzaSyAZiw4PTPzWiaCRE3rT06iCS012ZzoywOE",
   authDomain: "sipandsavour-672f8.firebaseapp.com",
@@ -532,16 +456,17 @@
       app = initializeApp(firebaseConfig);
       db = getFirestore(app);
     } catch (e) {
-      console.error("Échec initialisation Firebase :", e);
+      console.error("Échec Firebase :", e);
     }
 
-    // BASE DE DONNÉES CATALOGUE DES IMAGES EMBLÉMATIQUES (RÉTABLIES)
+    // LISTE INITIALE DES BOISSONS DU SALON
     const defaultCatalog = [
-      { id: 1, name: "Espresso Bourbon Pointu", price: "6.50", category: "signature", temp: "hot", img: "https://images.unsplash.com/photo-1510972527409-cac19ff31d7c?w=600&q=80", desc: "Variété rare cultivée sur sols volcaniques. Notes intenses de cacao fin et de litchi Oriental.", origin: "La Réunion", intensity: "4/5" },
-      { id: 2, name: "Latte Macchiato Or Vieilli", price: "7.00", category: "signature", temp: "hot", img: "https://images.unsplash.com/photo-1534778101976-62847782c213?w=600&q=80", desc: "Espresso velouté, crème micro-texturée et coulée d'un caramel au beurre salé cuit au chaudron.", origin: "Maison", intensity: "2/5" },
-      { id: 3, name: "Cold Brew Infusion Azur", price: "7.50", category: "signature", temp: "cold", img: "https://images.unsplash.com/photo-1517701604599-bb29b565090c?w=600&q=80", desc: "Macération lente de 18 heures à froid. Profil aromatique fruité, aérien et d'une fraîcheur totale.", origin: "Honduras", intensity: "3/5" },
-      { id: 4, name: "Matcha Cérémoniel Fouetté", price: "8.00", category: "prestige", temp: "hot", img: "https://images.unsplash.com/photo-1536256263959-770b48d82b0a?w=600&q=80", desc: "Poudre pure de thé de Kyoto battue au chasen traditionnel. Texture onctueuse végétale douce.", origin: "Uji, Japon", intensity: "1/5" },
-      { id: 5, name: "Cookie Triple Chocolat & Sel", price: "5.00", category: "douceurs", temp: "all", img: "https://images.unsplash.com/photo-1499636136210-6f4ee915583e?w=600&q=80", desc: "Pâte fine pur beurre, pépites massives de chocolat noir 72% et cristaux de sel de Guérande.", origin: "Fournil", intensity: "Gourmand" }
+      { id: 1, name: "Espresso Bourbon Pointu", price: "6.50", category: "signature", temp: "hot", img: "https://images.unsplash.com/photo-1510972527409-cac19ff31d7c?w=600&q=80", desc: "Variété rare cultivée sur sols volcaniques. Notes intenses de cacao fin et de litchi Oriental." },
+      { id: 2, name: "Latte Macchiato Maison", price: "7.00", category: "signature", temp: "hot", img: "https://images.unsplash.com/photo-1534778101976-62847782c213?w=600&q=80", desc: "Espresso velouté, crème micro-texturée et coulée d'un caramel au beurre salé maison." },
+      { id: 3, name: "Cold Brew Infusion Azur", price: "7.50", category: "signature", temp: "cold", img: "https://images.unsplash.com/photo-1517701604599-bb29b565090c?w=600&q=80", desc: "Macération lente de 18 heures à froid. Profil aromatique fruité, aérien et d'une fraîcheur totale." },
+      { id: 4, name: "Matcha Cérémoniel Fouetté", price: "8.00", category: "prestige", temp: "hot", img: "https://images.unsplash.com/photo-1536256263959-770b48d82b0a?w=600&q=80", desc: "Poudre pure de thé de Kyoto battue au chasen traditionnel. Texture onctueuse végétale douce." },
+      { id: 5, name: "Iced Chai Latte Secret", price: "7.50", category: "prestige", temp: "cold", img: "https://images.unsplash.com/photo-1551024601-bec78aea704b?w=600&q=80", desc: "Mélange secret d'épices de la maison, extrait noir de Ceylan, frappé intensément sur glace." },
+      { id: 6, name: "Cookie Triple Chocolat & Sel", price: "5.00", category: "douceurs", temp: "all", img: "https://images.unsplash.com/photo-1499636136210-6f4ee915583e?w=600&q=80", desc: "Pâte fine pur beurre, pépites massives de chocolat noir 72% et cristaux de sel de Guérande." }
     ];
 
     if (!localStorage.getItem('sip_catalog')) {
@@ -549,30 +474,31 @@
     }
 
     let currentRole = localStorage.getItem('sip_role') || null;
-    let currentGatewayRoleSelection = null;
     let activeCat = "all";
     let activeTemp = "all";
     let searchQuery = "";
     let toastTimer = null;
-    let localOrdersArray = [];
     let unsubscribeOrders = null;
-
-    function selectGatewayRole(role) {
-      currentGatewayRoleSelection = role;
-      document.getElementById('gateway-tab-famille').classList.remove('selected');
-      document.getElementById('gateway-tab-admin').classList.remove('selected');
-      document.getElementById('gateway-tab-' + role).classList.add('selected');
-      document.getElementById('gateway-password-zone').style.display = 'block';
-    }
 
     function validateGatewayLogin() {
       const password = document.getElementById('gateway-password-input').value.trim();
-      if (currentGatewayRoleSelection === 'famille' && password === 'famille') {
+      if (password === 'famille') {
         executeLogin('famille');
-      } else if (currentGatewayRoleSelection === 'admin' && password === 'admin') {
+      } else if (password === 'admin') {
+        // Permet aussi d'entrer en admin directement si on connaît la clé secrete barista
         executeLogin('admin');
       } else {
         document.getElementById('gateway-global-error').style.display = 'block';
+      }
+    }
+
+    function triggerAdminAccessSecret() {
+      const code = prompt("Mode Maître Barista — Entrez votre clé d'accès :");
+      if (code === 'admin') {
+        executeLogin('admin');
+        showToastNotification("Bienvenue, Maître Barista.");
+      } else if (code !== null) {
+        alert("Clé incorrecte.");
       }
     }
 
@@ -598,10 +524,9 @@
       const badge = document.getElementById('roleBadge');
       const adminZone = document.getElementById('adminDashboardZone');
       if (currentRole === 'admin') {
-        badge.textContent = "Maître d'Hôtel / Admin";
+        badge.textContent = "Maître Barista / Admin";
         adminZone.style.display = "block";
         startListeningOrdersRealtime();
-        renderAdminCatalogList();
       } else {
         badge.textContent = "Salon Famille";
         adminZone.style.display = "none";
@@ -609,15 +534,15 @@
     }
 
     function getCatalog() { return JSON.parse(localStorage.getItem('sip_catalog')) || []; }
-    function saveCatalog(cat) { localStorage.setItem('sip_catalog', JSON.stringify(cat)); }
 
     function startListeningOrdersRealtime() {
       if (unsubscribeOrders) unsubscribeOrders();
+      if (!db) return;
       unsubscribeOrders = onSnapshot(collection(db, "orders"), (snapshot) => {
-        localOrdersArray = [];
-        snapshot.forEach((doc) => { localOrdersArray.push({ firebaseId: doc.id, ...doc.data() }); });
-        localOrdersArray.sort((a, b) => (a.timestamp || 0) - (b.timestamp || 0));
-        renderAdminDashboard(localOrdersArray);
+        let orders = [];
+        snapshot.forEach((doc) => { orders.push({ firebaseId: doc.id, ...doc.data() }); });
+        orders.sort((a, b) => (a.timestamp || 0) - (b.timestamp || 0));
+        renderAdminDashboard(orders);
       });
     }
 
@@ -625,7 +550,7 @@
       const container = document.getElementById('adminOrdersContainer');
       container.innerHTML = "";
       if (orders.length === 0) {
-        container.innerHTML = `<div style="grid-column:1/-1; text-align:center; color:var(--text-muted); padding:20px; font-size:0.8rem;">AUCUN ÉLIXIR DEMANDÉ</div>`;
+        container.innerHTML = `<div style="grid-column:1/-1; text-align:center; color:var(--text-muted); padding:20px; font-size:0.8rem;">AUCUN ÉLIXIR COMMANDÉ</div>`;
         return;
       }
       orders.forEach(ord => {
@@ -637,17 +562,20 @@
             <div class="ticket-drink">${ord.drink}</div>
           </div>
           <div class="ticket-customs-content">${ord.customs}</div>
-          <button type="button" class="btn-single-action">Servi / Clôturer</button>
+          <button type="button" class="btn-single-action" style="margin-top:10px;">Servi & Clôturer</button>
         `;
         card.querySelector('button').addEventListener('click', async (e) => {
           e.stopPropagation();
-          await deleteDoc(doc(db, "orders", ord.firebaseId));
-          showToastNotification(`Commande de ${ord.guest} servie.`);
+          if(db) {
+            await deleteDoc(doc(db, "orders", ord.firebaseId));
+            showToastNotification(`Commande de ${ord.guest} terminée.`);
+          }
         });
         container.appendChild(card);
       });
     }
 
+    // LOGIQUE DE FILTRAGE PARFAITE ET SÉCURISÉE
     function renderGrid() {
       const grid = document.getElementById('menuGrid');
       grid.innerHTML = "";
@@ -659,6 +587,11 @@
         const matchesSearch = item.name.toLowerCase().includes(searchQuery) || item.desc.toLowerCase().includes(searchQuery);
         return matchesCat && matchesTemp && matchesSearch;
       });
+
+      if(filtered.length === 0) {
+        grid.innerHTML = `<div style="grid-column:1/-1; text-align:center; color:var(--text-muted); padding:40px; font-size:0.9rem;">Aucun élixir ne correspond à vos critères actuels.</div>`;
+        return;
+      }
 
       filtered.forEach(item => {
         const card = document.createElement('div');
@@ -682,7 +615,7 @@
     function openOrderModal(id, name) {
       document.getElementById('modalDrinkId').value = id;
       const title = document.getElementById('modalDrinkTitle');
-      title.textContent = `Commander — ${name}`;
+      title.textContent = `Ajuster — ${name}`;
       title.setAttribute('data-drink-name', name);
       document.getElementById('orderModal').classList.add('active');
     }
@@ -709,9 +642,9 @@
       }
     }
 
-    // GESTION DES APPELS INTERNES HTML
-    window.selectGatewayRole = selectGatewayRole;
+    // EXPOSITION DES FONCTIONS GLOBALES
     window.validateGatewayLogin = validateGatewayLogin;
+    window.triggerAdminAccessSecret = triggerAdminAccessSecret;
     window.logout = logout;
     window.toggleThemeSystem = toggleThemeSystem;
     window.closeOrderModal = closeOrderModal;
@@ -720,24 +653,25 @@
       if (e.target && e.target.classList.contains("btn-order-elixir")) {
         openOrderModal(e.target.getAttribute('data-id'), e.target.getAttribute('data-name'));
       }
+      
       if (e.target && e.target.classList.contains("send-btn-submit")) {
         const drinkName = document.getElementById('modalDrinkTitle').getAttribute('data-drink-name');
-        const guestName = document.getElementById('guestNameInput').value.trim() || "Invité anonyme";
+        const guestName = document.getElementById('guestNameInput').value.trim() || "Un membre de la famille";
         const sugar = document.getElementById('orderSugarInput').value;
         const syrup = document.getElementById('orderSyrupInput').value;
         const milk = document.getElementById('orderMilkInput').value;
         const foam = document.getElementById('orderFoamInput').value;
         const notes = document.getElementById('customNotesInput').value.trim();
 
-        let compiled = `Sucre: ${sugar} | Sirop: ${syrup} | Lait: ${milk} | Mousse: ${foam}`;
-        if(notes) compiled += `\nNote: ${notes}`;
+        let compiled = `Sucre: ${sugar} | Sirop: ${syrup} | Base: ${milk} | Mousse: ${foam}`;
+        if(notes) compiled += `\nNote de dégustation: ${notes}`;
 
         closeOrderModal();
-        showToastNotification("✨ Demande envoyée en cuisine !");
+        showToastNotification("✨ L'élixir est en cours d'assemblage...");
 
         if(db) {
           await addDoc(collection(db, "orders"), {
-            guest: guestName, drink: drinkName, customs: compiled, status: "received", timestamp: Date.now()
+            guest: guestName, drink: drinkName, customs: compiled, timestamp: Date.now()
           });
         }
       }
@@ -755,11 +689,22 @@
         renderGrid();
       });
 
+      // ACTIVATION CORRIGÉE DU FILTRE DE CATÉGORIES
       document.querySelectorAll('.filter-btn-luxe').forEach(btn => {
         btn.addEventListener('click', () => {
           document.querySelectorAll('.filter-btn-luxe').forEach(p => p.classList.remove('active'));
           btn.classList.add('active');
           activeCat = btn.dataset.cat;
+          renderGrid();
+        });
+      });
+
+      // CORRECTION ET CORRÉLATION ACTIVE POUR LES FILTRES CHAUD / GIVRÉ
+      document.querySelectorAll('.temp-btn-luxe').forEach(btn => {
+        btn.addEventListener('click', () => {
+          document.querySelectorAll('.temp-btn-luxe').forEach(p => p.classList.remove('active'));
+          btn.classList.add('active');
+          activeTemp = btn.dataset.temp;
           renderGrid();
         });
       });
