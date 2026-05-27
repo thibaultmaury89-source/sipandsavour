@@ -105,9 +105,9 @@
     .btn-luxe:hover { background: var(--text-light); color: var(--bg-salon); transform: translateY(-1px); }
     .auth-error { color: #d66b53; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; margin-top: 15px; display: none; font-weight: 500; }
 
-    /* HEADER */
+    /* HEADER - Sticky pour une meilleure navigation mobile */
     header {
-      position: absolute; top: 0; left: 0; right: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between;
+      position: sticky; top: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between;
       padding: 15px 40px; background: var(--panel-bg); backdrop-filter: blur(var(--blur)); -webkit-backdrop-filter: blur(var(--blur));
       border-bottom: 1px solid var(--border-fine); transition: background-color 0.4s ease;
     }
@@ -131,7 +131,7 @@
     .btn-quit { background: none; border: none; color: var(--text-muted); font-family: inherit; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1px; cursor: pointer; transition: color 0.3s; }
     .btn-quit:hover { color: var(--gold); }
 
-    .main-body-content { padding-top: 90px; }
+    .main-body-content { padding-top: 20px; }
 
     /* ============================================================
        SUIVI DE PREPARATION SENS DESIGN
@@ -181,7 +181,6 @@
     .admin-actions-row { display: flex; gap: 8px; margin-top: 5px; }
 
     .btn-single-action { flex: 1; border: 1px solid var(--gold); background: transparent; color: var(--gold); font-size: 0.65rem; text-transform: uppercase; letter-spacing: 1px; padding: 8px; cursor: pointer; transition: all 0.3s; font-weight: 600; text-align: center; border-radius: 4px; }
-    .btn-single-action:hover { background: var(--gold); color: #110a05; }
     .btn-single-action:hover { background: var(--gold); color: #110a05; }
     .btn-action-next { background: var(--gold); color: #110a05; }
 
@@ -241,11 +240,11 @@
     .btn-view-product { background: transparent; border: 1px solid var(--gold); color: var(--gold); padding: 10px; font-family: var(--font-sans); font-size: 0.65rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; text-align: center; border-radius: 4px; transition: all 0.3s; margin-top: auto; }
     .carte-item:hover .btn-view-product { background: var(--gold); color: #110a05; }
 
-    /* ONGLETS FICHE PRODUIT */
+    /* ONGLETS FICHE PRODUIT — OPTIMISÉ (right: 0;) */
     .tabs-nav-product { display: flex; border-bottom: 1px solid var(--border-fine); margin-bottom: 20px; gap: 15px; overflow-x: auto; -webkit-overflow-scrolling: touch; }
     .tab-link-product { background: none; border: none; font-family: var(--font-serif); font-size: 1.15rem; color: var(--text-muted); padding-bottom: 8px; cursor: pointer; position: relative; white-space: nowrap; }
     .tab-link-product.active { color: var(--gold); }
-    .tab-link-product.active::after { content: ''; position: absolute; bottom: -1px; left: 0; right: right; height: 2px; background: var(--gold); }
+    .tab-link-product.active::after { content: ''; position: absolute; bottom: -1px; left: 0; right: 0; height: 2px; background: var(--gold); }
     .tab-pane-product { display: none; font-size: 0.85rem; color: var(--text-light); line-height: 1.6; white-space: pre-line; min-height: 120px; }
     .tab-pane-product.active { display: block; }
     .product-meta-badge { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 1px; color: var(--gold); background: rgba(197, 168, 128, 0.1); padding: 4px 8px; border-radius: 4px; display: inline-block; margin-bottom: 15px; border: 1px solid var(--border-fine); }
@@ -266,8 +265,8 @@
     footer p { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 2px; color: var(--text-muted); }
 
     @media (max-width: 850px) {
-      header { padding: 15px 20px; flex-direction: column; gap: 15px; position: absolute; }
-      .main-body-content { padding-top: 140px; }
+      header { padding: 15px 20px; flex-direction: column; gap: 15px; }
+      .main-body-content { padding-top: 10px; }
       .nav-controls { width: 100%; justify-content: center; flex-wrap: wrap; gap: 12px; }
       .hero-cinematic { grid-template-columns: 1fr; padding: 25px 20px; gap: 25px; text-align: center; }
       .hero-title-luxe { font-size: 2rem; }
@@ -450,7 +449,7 @@
       <input type="hidden" id="modalDrinkId" />
       <div class="form-group">
         <label for="guestNameInput">Votre Prénom</label>
-        <input type="text" id="guestNameInput" class="form-input" placeholder="Ex: Papa, Maman, Lucas..." />
+        <input type="text" id="guestNameInput" class="form-input" placeholder="Ex: Papa, Maman, Lucas, Séverine..." />
       </div>
       <div class="modal-form-grid">
         <div class="form-group">
@@ -585,8 +584,20 @@
     let unsubsTracker = null;
     let dernierStatutConnu = "";
 
-    // 2. COMPTES & SÉCURITÉ GATES
+    // OPTIMISATION AUDIO : Fonction de déblocage audio pour iOS/Android au premier clic utilisateur
+    function unblockAudioContext() {
+      if ('speechSynthesis' in window) {
+        const u = new SpeechSynthesisUtterance('');
+        window.speechSynthesis.speak(u);
+      }
+      const audioSilence = new Audio('https://assets.mixkit.co/active_storage/sfx/911/911-200.wav');
+      audioSilence.volume = 0.01;
+      audioSilence.play().catch(() => {});
+    }
+
+    // 2. LOGIQUE DE VALIDATION DES CLEFS
     function validateGatewayLogin() {
+      unblockAudioContext(); 
       const pass = document.getElementById('gateway-password-input').value.trim();
       const err = document.getElementById('gateway-global-error');
       
@@ -642,12 +653,12 @@
     }
 
     function triggerAdminAccessSecret() {
-      if (currentRole === "admin") return;
+      unblockAudioContext();
       const promptName = prompt("Entrez votre prénom pour ouvrir une table (Ex: Maman, Papa, Lucas, Séverine...) :");
       if (promptName && promptName.trim() !== "") {
         currentUser = promptName.trim();
         localStorage.setItem("sipsavour_username", currentUser);
-        dernierStatutConnu = ""; // Force le rafraîchissement audio pour le nouvel arrivant
+        dernierStatutConnu = ""; 
         applyRoleUI();
         showToastNotification(`Bienvenue à la table de ${currentUser} !`);
       }
@@ -658,15 +669,79 @@
       location.reload();
     }
 
-    // 3. BASE DE DONNÉES SYNCHRO : CATALOGUE DE CRÉATIONS
+    // 3. BASE DE DONNÉES REALTIME + INJECTION BOISSONS CHAUDES BETA
     function initializeRealtimeCatalogs() {
       db.collection("creations-barista").orderBy("name", "asc").onSnapshot((snapshot) => {
         globalCatalogsRecipes = [];
         snapshot.forEach(doc => {
           globalCatalogsRecipes.push({ id: doc.id, ...doc.data() });
         });
-        renderGrid();
-        renderAdminCatalogManagement();
+
+        if (globalCatalogsRecipes.length === 0) {
+          injectBetaHotDrinksData();
+        } else {
+          renderGrid();
+          renderAdminCatalogManagement();
+        }
+      });
+    }
+
+    function injectBetaHotDrinksData() {
+      const betaDrinks = [
+        {
+          name: "Cappuccino de la Maison",
+          category: "signature",
+          temperature: "hot",
+          price: "4.50 €",
+          image: "https://images.unsplash.com/photo-1534778101976-62847782c213?w=500&q=80",
+          description: "Un espresso serré équilibré, enrobé d'une mousse de lait d'une onctuosité absolue, saupoudré de fèves de cacao râpées.",
+          history: "Inspiré des rituels des salons de Vienne, revisité avec notre assemblage signature de grains pure origine éthiopienne.",
+          method: "Ratio: 1/2 espresso, 1/2 lait micro-moussé à 65°C. Temps d'extraction : 26 secondes.",
+          gear: "La Marzocco Linea Mini & Moulin Mahlkönig E65S"
+        },
+        {
+          name: "Latte Macchiato Vanille Bourbon",
+          category: "signature",
+          temperature: "hot",
+          price: "5.20 €",
+          image: "https://images.unsplash.com/photo-1570968915860-54d5c301fc9f?w=500&q=80",
+          description: "Trois couches parfaites : du lait chaud onctueux, un double shot de nectar de café et une mousse délicate parfumée au sirop de Vanille Bourbon fait maison.",
+          history: "Création gourmande imaginée pour les après-midis d'hiver au coin du feu dans notre salon privé.",
+          method: "15ml de sirop maison, 180ml de lait d'avoine texturé, 1 double shot de café d'origine Colombie.",
+          gear: "Pichet à lait Barista Space & Machine à Espresso"
+        },
+        {
+          name: "Espresso Geisha Intense",
+          category: "signature",
+          temperature: "hot",
+          price: "3.80 €",
+          image: "https://images.unsplash.com/photo-1510972527409-cac5c4415024?w=500&q=80",
+          description: "Un shot pur d'une des variétés de café les plus prestigieuses au monde. Notes florales de jasmin et de bergamote.",
+          history: "Cultivé à haute altitude sur les flancs volcaniques, ce lot Geisha a bénéficié d'une torréfaction blonde ultra-précise.",
+          method: "In: 18g de café moulu fin | Out: 36g de boisson en tasse. Température d'extraction : 93.5°C.",
+          gear: "Moulin Comandante C40 Ninja & Filtre VST 18g"
+        },
+        {
+          name: "Chocolat Chaud Grand Cru 72%",
+          category: "douceurs",
+          temperature: "hot",
+          price: "4.80 €",
+          image: "https://images.unsplash.com/photo-1544787219-7f47ccb76574?w=500&q=80",
+          description: "Chocolat noir de dégustation fondu à la vapeur, lissé avec un lait crémeux et une pointe de fleur de sel de Guérande.",
+          history: "Un assemblage exclusif de fèves de cacao de Madagascar et de l'Équateur pour un équilibre parfait entre acidité et amertume.",
+          method: "40g de pistoles de chocolat noir, 200ml de lait entier monté à la buse vapeur.",
+          gear: "Buse vapeur haute pression & Fouet de précision"
+        }
+      ];
+
+      let itemsProcessed = 0;
+      betaDrinks.forEach(drink => {
+        db.collection("creations-barista").add(drink).then(() => {
+          itemsProcessed++;
+          if (itemsProcessed === betaDrinks.length) {
+            showToastNotification("Menu Beta Initialisé avec succès !");
+          }
+        });
       });
     }
 
@@ -703,7 +778,7 @@
       });
     }
 
-    // 4. LES MODALES (FICHES PRODUITS & LOGIQUE DE COMMANDE)
+    // 4. ACTION INTERACTIVE ET PREPARATION DES ORDERS
     function openProductModal(item) {
       activeProductDetails = item;
       document.getElementById('prodModalTitle').innerText = item.name;
@@ -785,9 +860,7 @@
       });
     }
 
-    // ============================================================
-    // 5. NOTIFICATION REPLI : TEXT-TO-SPEECH CLIENT SUIVANT LE STATUT
-    // ============================================================
+    // 5. ECOUTER ET JOUER LES NOTIFICATIONS VOCALES
     function ecouterCommandesClient() {
       if (unsubsTracker) unsubsTracker();
 
@@ -813,30 +886,22 @@
             const progress = document.getElementById('trackerProgressBar');
             document.querySelectorAll('.tracker-step').forEach(s => s.className = "tracker-step");
 
-            // --- CAS 1 : LA COMMANDE EST EN ATTENTE ---
             if(data.status === "En attente") {
               progress.style.width = "15%";
               document.getElementById('step-pending').classList.add('active');
             } 
-            
-            // --- CAS 2 : LE BARISTA PREND EN CHARGE LA COMMANDE ---
             else if (data.status === "En cours") {
               progress.style.width = "55%";
               document.getElementById('step-pending').classList.add('done');
               document.getElementById('step-preparing').classList.add('active');
 
-              // On vérifie qu'on ne l'a pas déjà annoncé
               if (dernierStatutConnu !== "En cours") {
                 const phrasePreparation = `Le café de ${data.user} est en préparation.`;
                 const messageVocal = new SpeechSynthesisUtterance(phrasePreparation);
                 messageVocal.lang = 'fr-FR';
-                messageVocal.pitch = 1.1;
-                messageVocal.rate = 1.0;
                 window.speechSynthesis.speak(messageVocal);
               }
             } 
-            
-            // --- CAS 3 : LA COMMANDE EST PRÊTE ---
             else if (data.status === "Prêt") {
               progress.style.width = "100%";
               document.getElementById('step-pending').classList.add('done');
@@ -847,10 +912,7 @@
                 const phrasePret = `Hé ${data.user} ! Ton ${data.boisson} est prêt ! Viens le récupérer au comptoir !`;
                 const messageVocal = new SpeechSynthesisUtterance(phrasePret);
                 messageVocal.lang = 'fr-FR';
-                messageVocal.pitch = 1.1;
-                messageVocal.rate = 1.0;
 
-                // On joue la clochette avant l'annonce finale
                 const bruitClochette = new Audio('https://assets.mixkit.co/active_storage/sfx/911/911-200.wav');
                 bruitClochette.play().then(() => {
                   window.speechSynthesis.speak(messageVocal);
@@ -859,13 +921,13 @@
                 });
               }
             }
-            // On sauvegarde le statut courant pour détecter la prochaine transition
+            container.appendChild(ticket);
             dernierStatutConnu = data.status;
           });
         });
     }
 
-    // 6. ZONE BARISTA (ADMIN ACTIONS & DASHBOARD MANAGEMENT)
+    // 6. SUIVI ADMIN (BARISTA COCKPIT)
     function listenAllOrdersForAdmin() {
       db.collection("commandes-café").orderBy("timestamp", "asc").onSnapshot((snapshot) => {
         const container = document.getElementById('adminOrdersContainer');
@@ -886,17 +948,17 @@
           if(o.status === "En attente") {
             stateClass = "status-pending";
             actionButtonsHTML = `
-              <button class="btn-single-action btn-action-next" onclick="updateOrderStatus('${doc.id}', 'En cours')">Prendre en charge</button>
+              <button class="btn-single-action btn-action-next" onclick="updateOrderStatus(this, '${doc.id}', 'En cours')">Prendre en charge</button>
             `;
           } else if(o.status === "En cours") {
             stateClass = "status-preparing";
             actionButtonsHTML = `
-              <button class="btn-single-action btn-action-next" onclick="updateOrderStatus('${doc.id}', 'Prêt')">✓ Signaler Prêt</button>
+              <button class="btn-single-action btn-action-next" onclick="updateOrderStatus(this, '${doc.id}', 'Prêt')">✓ Signaler Prêt</button>
             `;
           } else {
             stateClass = "status-ready";
             actionButtonsHTML = `
-              <button class="btn-single-action" style="border-color: var(--text-muted); color: var(--text-muted)" onclick="deleteOrderSingle('${doc.id}')">Archiver</button>
+              <button class="btn-single-action" style="border-color: var(--text-muted); color: var(--text-muted)" onclick="deleteOrderSingle(this, '${doc.id}')">Archiver</button>
             `;
           }
 
@@ -915,11 +977,19 @@
       });
     }
 
-    function updateOrderStatus(id, newStatus) {
+    function updateOrderStatus(btnElement, id, newStatus) {
+      if(btnElement) {
+        btnElement.disabled = true;
+        btnElement.innerText = "Mise à jour...";
+      }
       db.collection("commandes-café").doc(id).update({ status: newStatus });
     }
 
-    function deleteOrderSingle(id) {
+    function deleteOrderSingle(btnElement, id) {
+      if(btnElement) {
+        btnElement.disabled = true;
+        btnElement.innerText = "Archivage...";
+      }
       db.collection("commandes-café").doc(id).delete();
     }
 
@@ -931,7 +1001,7 @@
       }
     }
 
-    // 7. GESTION DU CATALOGUE (AJOUT / ÉDITION DE CRÉATIONS)
+    // 7. GESTION FORMULAIRE CRÉATION ÉLIXIRS
     function renderAdminCatalogManagement() {
       const container = document.getElementById('adminCatalogContainer');
       container.innerHTML = "";
@@ -1009,7 +1079,6 @@
       }
     }
 
-    // UTILITAIRES UI & DESIGN SYSTEM INTERFACES
     function toggleThemeSystem() {
       const body = document.body;
       const btn = document.getElementById('themeToggle');
@@ -1029,11 +1098,8 @@
       setTimeout(() => { toast.classList.remove('show'); }, 3500);
     }
 
-    // GESTION DES FILTRES DE CURATION
     document.addEventListener('DOMContentLoaded', () => {
-      if (currentRole) {
-        setupApplicationEntry();
-      }
+      if (currentRole) { setupApplicationEntry(); }
       
       document.getElementById('searchInput').addEventListener('input', e => {
         searchQuery = e.target.value.toLowerCase().trim();
@@ -1043,23 +1109,18 @@
       document.querySelectorAll('.filter-btn-luxe').forEach(btn => {
         btn.addEventListener('click', () => {
           document.querySelectorAll('.filter-btn-luxe').forEach(p => p.classList.remove('active'));
-          btn.classList.add('active'); 
-          activeCat = btn.dataset.cat; 
-          renderGrid();
+          btn.classList.add('active'); activeCat = btn.dataset.cat; renderGrid();
         });
       });
 
       document.querySelectorAll('.temp-btn-luxe').forEach(btn => {
         btn.addEventListener('click', () => {
           document.querySelectorAll('.temp-btn-luxe').forEach(p => p.classList.remove('active'));
-          btn.classList.add('active'); 
-          activeTemp = btn.dataset.temp; 
-          renderGrid();
+          btn.classList.add('active'); activeTemp = btn.dataset.temp; renderGrid();
         });
       });
     });
 
-    // Enregistrement des éléments globaux dans l'objet window pour compatibilité HTML Inline
     window.validateGatewayLogin = validateGatewayLogin;
     window.toggleThemeSystem = toggleThemeSystem;
     window.triggerAdminAccessSecret = triggerAdminAccessSecret;
@@ -1076,7 +1137,6 @@
     window.saveRecipeFromAdminForm = saveRecipeFromAdminForm;
     window.clearAllOrders = clearAllOrders;
     window.deleteRecipeCatalog = deleteRecipeCatalog;
-
   </script>
 </body>
 </html>
