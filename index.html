@@ -160,7 +160,7 @@
     .tracker-step.done .step-label { color: var(--text-muted); }
 
     /* ============================================================
-       TABLEAU DE BORD ADMIN & NOUVEAU TABLEAU DES COMMANDES
+       TABLEAU DE BORD ADMIN & TABLEAU DES COMMANDES
     ============================================================ */
     .top-dashboard-admin { display: none; max-width: 1300px; margin: 25px auto 0 auto; padding: 0 40px; }
     .dashboard-container { background: var(--panel-bg); backdrop-filter: blur(var(--blur)); border: 1px solid var(--border-fine); border-top: 4px solid var(--gold); padding: 25px; box-shadow: var(--shadow-luxe); margin-bottom: 25px; border-radius: 4px; }
@@ -170,7 +170,6 @@
     .btn-clear-all-orders { background: rgba(214, 107, 83, 0.1); border: 1px solid rgba(214, 107, 83, 0.3); color: #e57c67; padding: 6px 12px; font-size: 0.65rem; font-weight: 600; text-transform: uppercase; cursor: pointer; transition: all 0.3s; border-radius: 4px; }
     .btn-clear-all-orders:hover { background: #d66b53; color: #fff; }
     
-    /* TABLE STRUCTURE POUR LES COMMANDES */
     .table-responsive-luxe { width: 100%; overflow-x: auto; margin-bottom: 10px; }
     .table-luxe { width: 100%; border-collapse: collapse; text-align: left; font-size: 0.85rem; }
     .table-luxe th { font-family: var(--font-sans); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 2px; color: var(--text-muted); padding: 12px; border-bottom: 2px solid var(--gold); }
@@ -553,13 +552,88 @@
     const app = initializeApp(firebaseConfig);
     const db = getDatabase(app);
 
-    // Initialisation du catalogue si Firebase est vide
+    // CATALOGUE DES CAFÉS EXEMPLES POUR LES PHASES DE TEST
     const initialCatalog = {
-      "item_1": { id: "item_1", title: "Expresso d'Origine Sacrée", price: "4.50", desc: "Notes intenses de cacao sauvage et d'écorce d'orange grillée. Provenance exclusive de terroirs d'altitude.", category: "signature", temp: "hot", recipe: "9g de café, extraction de 24 secondes à 93°C pour obtenir 25ml.", img: "https://images.unsplash.com/photo-1510972527409-cac19ff31d7c?w=500&q=80" },
-      "item_2": { id: "item_2", title: "Latte de la Haute Sphère", price: "6.50", desc: "Douceur lactée onctueuse mariée à un double ristretto de Bourbon pointu. Texture velours.", category: "signature", temp: "hot", recipe: "Double shot de café, 150ml de lait texturé à 65°C avec micro-mousse de 1cm.", img: "https://images.unsplash.com/photo-1541167760496-1628856ab772?w=500&q=80" },
-      "item_3": { id: "item_3", title: "Infusion Noire Impériale", price: "7.00", desc: "Thé noir fumé d'exception infusé à température contrôlée. Notes boisées profonds.", category: "prestige", temp: "hot", recipe: "3g de feuilles de thé de la collection impériale, eau à 85°C, infusion exacte pendant 4 min.", img: "https://images.unsplash.com/photo-1576092768241-dec231879fc3?w=500&q=80" },
-      "item_4": { id: "item_4", title: "Cold Brew des Brumes", price: "6.00", desc: "Café extrait à froid pendant 18 heures. Profil floral léger, notes rafraîchissantes de jasmin.", category: "signature", temp: "cold", recipe: "Extraction à froid ratio 1:10 pendant 18h en chambre froide. Servir sur lit de glace filtrée purifiée.", img: "https://images.unsplash.com/photo-1517701604599-bb29b565090c?w=500&q=80" },
-      "item_5": { id: "item_5", title: "Mochi Artisanal Sésame Noir", price: "5.00", desc: "Douceur traditionnelle japonaise au cœur de sésame noir torréfié. L'accord parfait.", category: "douceurs", temp: "all", recipe: "Produit frais du matin. Servir à température ambiante sur coupelle noire mate d'argile.", img: "https://images.unsplash.com/photo-1606313564200-e75d5e30476c?w=500&q=80" }
+      "item_1": { 
+        id: "item_1", 
+        title: "Expresso d'Origine Sacrée", 
+        price: "4.50", 
+        desc: "Notes intenses de cacao sauvage et d'écorce d'orange grillée. Provenance exclusive de terroirs d'altitude d'Éthiopie.", 
+        category: "signature", 
+        temp: "hot", 
+        recipe: "9.5g de café moulu très finement. Extraction de 26 secondes à 93.5°C pour obtenir exactement 22ml en tasse. Servir immédiatement dans une tasse préchauffée.", 
+        img: "https://images.unsplash.com/photo-1510972527409-cac19ff31d7c?w=500&q=80" 
+      },
+      "item_2": { 
+        id: "item_2", 
+        title: "Latte de la Haute Sphère", 
+        price: "6.50", 
+        desc: "Douceur lactée onctueuse mariée à un double ristretto de Bourbon pointu. Texture velours et équilibre parfait.", 
+        category: "signature", 
+        temp: "hot", 
+        recipe: "Double shot de ristretto (18g de mouture pour 30ml de liquide). 150ml de lait entier texturé délicatement à 62°C pour créer une micro-mousse brillante de 8mm sans bulle d'air visible.", 
+        img: "https://images.unsplash.com/photo-1541167760496-1628856ab772?w=500&q=80" 
+      },
+      "item_test_geisha": { 
+        id: "item_test_geisha", 
+        title: "[Test] Geisha V60 Floral", 
+        price: "8.50", 
+        desc: "Café filtre de prestige d'une clarté absolue. Profil aromatique d'une élégance rare aux notes dominantes de jasmin, de bergamote et de pêche blanche.", 
+        category: "signature", 
+        temp: "hot", 
+        recipe: "15g de café moulu moyen (type sable de quartz). Extraction lente via cône V60 en 3 versements (50g de pré-infusion de 30s, puis versements à 150g et 250g). Eau filtrée à 91°C. Temps total : 2m45s.", 
+        img: "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=500&q=80" 
+      },
+      "item_test_shakerato": { 
+        id: "item_test_shakerato", 
+        title: "[Test] Shakerato Épicé Givré", 
+        price: "5.50", 
+        desc: "Double shot d'expresso vigoureusement frappé au shaker avec de la glace et un soupçon de sirop artisanal de cardamome. Une mousse aérienne et glacée incomparable.", 
+        category: "signature", 
+        temp: "cold", 
+        recipe: "Extraire un double expresso chaud sur 5ml de sirop de cardamome maison. Verser instantanément dans un shaker rempli de gros glaçons durs. Shaker intensément pendant 12 secondes. Filtrer lors du service dans une coupe de cristal refroidie.", 
+        img: "https://images.unsplash.com/photo-1517701604599-bb29b565090c?w=500&q=80" 
+      },
+      "item_test_nitro": { 
+        id: "item_test_nitro", 
+        title: "[Test] Cold Brew Velours", 
+        price: "6.00", 
+        desc: "Infusion lente à froid de 20 heures, filtrée trois fois pour une limpidité parfaite. Offre une sucrosité naturelle et une acidité extrêmement douce et rafraîchissante.", 
+        category: "signature", 
+        temp: "cold", 
+        recipe: "Café moulu grossièrement, infusé dans de l'eau purifiée à 4°C pendant 20 heures stables. Double filtration papier. Servir sur une grosse sphère de glace limpide sans remuer.", 
+        img: "https://images.unsplash.com/photo-1461023058943-07fcbe16d735?w=500&q=80" 
+      },
+      "item_3": { 
+        id: "item_3", 
+        title: "Infusion Noire Impériale", 
+        price: "7.00", 
+        desc: "Thé noir fumé d'exception infusé à température contrôlée. Notes boisées profondes, de cuir fin et de résine précieuse.", 
+        category: "prestige", 
+        temp: "hot", 
+        recipe: "3g de feuilles entières de thé de la collection impériale. Eau de source chauffée à 85°C. Infusion chronométrée exacte pendant 4 minutes dans une théière en argile rincée.", 
+        img: "https://images.unsplash.com/photo-1576092768241-dec231879fc3?w=500&q=80" 
+      },
+      "item_test_matcha": { 
+        id: "item_test_matcha", 
+        title: "[Test] Matcha Latte Cérémonie", 
+        price: "7.50", 
+        desc: "Poudre de thé vert Matcha de grade cérémonial du Japon, fouettée traditionnellement au chasen, nappée de lait de pavoine chaud texturé.", 
+        category: "prestige", 
+        temp: "hot", 
+        recipe: "2g de Matcha tamisé avec soin. 40ml d'eau pure à 75°C. Battre vigoureusement en mouvements de 'W' jusqu'à l'obtention d'une émulsion mousseuse vert émeraude. Ajouter délicatement 120ml de lait d'avoine texturé.", 
+        img: "https://images.unsplash.com/photo-1536256263959-770b48d82b0a?w=500&q=80" 
+      },
+      "item_5": { 
+        id: "item_5", 
+        title: "Mochi Artisanal Sésame Noir", 
+        price: "5.00", 
+        desc: "Douceur traditionnelle japonaise au cœur fondant de sésame noir torréfié. L'accord de texture parfait pour escorter un expresso serré.", 
+        category: "douceurs", 
+        temp: "all", 
+        recipe: "Produit frais façonné chaque matin par l'artisan du salon. Conserver à température ambiante douce. Présenter délicatement au centre d'une coupelle noire mate d'argile.", 
+        img: "https://images.unsplash.com/photo-1606313564200-e75d5e30476c?w=500&q=80" 
+      }
     };
 
     // États de l'application locale
@@ -629,7 +703,7 @@
       applyRoleUI();
     }
 
-    // Changement de Mode Sombre / Clair de luxe
+    // Changement de Mode Sombre / Clair
     function toggleThemeSystem() {
       const currentTheme = document.documentElement.getAttribute('data-theme');
       const newTheme = currentTheme === 'light' ? 'dark' : 'light';
@@ -659,7 +733,6 @@
           activeOrders.push({ id, ...data[id] });
         }
       }
-      // Tri chronologique inverse (plus récentes d'abord)
       activeOrders.sort((a, b) => b.timestamp - a.timestamp);
       
       renderAdminOrdersTable();
@@ -675,11 +748,8 @@
       for (let key in catalogData) {
         const item = catalogData[key];
         
-        // Filtre Recherche
         if (searchQuery && !item.title.toLowerCase().includes(searchQuery)) continue;
-        // Filtre Catégorie
         if (activeCat !== "all" && item.category !== activeCat) continue;
-        // Filtre Température
         if (activeTemp !== "all" && item.temp !== "all" && item.temp !== activeTemp) continue;
 
         const card = document.createElement('div');
@@ -706,7 +776,7 @@
       }
     }
 
-    // Rendu du nouveau Tableau Administrateur des Commandes au début
+    // Rendu du Tableau Administrateur des Commandes
     function renderAdminOrdersTable() {
       const tableBody = document.getElementById('adminOrdersTableBody');
       if (!tableBody) return;
@@ -794,7 +864,6 @@
       const stepPreparing = document.getElementById('step-preparing');
       const stepReady = document.getElementById('step-ready');
 
-      // Reset des états des étapes
       [stepPending, stepPreparing, stepReady].forEach(st => st.classList.remove('active', 'done'));
 
       if (currentOrder.status === 'pending') {
@@ -887,7 +956,6 @@
       if (currentStatus === 'pending') nextStatus = "preparing";
       else if (currentStatus === 'preparing') nextStatus = "ready";
       else if (currentStatus === 'ready') {
-        // L'archivage supprime la commande active du tableau
         deleteOrderSingle(id);
         return;
       }
@@ -1018,7 +1086,7 @@
       });
     });
 
-    // Enregistrement des éléments globaux dans l'objet window pour compatibilité HTML Inline
+    // Enregistrement dans window pour compatibilité HTML Inline
     window.validateGatewayLogin = validateGatewayLogin;
     window.toggleThemeSystem = toggleThemeSystem;
     window.triggerAdminAccessSecret = triggerAdminAccessSecret;
