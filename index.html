@@ -399,7 +399,7 @@
           <img src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=600&q=80" alt="Café de Spécialité" />
           <div class="frame-caption">
             <h4>Torréfaction Maison</h4>
-            <p>Sélections 100% Arabica Arabica</p>
+            <p>Sélections 100% Arabica</p>
           </div>
         </div>
       </section>
@@ -521,13 +521,20 @@
     const app = initializeApp(firebaseConfig);
     const db = getDatabase(app);
 
-    // Catalogue des boissons d'origine (Affichage instantané)
+    // Catalogue complet enrichi avec de nouvelles boissons types (Chaudes et Glacées)
     const initialCatalog = {
       "rec_1": { id: "rec_1", title: "Espresso Origine", cat: "classique", temp: "chaud", price: "3.50", description: "Un espresso extrait à haute précision à partir de notre récolte de saison.", recipeInfo: "18g de café moulu fin, 36g de boisson en tasse. Notes intenses de cacao brut et d'agrumes doux.", image: "https://images.unsplash.com/photo-1510972527409-cac19ff31d7c?w=500&q=80" },
       "rec_2": { id: "rec_2", title: "Caffè Latte de la Maison", cat: "classique", temp: "chaud", price: "4.80", description: "Double espresso mélangé harmonieusement à un lait soyeux texturé.", recipeInfo: "Double ristretto, lait entier micro-texturé à 60°C pour une douceur naturelle parfaite.", image: "https://images.unsplash.com/photo-1541167760496-1628856ab772?w=500&q=80" },
       "rec_3": { id: "rec_3", title: "Élixir d'Or (Golden Milk)", cat: "signature", temp: "chaud", price: "5.50", description: "Boisson réconfortante signature au curcuma, épices secrètes et miel bio.", recipeInfo: "Infusion à chaud de curcuma frais, cannelle de Ceylan, gingembre, poivre noir et lait végétal.", image: "https://images.unsplash.com/photo-1544787219-7f47ccb76574?w=500&q=80" },
       "rec_4": { id: "rec_4", title: "Cold Brew Infusion Fine", cat: "alternative", temp: "glacé", price: "5.00", description: "Café extrait à froid pendant 16h pour une rondeur d'une douceur absolue.", recipeInfo: "Mouture grossière, eau filtrée à 4°C, extraction lente. Très faible acidité, notes fruitées prononcées.", image: "https://images.unsplash.com/photo-1517701604599-bb29b565090c?w=500&q=80" },
-      "rec_5": { id: "rec_5", title: "Freddo Cappuccino Athénien", cat: "signature", temp: "glacé", price: "5.20", description: "Double espresso frappé sur glace sous une mousse de lait froide aérienne.", recipeInfo: "Espresso émulsionné au shaker avec glace, surmonté d'une crème de lait écrémé texturée à froid.", image: "https://images.unsplash.com/photo-1553909489-cd47e0907980?w=500&q=80" }
+      "rec_5": { id: "rec_5", title: "Freddo Cappuccino Athénien", cat: "signature", temp: "glacé", price: "5.20", description: "Double espresso frappé sur glace sous une mousse de lait froide aérienne.", recipeInfo: "Espresso émulsionné au shaker avec glace, surmonté d'une crème de lait écrémé texturée à froid.", image: "https://images.unsplash.com/photo-1553909489-cd47e0907980?w=500&q=80" },
+      
+      // AJOUTS : NOUVELLES BOISSONS TYPES EXEMPLES
+      "rec_6": { id: "rec_6", title: "Flat White Velours", cat: "classique", temp: "chaud", price: "4.90", description: "Une texture plus fine qu'un latte traditionnel, mettant en valeur un profil d'espresso corsé et délicat.", recipeInfo: "Double shot de ristretto (30ml), fine couche de micro-mousse de lait de 0.5 cm. Idéal pour apprécier l'origine pure.", image: "https://images.unsplash.com/photo-1577968897966-3d4325b36b61?w=500&q=80" },
+      "rec_7": { id: "rec_7", title: "Mocha Nuage de Cacao", cat: "signature", temp: "chaud", price: "5.80", description: "L'équilibre ultime entre l'intensité d'un espresso, l'onctuosité du lait chaud et un chocolat noir d'artisan fondu.", recipeInfo: "Espresso de spécialité, 20g de ganache maison au chocolat noir 72%, lait micro-texturé et zeste de fève de cacao.", image: "https://images.unsplash.com/photo-1607958996333-41aef7caefaa?w=500&q=80" },
+      "rec_8": { id: "rec_8", title: "Matcha Latte Cérémonie", cat: "alternative", temp: "chaud", price: "5.60", description: "Poudre de thé vert Matcha de qualité rituelle fouettée traditionnellement, enveloppée d'un lait d'avoine soyeux.", recipeInfo: "3g de Matcha d'Uji (Kyoto) battu au Chasen à 80°C, allongé au lait d'avoine Barista bio légèrement sucré.", image: "https://images.unsplash.com/photo-1536256263959-770b48d82b0a?w=500&q=80" },
+      "rec_9": { id: "rec_9", title: "Iced Espresso Tonic Aura", cat: "alternative", temp: "glacé", price: "5.40", description: "Une boisson estivale rafraîchissante et pétillante mariant l'amertume du tonic et l'acidité fruitée d'un shot de café.", recipeInfo: "Glace premium, 150ml de Tonic artisanal, 1 tranche de citron déshydratée, surmontée délicatement d'un espresso d'Éthiopie.", image: "https://images.unsplash.com/photo-1513530534585-c7b1394c6d51?w=500&q=80" },
+      "rec_10": { id: "rec_10", title: "Caramel Macchiato Grivé", cat: "signature", temp: "glacé", price: "5.90", description: "Lait glacé onctueux marbré de caramel au beurre salé maison et transpercé par un espresso frappé.", recipeInfo: "Sirop de vanille bourbon en base, cubes de glace, lait entier, shot d'espresso versé au centre, nappage caramel maison.", image: "https://images.unsplash.com/photo-1461023058043-03348141d830?w=500&q=80" }
     };
 
     // États globaux réactifs
