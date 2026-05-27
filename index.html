@@ -105,9 +105,9 @@
     .btn-luxe:hover { background: var(--text-light); color: var(--bg-salon); transform: translateY(-1px); }
     .auth-error { color: #d66b53; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; margin-top: 15px; display: none; font-weight: 500; }
 
-    /* HEADER - Sticky pour une meilleure navigation mobile */
+    /* HEADER */
     header {
-      position: sticky; top: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between;
+      position: absolute; top: 0; left: 0; right: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between;
       padding: 15px 40px; background: var(--panel-bg); backdrop-filter: blur(var(--blur)); -webkit-backdrop-filter: blur(var(--blur));
       border-bottom: 1px solid var(--border-fine); transition: background-color 0.4s ease;
     }
@@ -131,7 +131,7 @@
     .btn-quit { background: none; border: none; color: var(--text-muted); font-family: inherit; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1px; cursor: pointer; transition: color 0.3s; }
     .btn-quit:hover { color: var(--gold); }
 
-    .main-body-content { padding-top: 20px; }
+    .main-body-content { padding-top: 90px; }
 
     /* ============================================================
        SUIVI DE PREPARATION SENS DESIGN
@@ -144,11 +144,12 @@
     }
     .tracker-header { display: flex; justify-content: space-between; align-items: center; }
     .tracker-header h4 { font-family: var(--font-serif); font-size: 1.3rem; color: var(--gold); font-weight: 400; }
-    .tracker-status-badge { font-size: 0.65rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; padding: 4px 10px; border-radius: 20px; background: rgba(197, 168, 128, 0.1); color: var(--gold); border: 1px solid var(--border-fine); }
+    .tracker-status-badge { font-size: 0.65rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; padding: 4px 10px; border-radius: 20px; background: rgba(197, 168, 128, 0.1); color: var(--gold); border: 1px solid var(--border-fine); border-radius: 20px; }
     
     .tracker-progress-container { position: relative; width: 100%; height: 6px; background: rgba(197, 168, 128, 0.15); border-radius: 3px; margin: 15px 0; }
     .tracker-progress-bar { position: absolute; left: 0; top: 0; height: 100%; width: 15%; background: var(--gold); border-radius: 3px; transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1); }
     
+    .tracker-steps { display: flex; justify-content: space-between; position: relative; }
     .tracker-steps { display: flex; justify-content: space-between; position: relative; }
     .tracker-step { display: flex; flex-direction: column; align-items: center; gap: 6px; flex: 1; text-align: center; }
     .step-icon { width: 30px; height: 30px; border-radius: 50%; background: var(--bg-salon); border: 1px solid var(--border-fine); display: flex; align-items: center; justify-content: center; font-size: 0.8rem; color: var(--text-muted); transition: all 0.4s; }
@@ -240,7 +241,7 @@
     .btn-view-product { background: transparent; border: 1px solid var(--gold); color: var(--gold); padding: 10px; font-family: var(--font-sans); font-size: 0.65rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; text-align: center; border-radius: 4px; transition: all 0.3s; margin-top: auto; }
     .carte-item:hover .btn-view-product { background: var(--gold); color: #110a05; }
 
-    /* ONGLETS FICHE PRODUIT — OPTIMISÉ (right: 0;) */
+    /* ONGLETS FICHE PRODUIT */
     .tabs-nav-product { display: flex; border-bottom: 1px solid var(--border-fine); margin-bottom: 20px; gap: 15px; overflow-x: auto; -webkit-overflow-scrolling: touch; }
     .tab-link-product { background: none; border: none; font-family: var(--font-serif); font-size: 1.15rem; color: var(--text-muted); padding-bottom: 8px; cursor: pointer; position: relative; white-space: nowrap; }
     .tab-link-product.active { color: var(--gold); }
@@ -265,8 +266,8 @@
     footer p { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 2px; color: var(--text-muted); }
 
     @media (max-width: 850px) {
-      header { padding: 15px 20px; flex-direction: column; gap: 15px; }
-      .main-body-content { padding-top: 10px; }
+      header { padding: 15px 20px; flex-direction: column; gap: 15px; position: absolute; }
+      .main-body-content { padding-top: 140px; }
       .nav-controls { width: 100%; justify-content: center; flex-wrap: wrap; gap: 12px; }
       .hero-cinematic { grid-template-columns: 1fr; padding: 25px 20px; gap: 25px; text-align: center; }
       .hero-title-luxe { font-size: 2rem; }
@@ -449,7 +450,7 @@
       <input type="hidden" id="modalDrinkId" />
       <div class="form-group">
         <label for="guestNameInput">Votre Prénom</label>
-        <input type="text" id="guestNameInput" class="form-input" placeholder="Ex: Papa, Maman, Lucas, Séverine..." />
+        <input type="text" id="guestNameInput" class="form-input" placeholder="Ex: Papa, Maman, Lucas..." />
       </div>
       <div class="modal-form-grid">
         <div class="form-group">
@@ -584,20 +585,8 @@
     let unsubsTracker = null;
     let dernierStatutConnu = "";
 
-    // OPTIMISATION AUDIO : Fonction de déblocage audio pour iOS/Android au premier clic utilisateur
-    function unblockAudioContext() {
-      if ('speechSynthesis' in window) {
-        const u = new SpeechSynthesisUtterance('');
-        window.speechSynthesis.speak(u);
-      }
-      const audioSilence = new Audio('https://assets.mixkit.co/active_storage/sfx/911/911-200.wav');
-      audioSilence.volume = 0.01;
-      audioSilence.play().catch(() => {});
-    }
-
-    // 2. LOGIQUE DE VALIDATION DES CLEFS
+    // 2. COMPTES & SÉCURITÉ GATES
     function validateGatewayLogin() {
-      unblockAudioContext(); 
       const pass = document.getElementById('gateway-password-input').value.trim();
       const err = document.getElementById('gateway-global-error');
       
@@ -653,12 +642,12 @@
     }
 
     function triggerAdminAccessSecret() {
-      unblockAudioContext();
+      if (currentRole === "admin") return;
       const promptName = prompt("Entrez votre prénom pour ouvrir une table (Ex: Maman, Papa, Lucas, Séverine...) :");
       if (promptName && promptName.trim() !== "") {
         currentUser = promptName.trim();
         localStorage.setItem("sipsavour_username", currentUser);
-        dernierStatutConnu = ""; 
+        dernierStatutConnu = ""; // Force le rafraîchissement audio pour le nouvel arrivant
         applyRoleUI();
         showToastNotification(`Bienvenue à la table de ${currentUser} !`);
       }
@@ -669,79 +658,63 @@
       location.reload();
     }
 
-    // 3. BASE DE DONNÉES REALTIME + INJECTION BOISSONS CHAUDES BETA
+    // 3. BASE DE DONNÉES SYNCHRO : CATALOGUE DE CRÉATIONS & INJECTION AUTOMATIQUE
+    function checkAndInjectDefaultDrinks(snapshot) {
+      if (snapshot.empty) {
+        const exemples = [
+          {
+            name: "Latté Crème Vanille & Macadamia",
+            category: "signature",
+            temperature: "hot",
+            price: "6.50",
+            image: "https://images.unsplash.com/photo-1541167760496-1628856ab772?w=600&q=80",
+            description: "Double shot d'espresso Bourbon, lait d'avoine texturé, infusion artisanale de macadamia grillée et vraie vanille de Madagascar.",
+            history: "Inspiré par les notes naturellement gourmandes de notre variété de café Bourbon Jaune cultivée en haute altitude. L'association de la noix et de la vanille vient sublimer le corps soyeux de cette extraction sans masquer ses arômes de cacao.",
+            method: "Ratio d'extraction : 18g de café pour 36g de boisson en tasse.\nTemps d'extraction : 27 secondes.\nLait d'avoine chauffé et texturé à 62°C avec une micro-mousse dense de 1 cm.",
+            gear: "La Marzocco Linea Mini, Broyeur Mahlkönig E65S"
+          },
+          {
+            name: "Chaï Latté Céleste aux Épices",
+            category: "prestige",
+            temperature: "hot",
+            price: "6.00",
+            image: "https://images.unsplash.com/photo-1576092768241-dec231879fc3?w=600&q=80",
+            description: "Thé noir Assam lentement infusé aux épices entières (cardamome, cannelle, gingembre, badiane), lié à un lait onctueux et un filet de miel floral.",
+            history: "Une recette secrète développée pour les après-midis d'hiver au salon. Nous utilisons un mélange d'épices fraîchement torréfiées à sec au comptoir juste avant l'infusion pour libérer toutes les huiles essentielles des écorces.",
+            method: "Infusion du thé et des épices : 5 minutes à 95°C dans 100ml d'eau purifiée.\nÉmulsion : Compléter avec 150ml de lait chaud très mousseux.",
+            gear: "Pichet d'émulsion de précision, Bouilloire Fellow Stagg EKG"
+          },
+          {
+            name: "Chocolat Noir Velours & Fleur de Sel",
+            category: "douceurs",
+            temperature: "hot",
+            price: "5.80",
+            image: "https://images.unsplash.com/photo-1544787219-7f47ccb76574?w=600&q=80",
+            description: "Chocolat pure origine de dégustation (72% de cacao), fondu à la vapeur, rehaussé d'une pointe fine de fleur de sel et de crème fleurette.",
+            history: "Pour les amateurs de vraie gourmandise texturée. Nous avons banni les poudres industrielles pour ne travailler qu'avec des pistoles de chocolat de couverture grand cru fondues directement sous la buse vapeur de la machine.",
+            method: "Mélange de 40g de pistoles de chocolat noir avec 200ml de lait entier.\nMontage lent à la buse vapeur jusqu'à obtention d'une texture nappante.\nAjouter 3 cristaux de fleur de sel en surface avant de servir.",
+            gear: "Buse vapeur haute pression La Marzocco"
+          }
+        ];
+
+        exemples.forEach(boisson => {
+          db.collection("creations-barista").add(boisson);
+        });
+        console.log("Exemples de boissons chaudes injectés avec succès dans Cloud Firestore !");
+      }
+    }
+
     function initializeRealtimeCatalogs() {
       db.collection("creations-barista").orderBy("name", "asc").onSnapshot((snapshot) => {
+        // Exécute l'injection automatique de l'Option B si aucun document n'existe
+        checkAndInjectDefaultDrinks(snapshot);
+        
         globalCatalogsRecipes = [];
         snapshot.forEach(doc => {
           globalCatalogsRecipes.push({ id: doc.id, ...doc.data() });
         });
-
-        if (globalCatalogsRecipes.length === 0) {
-          injectBetaHotDrinksData();
-        } else {
-          renderGrid();
-          renderAdminCatalogManagement();
-        }
-      });
-    }
-
-    function injectBetaHotDrinksData() {
-      const betaDrinks = [
-        {
-          name: "Cappuccino de la Maison",
-          category: "signature",
-          temperature: "hot",
-          price: "4.50 €",
-          image: "https://images.unsplash.com/photo-1534778101976-62847782c213?w=500&q=80",
-          description: "Un espresso serré équilibré, enrobé d'une mousse de lait d'une onctuosité absolue, saupoudré de fèves de cacao râpées.",
-          history: "Inspiré des rituels des salons de Vienne, revisité avec notre assemblage signature de grains pure origine éthiopienne.",
-          method: "Ratio: 1/2 espresso, 1/2 lait micro-moussé à 65°C. Temps d'extraction : 26 secondes.",
-          gear: "La Marzocco Linea Mini & Moulin Mahlkönig E65S"
-        },
-        {
-          name: "Latte Macchiato Vanille Bourbon",
-          category: "signature",
-          temperature: "hot",
-          price: "5.20 €",
-          image: "https://images.unsplash.com/photo-1570968915860-54d5c301fc9f?w=500&q=80",
-          description: "Trois couches parfaites : du lait chaud onctueux, un double shot de nectar de café et une mousse délicate parfumée au sirop de Vanille Bourbon fait maison.",
-          history: "Création gourmande imaginée pour les après-midis d'hiver au coin du feu dans notre salon privé.",
-          method: "15ml de sirop maison, 180ml de lait d'avoine texturé, 1 double shot de café d'origine Colombie.",
-          gear: "Pichet à lait Barista Space & Machine à Espresso"
-        },
-        {
-          name: "Espresso Geisha Intense",
-          category: "signature",
-          temperature: "hot",
-          price: "3.80 €",
-          image: "https://images.unsplash.com/photo-1510972527409-cac5c4415024?w=500&q=80",
-          description: "Un shot pur d'une des variétés de café les plus prestigieuses au monde. Notes florales de jasmin et de bergamote.",
-          history: "Cultivé à haute altitude sur les flancs volcaniques, ce lot Geisha a bénéficié d'une torréfaction blonde ultra-précise.",
-          method: "In: 18g de café moulu fin | Out: 36g de boisson en tasse. Température d'extraction : 93.5°C.",
-          gear: "Moulin Comandante C40 Ninja & Filtre VST 18g"
-        },
-        {
-          name: "Chocolat Chaud Grand Cru 72%",
-          category: "douceurs",
-          temperature: "hot",
-          price: "4.80 €",
-          image: "https://images.unsplash.com/photo-1544787219-7f47ccb76574?w=500&q=80",
-          description: "Chocolat noir de dégustation fondu à la vapeur, lissé avec un lait crémeux et une pointe de fleur de sel de Guérande.",
-          history: "Un assemblage exclusif de fèves de cacao de Madagascar et de l'Équateur pour un équilibre parfait entre acidité et amertume.",
-          method: "40g de pistoles de chocolat noir, 200ml de lait entier monté à la buse vapeur.",
-          gear: "Buse vapeur haute pression & Fouet de précision"
-        }
-      ];
-
-      let itemsProcessed = 0;
-      betaDrinks.forEach(drink => {
-        db.collection("creations-barista").add(drink).then(() => {
-          itemsProcessed++;
-          if (itemsProcessed === betaDrinks.length) {
-            showToastNotification("Menu Beta Initialisé avec succès !");
-          }
-        });
+        renderGrid();
+        renderAdminCatalogManagement();
       });
     }
 
@@ -778,7 +751,7 @@
       });
     }
 
-    // 4. ACTION INTERACTIVE ET PREPARATION DES ORDERS
+    // 4. LES MODALES (FICHES PRODUITS & LOGIQUE DE COMMANDE)
     function openProductModal(item) {
       activeProductDetails = item;
       document.getElementById('prodModalTitle').innerText = item.name;
@@ -860,7 +833,9 @@
       });
     }
 
-    // 5. ECOUTER ET JOUER LES NOTIFICATIONS VOCALES
+    // ============================================================
+    // 5. NOTIFICATION REPLI : TEXT-TO-SPEECH CLIENT SUIVANT LE STATUT
+    // ============================================================
     function ecouterCommandesClient() {
       if (unsubsTracker) unsubsTracker();
 
@@ -886,10 +861,13 @@
             const progress = document.getElementById('trackerProgressBar');
             document.querySelectorAll('.tracker-step').forEach(s => s.className = "tracker-step");
 
+            // --- CAS 1 : LA COMMANDE EST EN ATTENTE ---
             if(data.status === "En attente") {
               progress.style.width = "15%";
               document.getElementById('step-pending').classList.add('active');
             } 
+            
+            // --- CAS 2 : LE BARISTA PREND EN CHARGE LA COMMANDE ---
             else if (data.status === "En cours") {
               progress.style.width = "55%";
               document.getElementById('step-pending').classList.add('done');
@@ -899,9 +877,13 @@
                 const phrasePreparation = `Le café de ${data.user} est en préparation.`;
                 const messageVocal = new SpeechSynthesisUtterance(phrasePreparation);
                 messageVocal.lang = 'fr-FR';
+                messageVocal.pitch = 1.1;
+                messageVocal.rate = 1.0;
                 window.speechSynthesis.speak(messageVocal);
               }
             } 
+            
+            // --- CAS 3 : LA COMMANDE EST PRÊTE ---
             else if (data.status === "Prêt") {
               progress.style.width = "100%";
               document.getElementById('step-pending').classList.add('done');
@@ -912,6 +894,8 @@
                 const phrasePret = `Hé ${data.user} ! Ton ${data.boisson} est prêt ! Viens le récupérer au comptoir !`;
                 const messageVocal = new SpeechSynthesisUtterance(phrasePret);
                 messageVocal.lang = 'fr-FR';
+                messageVocal.pitch = 1.1;
+                messageVocal.rate = 1.0;
 
                 const bruitClochette = new Audio('https://assets.mixkit.co/active_storage/sfx/911/911-200.wav');
                 bruitClochette.play().then(() => {
@@ -921,13 +905,12 @@
                 });
               }
             }
-            container.appendChild(ticket);
             dernierStatutConnu = data.status;
           });
         });
     }
 
-    // 6. SUIVI ADMIN (BARISTA COCKPIT)
+    // 6. ZONE BARISTA (ADMIN ACTIONS & DASHBOARD MANAGEMENT)
     function listenAllOrdersForAdmin() {
       db.collection("commandes-café").orderBy("timestamp", "asc").onSnapshot((snapshot) => {
         const container = document.getElementById('adminOrdersContainer');
@@ -948,17 +931,17 @@
           if(o.status === "En attente") {
             stateClass = "status-pending";
             actionButtonsHTML = `
-              <button class="btn-single-action btn-action-next" onclick="updateOrderStatus(this, '${doc.id}', 'En cours')">Prendre en charge</button>
+              <button class="btn-single-action btn-action-next" onclick="updateOrderStatus('${doc.id}', 'En cours')">Prendre en charge</button>
             `;
           } else if(o.status === "En cours") {
             stateClass = "status-preparing";
             actionButtonsHTML = `
-              <button class="btn-single-action btn-action-next" onclick="updateOrderStatus(this, '${doc.id}', 'Prêt')">✓ Signaler Prêt</button>
+              <button class="btn-single-action btn-action-next" onclick="updateOrderStatus('${doc.id}', 'Prêt')">✓ Signaler Prêt</button>
             `;
           } else {
             stateClass = "status-ready";
             actionButtonsHTML = `
-              <button class="btn-single-action" style="border-color: var(--text-muted); color: var(--text-muted)" onclick="deleteOrderSingle(this, '${doc.id}')">Archiver</button>
+              <button class="btn-single-action" style="border-color: var(--text-muted); color: var(--text-muted)" onclick="deleteOrderSingle('${doc.id}')">Archiver</button>
             `;
           }
 
@@ -977,19 +960,11 @@
       });
     }
 
-    function updateOrderStatus(btnElement, id, newStatus) {
-      if(btnElement) {
-        btnElement.disabled = true;
-        btnElement.innerText = "Mise à jour...";
-      }
+    function updateOrderStatus(id, newStatus) {
       db.collection("commandes-café").doc(id).update({ status: newStatus });
     }
 
-    function deleteOrderSingle(btnElement, id) {
-      if(btnElement) {
-        btnElement.disabled = true;
-        btnElement.innerText = "Archivage...";
-      }
+    function deleteOrderSingle(id) {
       db.collection("commandes-café").doc(id).delete();
     }
 
@@ -1001,7 +976,7 @@
       }
     }
 
-    // 7. GESTION FORMULAIRE CRÉATION ÉLIXIRS
+    // 7. GESTION DU CATALOGUE (AJOUT / ÉDITION DE CRÉATIONS)
     function renderAdminCatalogManagement() {
       const container = document.getElementById('adminCatalogContainer');
       container.innerHTML = "";
@@ -1079,6 +1054,7 @@
       }
     }
 
+    // UTILITAIRES UI & DESIGN SYSTEM INTERFACES
     function toggleThemeSystem() {
       const body = document.body;
       const btn = document.getElementById('themeToggle');
@@ -1098,8 +1074,11 @@
       setTimeout(() => { toast.classList.remove('show'); }, 3500);
     }
 
+    // GESTION DES FILTRES DE CURATION
     document.addEventListener('DOMContentLoaded', () => {
-      if (currentRole) { setupApplicationEntry(); }
+      if (currentRole) {
+        setupApplicationEntry();
+      }
       
       document.getElementById('searchInput').addEventListener('input', e => {
         searchQuery = e.target.value.toLowerCase().trim();
@@ -1109,18 +1088,23 @@
       document.querySelectorAll('.filter-btn-luxe').forEach(btn => {
         btn.addEventListener('click', () => {
           document.querySelectorAll('.filter-btn-luxe').forEach(p => p.classList.remove('active'));
-          btn.classList.add('active'); activeCat = btn.dataset.cat; renderGrid();
+          btn.classList.add('active'); 
+          activeCat = btn.dataset.cat; 
+          renderGrid();
         });
       });
 
       document.querySelectorAll('.temp-btn-luxe').forEach(btn => {
         btn.addEventListener('click', () => {
           document.querySelectorAll('.temp-btn-luxe').forEach(p => p.classList.remove('active'));
-          btn.classList.add('active'); activeTemp = btn.dataset.temp; renderGrid();
+          btn.classList.add('active'); 
+          activeTemp = btn.dataset.temp; 
+          renderGrid();
         });
       });
     });
 
+    // Enregistrement des éléments globaux dans l'objet window pour compatibilité HTML Inline
     window.validateGatewayLogin = validateGatewayLogin;
     window.toggleThemeSystem = toggleThemeSystem;
     window.triggerAdminAccessSecret = triggerAdminAccessSecret;
@@ -1137,6 +1121,7 @@
     window.saveRecipeFromAdminForm = saveRecipeFromAdminForm;
     window.clearAllOrders = clearAllOrders;
     window.deleteRecipeCatalog = deleteRecipeCatalog;
+
   </script>
 </body>
 </html>
