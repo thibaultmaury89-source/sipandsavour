@@ -142,8 +142,7 @@
     .tracker-card {
       background: var(--panel-bg); backdrop-filter: blur(var(--blur)); border: 1px solid var(--gold); border-radius: 8px; padding: 20px; box-shadow: var(--shadow-luxe); display: flex; flex-direction: column; gap: 15px;
     }
-    .tracker-header { display: flex; justify-content: space-between; align-items: center; }
-    .tracker-header h4 { font-family: var(--font-serif); font-size: 1.3rem; color: var(--gold); font-weight: 400; }
+    .tracker-card h4 { font-family: var(--font-serif); font-size: 1.3rem; color: var(--gold); font-weight: 400; }
     .tracker-status-badge { font-size: 0.65rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; padding: 4px 10px; border-radius: 20px; background: rgba(197, 168, 128, 0.1); color: var(--gold); border: 1px solid var(--border-fine); }
     
     .tracker-progress-container { position: relative; width: 100%; height: 6px; background: rgba(197, 168, 128, 0.15); border-radius: 3px; margin: 15px 0; }
@@ -208,9 +207,7 @@
     .frame-caption h4 { font-family: var(--font-serif); font-size: 1.1rem; color: var(--gold); font-weight: 400; }
     .frame-caption p { font-size: 0.6rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
 
-    /* ============================================================
-       NOUVEAU - SECTION BOISSON DU MOMENT (BARISTA CHOICE)
-    ============================================================ */
+    /* SECTION BOISSON DU MOMENT (BARISTA CHOICE) */
     .barista-choice-section { max-width: 1300px; margin: 30px auto; padding: 0 40px; }
     .barista-choice-card { display: grid; grid-template-columns: 300px 1fr; background: linear-gradient(135deg, rgba(197, 168, 128, 0.08) 0%, var(--panel-bg) 100%); border: 1px solid var(--gold); border-radius: 8px; overflow: hidden; box-shadow: var(--shadow-luxe); position: relative; }
     .barista-choice-media { width: 100%; height: 100%; min-height: 220px; overflow: hidden; position: relative; border-right: 1px solid var(--border-fine); }
@@ -232,8 +229,6 @@
     .filter-btn-luxe { background: none; border: none; font-family: var(--font-serif); font-size: 1.25rem; color: var(--text-muted); cursor: pointer; transition: all 0.3s; padding-bottom: 3px; position: relative; }
     .filter-btn-luxe:hover, .filter-btn-luxe.active { color: var(--gold); }
     .filter-btn-luxe.active::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 1px; background: var(--gold); }
-    
-    .temp-selector-luxe { display: flex; border: 1px solid var(--border-fine); padding: 2px; border-radius: 4px; display: none; } /* Caché car le filtrage se fait par type désormais */
 
     .grid-container { max-width: 1300px; margin: 0 auto; padding: 0 40px 80px; }
     .menu-grid-luxe { display: grid; grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); gap: 30px; }
@@ -248,7 +243,6 @@
     
     .item-tag-hot-cold { position: absolute; top: 10px; left: 10px; font-size: 0.55rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; padding: 3px 8px; border-radius: 3px; backdrop-filter: blur(4px); }
     .tag-hot { background: rgba(214, 107, 83, 0.15); color: #e57c67; border: 1px solid rgba(214, 107, 83, 0.3); }
-    .tag-cold { background: rgba(114, 150, 105, 0.15); color: #a8c99b; border: 1px solid rgba(114, 150, 105, 0.3); }
 
     .item-header { display: flex; justify-content: space-between; align-items: baseline; gap: 5px; }
     .item-title { font-family: var(--font-serif); font-size: 1.35rem; font-weight: 400; color: var(--text-light); }
@@ -322,13 +316,13 @@
   <div class="auth-screen" id="authGate">
     <div class="auth-card">
       <h1 class="auth-logo">Sip & Savour</h1>
-      <p class="auth-subtitle">Maison de Torréfaction — Espace Famille</p>
+      <p class="auth-subtitle">Maison de Torréfaction</p>
       <div class="form-group">
-        <label for="gateway-password-input">Clé du Salon Privé</label>
-        <input type="password" id="gateway-password-input" class="form-input" placeholder="Entrez la clé famille..." onkeydown="if(event.key === 'Enter') validateGatewayLogin()">
+        <label for="gateway-password-input">Clé d'accès</label>
+        <input type="password" id="gateway-password-input" class="form-input" placeholder="Entrez votre clé..." onkeydown="if(event.key === 'Enter') validateGatewayLogin()">
       </div>
       <button type="button" class="btn-luxe" onclick="validateGatewayLogin()">Rejoindre la Table</button>
-      <div class="auth-error" id="gateway-global-error">Code incorrect. Veuillez vérifier avec le barista.</div>
+      <div class="auth-error" id="gateway-global-error">Code incorrect. Veuillez réessayer.</div>
     </div>
   </div>
 
@@ -344,7 +338,7 @@
           <input type="text" id="searchInput" placeholder="Rechercher un élixir..." />
         </div>
         <button type="button" class="theme-toggle-btn" id="themeToggle" onclick="toggleThemeSystem()">Mode Clair</button>
-        <div class="club-badge" id="roleBadge" onclick="triggerAdminAccessSecret()">Salon Famille</div>
+        <div class="club-badge" id="roleBadge" onclick="triggerAdminAccessSecret()">Chargement...</div>
         <button type="button" class="btn-quit" onclick="logout()">Quitter</button>
       </div>
     </header>
@@ -416,7 +410,7 @@
         <div>
           <span class="hero-tagline">Expérience Privée</span>
           <h2 class="hero-title-luxe">L'Art de la Torréfaction et des <em>Élixirs de Saison</em></h2>
-          <p class="hero-manifesto">Bienvenue à la table familiale Sip & Savour. Commandez votre café d'exception à distance et suivez sa préparation par votre barista en temps réel.</p>
+          <p class="hero-manifesto">Bienvenue à la table Sip & Savour. Commandez votre café d'exception à distance et suivez sa préparation en temps réel.</p>
         </div>
         <div class="frame-artisan">
           <img src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=600&q=80" alt="Café de Spécialité" />
@@ -439,7 +433,7 @@
             <span class="barista-choice-price" id="choicePrice">- €</span>
             <div class="barista-choice-actions">
               <button class="btn-luxe" style="width: auto; padding: 10px 25px;" id="choiceOrderBtn">Commander cet élixir</button>
-              <button class="btn-single-action btn-action-next" style="display:none; id:adminPinChoiceBtn" id="choiceAdminPinBtn" onclick="triggerPickMomentDrinkAdmin()">★ Définir comme Élixir du Moment</button>
+              <button class="btn-single-action btn-action-next" style="display:none;" id="choiceAdminPinBtn" onclick="triggerPickMomentDrinkAdmin()">★ Définir comme Élixir du Moment</button>
             </div>
           </div>
         </div>
@@ -457,11 +451,6 @@
             <button class="filter-btn-luxe" data-cat="the">Thé et infusions</button>
             <button class="filter-btn-luxe" data-cat="accompagnement">Accompagnements</button>
           </div>
-          <div class="temp-selector-luxe">
-            <button class="temp-btn-luxe active" data-temp="all">Tous</button>
-            <button class="temp-btn-luxe" data-temp="chaud">Chaud</button>
-            <button class="temp-btn-luxe" data-temp="glacé">Glacé</button>
-          </div>
         </div>
       </section>
 
@@ -474,7 +463,7 @@
   <div class="modal-backdrop-luxe" id="productModal" onclick="if(event.target===this) closeProductModal()">
     <div class="modal-box-luxe">
       <h3 class="modal-title-luxe" id="modalProductTitle">Élixir</h3>
-      <span class="product-meta-badge" id="modalProductBadge">Chaud — Café</span>
+      <span class="product-meta-badge" id="modalProductBadge">-</span>
       
       <div class="tabs-nav-product">
         <button class="tab-link-product active" onclick="switchProductTab('desc', this)">Histoire</button>
@@ -554,22 +543,20 @@
     const app = initializeApp(firebaseConfig);
     const db = getDatabase(app);
 
-    // Nouveau Catalogue initialisé selon vos nouveaux onglets demandés
     const initialCatalog = {
-      "rec_1": { id: "rec_1", title: "Espresso Origine", cat: "cafe", temp: "chaud", price: "3.50", description: "Un espresso extrait à haute précision à partir de notre récolte de saison.", recipeInfo: "18g de café moulu fin, 36g de boisson en tasse. Notes de cacao brut.", image: "https://images.unsplash.com/photo-1510972527409-cac19ff31d7c?w=500&q=80" },
-      "rec_2": { id: "rec_2", title: "Caffè Latte de la Maison", cat: "cafe", temp: "chaud", price: "4.80", description: "Double espresso mélangé harmonieusement à un lait soyeux texturé.", recipeInfo: "Double ristretto, lait entier micro-texturé à 60°C pour une douceur naturelle.", image: "https://images.unsplash.com/photo-1541167760496-1628856ab772?w=500&q=80" },
-      "rec_3": { id: "rec_3", title: "Chaï Latte Impérial", cat: "the", temp: "chaud", price: "5.50", description: "Thé noir infusé aux épices traditionnelles indiennes et mousse de lait douce.", recipeInfo: "Mélange de cardamome, cannelle, clou de girofle, gingembre frais broyé et miel liquide.", image: "https://images.unsplash.com/photo-1544787219-7f47ccb76574?w=500&q=80" },
-      "rec_4": { id: "rec_4", title: "Cookie Artisanal aux Trois Chocolats", cat: "accompagnement", temp: "chaud", price: "3.80", description: "Cuit sur place chaque matin, cœur fondant et pépites généreuses.", recipeInfo: "Chocolat noir 70%, chocolat au lait de chèvre et éclats de chocolat blanc caramélisé, pointe de fleur de sel.", image: "https://images.unsplash.com/photo-1499636136210-6f4ee915583e?w=500&q=80" }
+      "rec_1": { id: "rec_1", title: "Espresso Origine", cat: "cafe", price: "3.50", description: "Un espresso extrait à haute précision à partir de notre récolte de saison.", recipeInfo: "18g de café moulu fin, 36g de boisson en tasse. Notes de cacao brut.", image: "https://images.unsplash.com/photo-1510972527409-cac19ff31d7c?w=500&q=80" },
+      "rec_2": { id: "rec_2", title: "Caffè Latte de la Maison", cat: "cafe", price: "4.80", description: "Double espresso mélangé harmonieusement à un lait soyeux texturé.", recipeInfo: "Double ristretto, lait entier micro-texturé à 60°C pour une douceur naturelle.", image: "https://images.unsplash.com/photo-1541167760496-1628856ab772?w=500&q=80" },
+      "rec_3": { id: "rec_3", title: "Chaï Latte Impérial", cat: "the", price: "5.50", description: "Thé noir infusé aux épices traditionnelles indiennes et mousse de lait douce.", recipeInfo: "Mélange de cardamome, cannelle, clou de girofle, gingembre frais broyé et miel liquide.", image: "https://images.unsplash.com/photo-1544787219-7f47ccb76574?w=600&q=80" },
+      "rec_4": { id: "rec_4", title: "Cookie Artisanal aux Trois Chocolats", cat: "accompagnement", price: "3.80", description: "Cuit sur place chaque matin, cœur fondant et pépites généreuses.", recipeInfo: "Chocolat noir 70%, chocolat au lait de chèvre et éclats de chocolat blanc caramélisé, pointe de fleur de sel.", image: "https://images.unsplash.com/photo-1499636136210-6f4ee915583e?w=500&q=80" }
     };
 
     let catalogData = initialCatalog; 
     let activeCat = "all";
-    let activeTemp = "all";
     let searchQuery = "";
     let selectedProduct = null;
     let currentRole = localStorage.getItem("s_role") || ""; 
     let myActiveOrderId = localStorage.getItem("s_my_order_id") || "";
-    let currentChoiceId = "rec_3"; // Boisson du moment par défaut
+    let currentChoiceId = "rec_3";
 
     function showNotification(msg) {
       const t = document.getElementById("globalToast");
@@ -580,17 +567,19 @@
       }
     }
 
+    // MODIFICATION DES MOTS DE PASSE D'ENTRÉE DU PORTAIL
     function validateGatewayLogin() {
-      const pin = document.getElementById("gateway-password-input").value.trim();
+      const pin = document.getElementById("gateway-password-input").value.trim().toLowerCase();
       const err = document.getElementById("gateway-global-error");
-      if (pin === "1311") {
+      
+      if (pin === "famille") {
         currentRole = "family";
         localStorage.setItem("s_role", "family");
         err.style.display = "none";
         document.getElementById("authGate").classList.add("hidden");
         document.getElementById("appWrapper").classList.add("active");
         applyRoleUI();
-      } else if (pin === "2408") {
+      } else if (pin === "admin") {
         currentRole = "barista";
         localStorage.setItem("s_role", "barista");
         err.style.display = "none";
@@ -602,9 +591,10 @@
       }
     }
 
+    // PIN ADITIONNEL SECRET SUR LE BADGE
     function triggerAdminAccessSecret() {
       const p = prompt("Entrez le code d'accès barista :");
-      if (p === "2408") {
+      if (p && p.trim().toLowerCase() === "admin") {
         currentRole = "barista";
         localStorage.setItem("s_role", "barista");
         applyRoleUI();
@@ -653,7 +643,7 @@
       }
     }
 
-    // FIREBASE : CHARGEMENT DES RECETTES
+    // FIREBASE RECEPTIONS
     onValue(ref(db, "recipes"), (snapshot) => {
       const data = snapshot.val();
       if (!data) {
@@ -667,7 +657,6 @@
       updateBaristaChoiceCard();
     });
 
-    // FIREBASE : SÉLECTION INTERNE DE LA BOISSON DU MOMENT
     onValue(ref(db, "baristaChoiceId"), (snapshot) => {
       const id = snapshot.val();
       if (id) {
@@ -693,7 +682,6 @@
       if(btnEl) btnEl.onclick = () => openProductModal(item.id);
     }
 
-    // ADMIN ACTION : METTRE À JOUR L'ÉLIXIR DU MOMENT
     function triggerPickMomentDrinkAdmin() {
       const list = Object.values(catalogData);
       let msg = "Choisissez l'ID de la boisson à mettre en avant :\n\n";
@@ -710,7 +698,6 @@
       }
     }
 
-    // FIREBASE : LES COMMANDES TICKET SYSTEM
     onValue(ref(db, "orders"), (snapshot) => {
       const data = snapshot.val();
       const orders = data ? Object.values(data) : [];
@@ -787,7 +774,6 @@
       }).join("");
     });
 
-    // RENDU D'AFFICHAGE DU CATALOGUE GRAND PUBLIC
     function renderGrid() {
       const g = document.getElementById("menuGrid");
       if (!g) return;
@@ -819,10 +805,14 @@
           `;
         }
 
+        let readableCat = "Café";
+        if(item.cat === "the") readableCat = "Thé et infusions";
+        if(item.cat === "accompagnement") readableCat = "Accompagnement";
+
         return `
           <div class="carte-item">
             <div class="item-media" onclick="openProductModal('${item.id}')">
-              <span class="item-tag-hot-cold tag-hot">${item.cat}</span>
+              <span class="item-tag-hot-cold tag-hot">${readableCat}</span>
               <img src="${item.image || 'https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=500&q=80'}" alt="${item.title}">
             </div>
             <div class="item-header" onclick="openProductModal('${item.id}')">
@@ -852,14 +842,13 @@
       `).join("");
     }
 
-    // ENVOI COMMANDE TICKET
     function submitOrderToFirebase() {
       const gInput = document.getElementById("orderGuestNameInput");
       const name = gInput ? gInput.value.trim() : "";
       const customs = document.getElementById("orderCustomsInput") ? document.getElementById("orderCustomsInput").value.trim() : "";
       
       if (!name) {
-        alert("Saisissez votre prénom ou le nom de votre table pour la commande.");
+        alert("Saisissez votre prénom pour la commande.");
         return;
       }
 
@@ -919,7 +908,6 @@
       }
     }
 
-    // ACTIONS ÉDITION CATALOGUE BARISTA (RÉPARÉ ET VÉRIFIÉ)
     function openRecipeAdminModal(id = '') {
       const m = document.getElementById("recipeAdminModal");
       const f = document.getElementById("recipeAdminForm");
@@ -949,7 +937,6 @@
       if(m) m.classList.remove("active");
     }
 
-    // SOLUTION DU BOUTON ENREGISTRER SANS EFFET : COUPLAGE EXPLICITE VIA UPDATE / SET
     function saveRecipeFromAdminForm() {
       let id = document.getElementById("adminRecipeId").value;
       const isNew = (!id);
@@ -967,15 +954,14 @@
         recipeInfo: document.getElementById("adminRecipeInfo").value.trim()
       };
 
-      // Utilisation d'un update global ou set ciblé sur l'arborescence Firebase pour écraser/créer proprement
       update(ref(db, `recipes/${id}`), payload)
         .then(() => {
           closeRecipeAdminModal();
           showNotification("Menu mis à jour avec succès !");
         })
         .catch(e => {
-          console.error("Erreur d'écriture Firebase Database: ", e);
-          alert("Erreur d'enregistrement Firebase. Vérifiez la console.");
+          console.error("Erreur d'écriture : ", e);
+          alert("Erreur d'enregistrement.");
         });
     }
 
@@ -990,8 +976,12 @@
       if (!catalogData[id]) return;
       selectedProduct = catalogData[id];
       
+      let displayCat = "Café";
+      if(selectedProduct.cat === "the") displayCat = "Thé et infusions";
+      if(selectedProduct.cat === "accompagnement") displayCat = "Accompagnement";
+
       document.getElementById("modalProductTitle").textContent = selectedProduct.title;
-      document.getElementById("modalProductBadge").textContent = `Collection — ${selectedProduct.cat}`;
+      document.getElementById("modalProductBadge").textContent = `Collection — ${displayCat}`;
       document.getElementById("tabDesc").textContent = selectedProduct.description;
       document.getElementById("tabRecipe").textContent = selectedProduct.recipeInfo;
       
@@ -1015,7 +1005,6 @@
       if(currentPane) currentPane.classList.add("active");
     }
 
-    // EXPOSITION UNIVERSELLE POUR BOUTONS HTML INLINE
     window.validateGatewayLogin = validateGatewayLogin;
     window.toggleThemeSystem = toggleThemeSystem;
     window.triggerAdminAccessSecret = triggerAdminAccessSecret;
