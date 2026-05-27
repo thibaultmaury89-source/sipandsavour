@@ -247,46 +247,6 @@
     .btn-view-product { background: transparent; border: 1px solid var(--gold); color: var(--gold); padding: 10px; font-family: var(--font-sans); font-size: 0.65rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; text-align: center; border-radius: 4px; transition: all 0.3s; margin-top: auto; }
     .carte-item:hover .btn-view-product { background: var(--gold); color: #110a05; }
 
-    /* NOUVEAU - GROUPE DE BOUTONS SÉPARÉS EN MODE BARISTA */
-    .admin-card-actions {
-      display: flex;
-      gap: 8px;
-      margin-top: auto;
-      width: 100%;
-    }
-    .admin-card-actions .btn-view-product,
-    .admin-card-actions .btn-edit-product {
-      flex: 1;
-      padding: 10px 4px;
-      font-family: var(--font-sans);
-      font-size: 0.65rem;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      text-align: center;
-      border-radius: 4px;
-      transition: all 0.3s;
-      cursor: pointer;
-    }
-    .admin-card-actions .btn-view-product {
-      background: transparent;
-      border: 1px solid var(--gold);
-      color: var(--gold);
-    }
-    .admin-card-actions .btn-view-product:hover {
-      background: var(--gold);
-      color: #110a05;
-    }
-    .admin-card-actions .btn-edit-product {
-      background: rgba(229, 124, 103, 0.1);
-      border: 1px solid rgba(229, 124, 103, 0.4);
-      color: #e57c67;
-    }
-    .admin-card-actions .btn-edit-product:hover {
-      background: #e57c67;
-      color: #110a05;
-    }
-
     /* ONGLETS FICHE PRODUIT */
     .tabs-nav-product { display: flex; border-bottom: 1px solid var(--border-fine); margin-bottom: 20px; gap: 15px; overflow-x: auto; -webkit-overflow-scrolling: touch; }
     .tab-link-product { background: none; border: none; font-family: var(--font-serif); font-size: 1.15rem; color: var(--text-muted); padding-bottom: 8px; cursor: pointer; position: relative; white-space: nowrap; }
@@ -399,6 +359,27 @@
       <section class="top-dashboard-admin" id="adminDashboardZone">
         <div class="dashboard-container">
           <div class="dashboard-header">
+            <h3 class="dashboard-title">Gestion de l'En-tête</h3>
+          </div>
+          <div class="modal-form-grid" style="margin-bottom:0;">
+            <div class="form-group">
+              <label>Surlignage / Sous-titre</label>
+              <input type="text" id="adminHeroTagline" class="form-input" placeholder="Ex: Boissons chaudes du moment...">
+            </div>
+            <div class="form-group">
+              <label>Titre Principal</label>
+              <input type="text" id="adminHeroTitle" class="form-input" placeholder="Ex: L'Art de la Torréfaction...">
+            </div>
+            <div class="form-group span-full">
+              <label>Manifeste / Description</label>
+              <textarea id="adminHeroManifesto" rows="2" class="form-input" placeholder="Bienvenue à la table..."></textarea>
+            </div>
+          </div>
+          <button type="button" class="btn-luxe" style="margin-top:15px; width:auto; padding:10px 20px;" onclick="saveHeroSettings()">Mettre à jour l'en-tête</button>
+        </div>
+
+        <div class="dashboard-container">
+          <div class="dashboard-header">
             <h3 class="dashboard-title">Commandes en Temps Réel</h3>
             <button class="btn-clear-all-orders" onclick="clearAllOrders()">Archiver tout</button>
           </div>
@@ -431,9 +412,9 @@
 
       <section class="hero-cinematic">
         <div>
-          <span class="hero-tagline">Expérience Privée</span>
-          <h2 class="hero-title-luxe">L'Art de la Torréfaction et des <em>Élixirs de Saison</em></h2>
-          <p class="hero-manifesto">Bienvenue à la table familiale Sip & Savour. Commandez votre café d'exception à distance et suivez sa préparation par votre barista en temps réel.</p>
+          <span class="hero-tagline" id="heroTaglineDisplay">Espace boissons chaudes du moment choisies par votre barista</span>
+          <h2 class="hero-title-luxe" id="heroTitleDisplay">L'Art de la Torréfaction et des <em>Élixirs de Saison</em></h2>
+          <p class="hero-manifesto" id="heroManifestoDisplay">Bienvenue à la table familiale Sip & Savour. Commandez votre café d'exception à distance et suivez sa préparation par votre barista en temps réel.</p>
         </div>
         <div class="frame-artisan">
           <img src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=600&q=80" alt="Café de Spécialité" />
@@ -451,10 +432,10 @@
         </div>
         <div class="curation-tabs-row">
           <div class="filter-group-luxe">
-            <button class="filter-btn-luxe active" data-cat="all">Tous nos cafés</button>
-            <button class="filter-btn-luxe" data-cat="signature">Signatures</button>
-            <button class="filter-btn-luxe" data-cat="classique">Classiques</button>
-            <button class="filter-btn-luxe" data-cat="alternative">Alternatives</button>
+            <button class="filter-btn-luxe active" data-cat="all">Toutes nos boissons chaudes</button>
+            <button class="filter-btn-luxe" data-cat="cafe">Café</button>
+            <button class="filter-btn-luxe" data-cat="the">Thé et infusions</button>
+            <button class="filter-btn-luxe" data-cat="accompagnement">Accompagnements</button>
           </div>
           <div class="temp-selector-luxe">
             <button class="temp-btn-luxe active" data-temp="all">Tous</button>
@@ -491,7 +472,7 @@
             <input type="text" id="orderGuestNameInput" class="form-input" placeholder="Pour votre ticket...">
           </div>
           <div class="form-group span-full">
-            <label for="orderCustomsInput">Preferences (Lait d'avoine, léger, sucré...)</label>
+            <label for="orderCustomsInput">Préférences (Lait d'avoine, léger, sucré...)</label>
             <textarea id="orderCustomsInput" rows="2" class="form-input" placeholder="Laissez vos instructions au barista..."></textarea>
           </div>
         </div>
@@ -502,7 +483,7 @@
 
   <div class="modal-backdrop-luxe" id="recipeAdminModal" onclick="if(event.target===this) closeRecipeAdminModal()">
     <div class="modal-box-luxe">
-      <h3 class="modal-title-luxe">Nouvel Élixir</h3>
+      <h3 class="modal-title-luxe">Configuration de l'Élixir</h3>
       <form id="recipeAdminForm" onsubmit="event.preventDefault(); saveRecipeFromAdminForm();">
         <input type="hidden" id="adminRecipeId">
         <div class="modal-form-grid">
@@ -513,9 +494,9 @@
           <div class="form-group">
             <label>Catégorie</label>
             <select id="adminCat">
-              <option value="classique">Classique</option>
-              <option value="signature">Signature</option>
-              <option value="alternative">Alternative</option>
+              <option value="cafe">Café</option>
+              <option value="the">Thé et infusions</option>
+              <option value="accompagnement">Accompagnements</option>
             </select>
           </div>
           <div class="form-group">
@@ -553,7 +534,6 @@
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
     import { getDatabase, ref, set, onValue, push, update, remove } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
-    // Configuration Firebase stable
     const firebaseConfig = {
       databaseURL: "https://sipandsavour-db-default-rtdb.europe-west1.firebasedatabase.app"
     };
@@ -561,25 +541,22 @@
     const app = initializeApp(firebaseConfig);
     const db = getDatabase(app);
 
-    // Catalogue des boissons d'origine (Affichage instantané)
+    // Catalogue par défaut ré-adapté aux nouvelles catégories
     const initialCatalog = {
-      "rec_1": { id: "rec_1", title: "Espresso Origine", cat: "classique", temp: "chaud", price: "3.50", description: "Un espresso extrait à haute précision à partir de notre récolte de saison.", recipeInfo: "18g de café moulu fin, 36g de boisson en tasse. Notes intenses de cacao brut et d'agrumes doux.", image: "https://images.unsplash.com/photo-1510972527409-cac19ff31d7c?w=500&q=80" },
-      "rec_2": { id: "rec_2", title: "Caffè Latte de la Maison", cat: "classique", temp: "chaud", price: "4.80", description: "Double espresso mélangé harmonieusement à un lait soyeux texturé.", recipeInfo: "Double ristretto, lait entier micro-texturé à 60°C pour une douceur naturelle parfaite.", image: "https://images.unsplash.com/photo-1541167760496-1628856ab772?w=500&q=80" },
-      "rec_3": { id: "rec_3", title: "Élixir d'Or (Golden Milk)", cat: "signature", temp: "chaud", price: "5.50", description: "Boisson réconfortante signature au curcuma, épices secrètes et miel bio.", recipeInfo: "Infusion à chaud de curcuma frais, cannelle de Ceylan, gingembre, poivre noir et lait végétal.", image: "https://images.unsplash.com/photo-1544787219-7f47ccb76574?w=500&q=80" },
-      "rec_4": { id: "rec_4", title: "Cold Brew Infusion Fine", cat: "alternative", temp: "glacé", price: "5.00", description: "Café extrait à froid pendant 16h pour une rondeur d'une douceur absolue.", recipeInfo: "Mouture grossière, eau filtrée à 4°C, extraction lente. Très faible acidité, notes fruitées prononcées.", image: "https://images.unsplash.com/photo-1517701604599-bb29b565090c?w=500&q=80" },
-      "rec_5": { id: "rec_5", title: "Freddo Cappuccino Athénien", cat: "signature", temp: "glacé", price: "5.20", description: "Double espresso frappé sur glace sous une mousse de lait froide aérienne.", recipeInfo: "Espresso émulsionné au shaker avec glace, surmonté d'une crème de lait écrémé texturée à froid.", image: "https://images.unsplash.com/photo-1553909489-cd47e0907980?w=500&q=80" }
+      "rec_1": { id: "rec_1", title: "Espresso Origine", cat: "cafe", temp: "chaud", price: "3.50", description: "Un espresso extrait à haute précision à partir de notre récolte de saison.", recipeInfo: "18g de café moulu fin, 36g de boisson en tasse.", image: "https://images.unsplash.com/photo-1510972527409-cac19ff31d7c?w=500&q=80" },
+      "rec_2": { id: "rec_2", title: "Caffè Latte de la Maison", cat: "cafe", temp: "chaud", price: "4.80", description: "Double espresso mélangé harmonieusement à un lait soyeux texturé.", recipeInfo: "Double ristretto, lait entier micro-texturé à 60°C.", image: "https://images.unsplash.com/photo-1541167760496-1628856ab772?w=500&q=80" },
+      "rec_3": { id: "rec_3", title: "Chaï Latte Impérial", cat: "the", temp: "chaud", price: "5.50", description: "Thé noir d'Assam infusé aux épices fines et lait crémeux.", recipeInfo: "Mélange maison de cardamome, cannelle, clous de girofle et miel.", image: "https://images.unsplash.com/photo-1544787219-7f47ccb76574?w=500&q=80" },
+      "rec_4": { id: "rec_4", title: "Cookie Artisanal", cat: "accompagnement", temp: "chaud", price: "3.50", description: "Chocolat noir fleur de sel, cuit doucement le matin même.", recipeInfo: "Pépites 70% Équateur, beurre AOP noisette.", image: "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=600&q=80" }
     };
 
-    // États globaux réactifs
     let catalogData = initialCatalog; 
     let activeCat = "all";
     let activeTemp = "all";
     let searchQuery = "";
     let selectedProduct = null;
-    let currentRole = localStorage.getItem("s_role") || ""; // 'family' ou 'barista'
+    let currentRole = localStorage.getItem("s_role") || ""; 
     let myActiveOrderId = localStorage.getItem("s_my_order_id") || "";
 
-    // TOAST DE NOTIFICATION VISUELLE
     function showNotification(msg) {
       const t = document.getElementById("globalToast");
       if(t) {
@@ -589,7 +566,6 @@
       }
     }
 
-    // ACCÈS SALON PRIVÉ / SECURITÉ
     function validateGatewayLogin() {
       const pin = document.getElementById("gateway-password-input").value.trim();
       const err = document.getElementById("gateway-global-error");
@@ -644,12 +620,8 @@
         b.style.color = "var(--gold)";
         if(adminZone) adminZone.style.display = "none";
       }
-      
-      // Force le re-calcul des boutons (Unique ou Double) dès que le rôle change
-      renderGrid();
     }
 
-    // GESTION DU THEME D'ORIGINE
     function toggleThemeSystem() {
       const h = document.documentElement;
       const btn = document.getElementById("themeToggle");
@@ -662,14 +634,44 @@
       }
     }
 
-    // REALTIME FIREBASE : LES RECETTES (Version Corrigée)
+    // FIREBASE RECEPTACLE : CONFIGURATION TEXTE HERO
+    onValue(ref(db, "hero_settings"), (snapshot) => {
+      const data = snapshot.val();
+      if(data) {
+        if(data.tagline) {
+          document.getElementById("heroTaglineDisplay").textContent = data.tagline;
+          document.getElementById("adminHeroTagline").value = data.tagline;
+        }
+        if(data.title) {
+          document.getElementById("heroTitleDisplay").innerHTML = data.title;
+          document.getElementById("adminHeroTitle").value = data.title;
+        }
+        if(data.manifesto) {
+          document.getElementById("heroManifestoDisplay").textContent = data.manifesto;
+          document.getElementById("adminHeroManifesto").value = data.manifesto;
+        }
+      }
+    });
+
+    window.saveHeroSettings = function() {
+      const payload = {
+        tagline: document.getElementById("adminHeroTagline").value.trim(),
+        title: document.getElementById("adminHeroTitle").value.trim(),
+        manifesto: document.getElementById("adminHeroManifesto").value.trim()
+      };
+      set(ref(db, "hero_settings"), payload)
+        .then(() => showNotification("En-tête mise à jour avec succès"))
+        .catch(() => alert("Échec de la sauvegarde de l'en-tête."));
+    };
+
+    // REALTIME FIREBASE : RECETTES
     onValue(ref(db, "recipes"), (snapshot) => {
       const data = snapshot.val();
       if (!data) {
         catalogData = initialCatalog;
         renderGrid();
         renderAdminCatalog();
-        set(ref(db, "recipes"), initialCatalog).catch(e => console.warn("Firebase écriture restreinte (rules) :", e));
+        set(ref(db, "recipes"), initialCatalog).catch(e => console.warn(e));
       } else {
         catalogData = data;
         renderGrid();
@@ -677,11 +679,10 @@
       }
     });
 
-    // REALTIME FIREBASE : LES COMMANDES TICKET SYSTEM
+    // REALTIME FIREBASE : COMMANDES
     onValue(ref(db, "orders"), (snapshot) => {
       const data = snapshot.val();
       const orders = data ? Object.values(data) : [];
-      
       orders.sort((x, y) => (x.timestamp || 0) - (y.timestamp || 0));
 
       const clientZone = document.getElementById("clientTrackerZone");
@@ -755,7 +756,6 @@
       }).join("");
     });
 
-    // RENDU D'AFFICHAGE DU CATALOGUE GRAND PUBLIC
     function renderGrid() {
       const g = document.getElementById("menuGrid");
       if (!g) return;
@@ -772,43 +772,23 @@
         return;
       }
 
-      g.innerHTML = items.map(item => {
-        let actionButtonsHTML = "";
-        
-        // Si connecté Barista, le bouton est coupé en deux (Commander & Modifier)
-        if (currentRole === "barista") {
-          actionButtonsHTML = `
-            <div class="admin-card-actions" onclick="event.stopPropagation();">
-              <button type="button" class="btn-view-product" onclick="openProductModal('${item.id}')">Commander</button>
-              <button type="button" class="btn-edit-product" onclick="openRecipeAdminModal('${item.id}')">Modifier</button>
-            </div>
-          `;
-        } else {
-          // Sinon (Salon Famille standard), affiche le bouton complet d'origine
-          actionButtonsHTML = `
-            <button type="button" class="btn-view-product" onclick="openProductModal('${item.id}')">Découvrir l'élixir</button>
-          `;
-        }
-
-        return `
-          <div class="carte-item">
-            <div class="item-media" onclick="openProductModal('${item.id}')">
-              <span class="item-tag-hot-cold ${item.temp === 'chaud' ? 'tag-hot' : 'tag-cold'}">${item.temp}</span>
-              <img src="${item.image || 'https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=500&q=80'}" alt="${item.title}">
-            </div>
-            <div class="item-header" onclick="openProductModal('${item.id}')">
-              <h4 class="item-title">${item.title}</h4>
-              <div class="item-line-dots"></div>
-              <span class="item-price">${item.price}€</span>
-            </div>
-            <p class="item-description" onclick="openProductModal('${item.id}')">${item.description}</p>
-            ${actionButtonsHTML}
+      g.innerHTML = items.map(item => `
+        <div class="carte-item" onclick="openProductModal('${item.id}')">
+          <div class="item-media">
+            <span class="item-tag-hot-cold ${item.temp === 'chaud' ? 'tag-hot' : 'tag-cold'}">${item.temp}</span>
+            <img src="${item.image || 'https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=500&q=80'}" alt="${item.title}">
           </div>
-        `;
-      }).join("");
+          <div class="item-header">
+            <h4 class="item-title">${item.title}</h4>
+            <div class="item-line-dots"></div>
+            <span class="item-price">${item.price}€</span>
+          </div>
+          <p class="item-description">${item.description}</p>
+          <button type="button" class="btn-view-product">Découvrir l'élixir</button>
+        </div>
+      `).join("");
     }
 
-    // RENDU DE GESTION DU CATALOGUE POUR L'ADMIN
     function renderAdminCatalog() {
       const container = document.getElementById("adminCatalogGrid");
       if (!container) return;
@@ -824,7 +804,6 @@
       `).join("");
     }
 
-    // ENVOI D'UNE COMMANDE TICKET
     function submitOrderToFirebase() {
       const gInput = document.getElementById("orderGuestNameInput");
       const name = gInput ? gInput.value.trim() : "";
@@ -857,12 +836,11 @@
           showNotification(`Ticket de ${name} transmis au barista !`);
         })
         .catch(e => {
-          alert("Erreur réseau de transmission. Vérifiez l'accès à internet.");
+          alert("Erreur réseau de transmission.");
           console.error(e);
         });
     }
 
-    // ACTIONS TICKET BARISTA
     function updateOrderStatus(id, newStatus) {
       update(ref(db, `orders/${id}`), { status: newStatus })
         .then(() => showNotification(`Ticket mis à jour : ${newStatus}`))
@@ -892,7 +870,6 @@
       }
     }
 
-    // ACTIONS ÉDITION CATALOGUE BARISTA
     function openRecipeAdminModal(id = '') {
       const m = document.getElementById("recipeAdminModal");
       const f = document.getElementById("recipeAdminForm");
@@ -903,8 +880,8 @@
         const item = catalogData[id];
         document.getElementById("adminRecipeId").value = item.id;
         document.getElementById("adminTitle").value = item.title;
-        document.getElementById("adminCat").value = item.cat;
-        document.getElementById("adminTemp").value = item.temp;
+        document.getElementById("adminCat").value = item.cat || "cafe";
+        document.getElementById("adminTemp").value = item.temp || "chaud";
         document.getElementById("adminPrice").value = item.price;
         document.getElementById("adminImage").value = item.image || '';
         document.getElementById("adminDescription").value = item.description;
@@ -920,7 +897,8 @@
       if(m) m.classList.remove("active");
     }
 
-    function saveRecipeFromAdminForm() {
+    // SCRIPT DE SAUVEGARDE ET DE MODIFICATION ENTIÈREMENT CORRIGÉ
+    window.saveRecipeFromAdminForm = function() {
       let id = document.getElementById("adminRecipeId").value;
       if (!id) {
         id = "rec_" + Date.now();
@@ -941,8 +919,8 @@
           closeRecipeAdminModal();
           showNotification("Élixir enregistré avec succès");
         })
-        .catch(e => alert("Sauvegarde échouée. Vérifiez vos règles Firebase."));
-    }
+        .catch(e => alert("Sauvegarde échouée."));
+    };
 
     window.deleteRecipe = function(id) {
       if(confirm("Supprimer définitivement cette boisson du menu ?")) {
@@ -951,7 +929,6 @@
       }
     }
 
-    // INTERACTIONS FICHE PRODUIT POPUP
     function openProductModal(id) {
       if (!catalogData[id]) return;
       selectedProduct = catalogData[id];
@@ -972,7 +949,6 @@
       if(m) m.classList.remove("active");
     }
 
-    // ONGLETS FICHE PRODUIT POPUP
     function switchProductTab(paneId, btn) {
       document.querySelectorAll(".tab-link-product").forEach(b => b.classList.remove("active"));
       document.querySelectorAll(".tab-pane-product").forEach(p => p.classList.remove("active"));
@@ -982,7 +958,6 @@
       if(currentPane) currentPane.classList.add("active");
     }
 
-    // EXPOSITION UNIVERSELLE POUR BOUTONS HTML INLINE
     window.validateGatewayLogin = validateGatewayLogin;
     window.toggleThemeSystem = toggleThemeSystem;
     window.triggerAdminAccessSecret = triggerAdminAccessSecret;
@@ -995,10 +970,8 @@
     window.switchProductTab = switchProductTab;
     window.openRecipeAdminModal = openRecipeAdminModal;
     window.closeRecipeAdminModal = closeRecipeAdminModal;
-    window.saveRecipeFromAdminForm = saveRecipeFromAdminForm;
     window.clearAllOrders = clearAllOrders;
 
-    // ÉCOUTEURS D'ÉVÉNEMENTS DOM AU CHARGEMENT
     document.addEventListener('DOMContentLoaded', () => {
       if (currentRole) {
         document.getElementById('authGate').classList.add('hidden');
