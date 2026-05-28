@@ -122,9 +122,9 @@
     .theme-toggle-btn:hover { background: rgba(197, 168, 128, 0.1); }
 
     .search-luxe { position: relative; display: flex; align-items: center; }
+    .search-luxe svg { position: absolute; left: 0; width: 12px; height: 12px; color: var(--gold-dim); }
     .search-luxe input { background: transparent; border: none; border-bottom: 1px solid var(--border-fine); padding: 4px 0 4px 24px; color: var(--text-light); font-family: inherit; font-size: 0.8rem; outline: none; width: 140px; transition: all 0.3s; }
     .search-luxe input:focus { width: 180px; border-color: var(--gold); }
-    .search-luxe svg { position: absolute; left: 0; width: 12px; height: 12px; color: var(--gold-dim); }
 
     .club-badge { font-size: 0.6rem; font-weight: 600; text-transform: uppercase; letter-spacing: 2px; border: 1px solid var(--gold); padding: 4px 10px; color: var(--gold); border-radius: 3px; cursor: pointer; transition: background 0.3s; }
     .club-badge:hover { background: rgba(197, 168, 128, 0.1); }
@@ -455,7 +455,7 @@
             <textarea id="orderCustomsInput" rows="2" class="form-input" placeholder="Laissez vos instructions au barista..."></textarea>
           </div>
         </div>
-        <button type="button" class="btn-luxe" onclick="submitOrderToFirebase()">Lancer la préparation</button>
+        <button type="button" id="btnSubmitOrder" class="btn-luxe">Lancer la préparation</button>
       </div>
     </div>
   </div>
@@ -535,7 +535,7 @@
     let activeCat = "all";
     let activeTemp = "all";
     let searchQuery = "";
-    window.selectedProduct = null; // Rattaché globalement pour éviter les pertes de contexte
+    let selectedProduct = null;
     let currentRole = localStorage.getItem("s_role") || ""; // 'family' ou 'barista'
     let myActiveOrderId = localStorage.getItem("s_my_order_id") || "";
 
@@ -623,9 +623,11 @@
     onValue(ref(db, "recipes"), (snapshot) => {
       const data = snapshot.val();
       if (!data) {
+        // Affiche immédiatement le catalogue en local pour le hors-ligne / premier déploiement
         catalogData = initialCatalog;
         renderGrid();
         renderAdminCatalog();
+        // Écrit calmement dans Firebase en arrière-plan sans bloquer la vue
         set(ref(db, "recipes"), initialCatalog).catch(e => console.warn("Firebase écriture restreinte (rules) :", e));
       } else {
         catalogData = data;
@@ -639,9 +641,10 @@
       const data = snapshot.val();
       const orders = data ? Object.values(data) : [];
       
+      // Tri chronologique des commandes
       orders.sort((x, y) => (x.timestamp || 0) - (y.timestamp || 0));
 
-      // 1. Tracker client
+      // 1. Mise à jour du tracker client si commande active
       const clientZone = document.getElementById("clientTrackerZone");
       if (currentRole === "family" && myActiveOrderId && data && data[myActiveOrderId]) {
         const myOrd = data[myActiveOrderId];
@@ -675,7 +678,7 @@
         if(clientZone) clientZone.style.display = "none";
       }
 
-      // 2. Tableau Barista
+      // 2. Remplissage du tableau barista
       const tbody = document.getElementById("ordersTableBody");
       if (!tbody) return;
       
@@ -714,7 +717,7 @@
       }).join("");
     });
 
-    // RENDU DU MENU DE SURFACE
+    // RENDU D'AFFICHAGE DU CATALOGUE GRAND PUBLIC
     function renderGrid() {
       const g = document.getElementById("menuGrid");
       if (!g) return;
@@ -748,6 +751,7 @@
       `).join("");
     }
 
+    // RENDU DE GESTION DU CATALOGUE POUR L'ADMIN
     function renderAdminCatalog() {
       const container = document.getElementById("adminCatalogGrid");
       if (!container) return;
@@ -763,20 +767,14 @@
       `).join("");
     }
 
-    // TRANSMISSION DU TICKET DE COMMANDE VERS FIREBASE (Version Sécurisée)
+    // ENVOI D'UNE COMMANDE TICKET
     function submitOrderToFirebase() {
       const gInput = document.getElementById("orderGuestNameInput");
       const name = gInput ? gInput.value.trim() : "";
       const customs = document.getElementById("orderCustomsInput") ? document.getElementById("orderCustomsInput").value.trim() : "";
       
       if (!name) {
-        alert("Saisissez votre prénom ou le nom de votre table pour lancer la commande.");
-        return;
-      }
-
-      // Sécurité structurelle : On recherche l'objet si la variable est vide
-      if (!window.selectedProduct) {
-        alert("Erreur de sélection : Veuillez refermer et réouvrir la fiche de cet élixir.");
+        alert("Saisissez votre prénom ou le nom de votre table pour la commande.");
         return;
       }
 
@@ -786,8 +784,8 @@
 
       const orderPayload = {
         id: ticketId,
-        drinkId: window.selectedProduct.id,
-        drinkTitle: window.selectedProduct.title,
+        drinkId: selectedProduct.id,
+        drinkTitle: selectedProduct.title,
         guestName: name,
         customs: customs,
         status: "pending",
@@ -800,10 +798,6 @@
           localStorage.setItem("s_my_order_id", ticketId);
           closeProductModal();
           showNotification(`Ticket de ${name} transmis au barista !`);
-          
-          // Nettoyage des champs de formulaire de commande
-          if (gInput) gInput.value = "";
-          if (document.getElementById("orderCustomsInput")) document.getElementById("orderCustomsInput").value = "";
         })
         .catch(e => {
           alert("Erreur réseau de transmission. Vérifiez l'accès à internet.");
@@ -841,7 +835,7 @@
       }
     }
 
-    // ENREGISTREMENT RECETTES ADMINISTRATION
+    // ACTIONS ÉDITION CATALOGUE BARISTA
     function openRecipeAdminModal(id = '') {
       const m = document.getElementById("recipeAdminModal");
       const f = document.getElementById("recipeAdminForm");
@@ -900,19 +894,17 @@
       }
     }
 
-    // OUVERTURE DE LA MODALE PRODUIT AVEC RE-LIAISON CONTEXTUELLE
+    // INTERACTIONS FICHE PRODUIT POPUP
     function openProductModal(id) {
       if (!catalogData[id]) return;
+      selectedProduct = catalogData[id];
       
-      // Stockage dans l'état local ET dans le contexte window global
-      window.selectedProduct = catalogData[id];
+      document.getElementById("modalProductTitle").textContent = selectedProduct.title;
+      document.getElementById("modalProductBadge").textContent = `${selectedProduct.temp} — ${selectedProduct.cat}`;
+      document.getElementById("tabDesc").textContent = selectedProduct.description;
+      document.getElementById("tabRecipe").textContent = selectedProduct.recipeInfo;
       
-      document.getElementById("modalProductTitle").textContent = window.selectedProduct.title;
-      document.getElementById("modalProductBadge").textContent = `${window.selectedProduct.temp} — ${window.selectedProduct.cat}`;
-      document.getElementById("tabDesc").textContent = window.selectedProduct.description;
-      document.getElementById("tabRecipe").textContent = window.selectedProduct.recipeInfo;
-      
-      // Force le retour sur le premier onglet à chaque ouverture
+      // Reset sur le premier onglet
       switchProductTab('desc', document.querySelector(".tab-link-product"));
       
       const m = document.getElementById("productModal");
@@ -933,7 +925,7 @@
       if(currentPane) currentPane.classList.add("active");
     }
 
-    // EXPOSITION UNIVERSELLE POUR COMPATIBILITÉ DES APPPELS INLINE
+    // EXPOSITION UNIVERSELLE POUR COMPATIBILITE COMPLETE DES BOUTONS INLINE HTML
     window.validateGatewayLogin = validateGatewayLogin;
     window.toggleThemeSystem = toggleThemeSystem;
     window.triggerAdminAccessSecret = triggerAdminAccessSecret;
@@ -949,12 +941,20 @@
     window.saveRecipeFromAdminForm = saveRecipeFromAdminForm;
     window.clearAllOrders = clearAllOrders;
 
-    // INITIALISATION DES LISTENERS DOM AU CHARGEMENT GLOBAL
+    // ÉCOUTEURS D'ÉVÉNEMENTS DOM AU CHARGEMENT
     document.addEventListener('DOMContentLoaded', () => {
       if (currentRole) {
         document.getElementById('authGate').classList.add('hidden');
         document.getElementById('appWrapper').classList.add('active');
         applyRoleUI();
+      }
+      
+      // Liaison dynamique stable pour la soumission des commandes (Résolution du bug de Scope)
+      const btnSubmit = document.getElementById('btnSubmitOrder');
+      if (btnSubmit) {
+        btnSubmit.addEventListener('click', () => {
+          submitOrderToFirebase();
+        });
       }
       
       const sInput = document.getElementById('searchInput');
