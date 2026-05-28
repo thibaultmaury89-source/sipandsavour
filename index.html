@@ -198,6 +198,17 @@
     .frame-caption h4 { font-family: var(--font-serif); font-size: 1.1rem; color: var(--gold); font-weight: 400; }
     .frame-caption p { font-size: 0.6rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
 
+    /* NOUVELLE SECTION : RECOMMANDATIONS BARISTA */
+    .barista-recommendation-section { max-width: 1300px; margin: 40px auto; padding: 0 40px; }
+    .recommendation-title-block { border-bottom: 1px solid var(--border-fine); padding-bottom: 10px; margin-bottom: 25px; }
+    .recommendation-title-block h3 { font-family: var(--font-serif); font-size: 1.6rem; font-weight: 400; color: var(--gold); }
+    .recommendation-container { background: var(--panel-bg); border: 1px solid var(--border-fine); border-left: 4px solid var(--gold); box-shadow: var(--shadow-luxe); border-radius: 6px; display: grid; grid-template-columns: 0.8fr 1.2fr; overflow: hidden; align-items: center; }
+    .recommendation-img-side { width: 100%; height: 100%; min-height: 250px; overflow: hidden; }
+    .recommendation-img-side img { width: 100%; height: 100%; object-fit: cover; }
+    .recommendation-content-side { padding: 30px; display: flex; flex-direction: column; gap: 12px; align-items: flex-start; }
+    .recommendation-drink-name { font-family: var(--font-serif); font-size: 1.8rem; font-weight: 400; line-height: 1.2; }
+    .recommendation-drink-desc { font-size: 0.85rem; color: var(--text-muted); line-height: 1.6; }
+
     .salon-curation { max-width: 1300px; margin: 0 auto; padding: 20px 40px; }
     .seasonal-indicator { display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--border-fine); padding-bottom: 12px; margin-bottom: 30px; }
     .season-label { font-family: var(--font-serif); font-size: 1.5rem; color: var(--gold); font-style: italic; }
@@ -216,7 +227,7 @@
     .grid-container { max-width: 1300px; margin: 0 auto; padding: 0 40px 80px; }
     .menu-grid-luxe { display: grid; grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); gap: 30px; }
     
-    /* CARTES DU MENU MODIFIÉES POUR ACCUEILLIR LES DEUX BOUTONS */
+    /* CARTES DU MENU */
     .carte-item { background: var(--panel-bg); border: 1px solid var(--border-fine); padding: 18px; position: relative; transition: all 0.3s ease; display: flex; flex-direction: column; gap: 12px; box-shadow: var(--shadow-luxe); border-radius: 6px; }
     .carte-item:hover { border-color: var(--gold); transform: translateY(-3px); }
     
@@ -233,14 +244,13 @@
     .item-price { font-family: var(--font-serif); font-size: 1.2rem; color: var(--gold); font-weight: 600; }
     .item-description { font-size: 0.75rem; color: var(--text-muted); line-height: 1.5; min-height: 3em; }
     
-    /* SECTION DES DEUX BOUTONS SEPARÉS */
-    .item-actions-dual { display: flex; gap: 10px; margin-top: auto; }
+    .item-actions-dual { display: flex; gap: 10px; margin-top: auto; width: 100%; }
     .btn-action-discover { flex: 1; background: var(--gold); color: #110a05; border: 1px solid var(--gold); padding: 10px; font-family: var(--font-sans); font-size: 0.65rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; text-align: center; border-radius: 4px; cursor: pointer; transition: all 0.3s; }
     .btn-action-discover:hover { background: var(--text-light); color: var(--bg-salon); border-color: var(--text-light); }
     .btn-action-order-now { flex: 1; background: transparent; border: 1px solid var(--border-fine); color: var(--text-light); padding: 10px; font-family: var(--font-sans); font-size: 0.65rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; text-align: center; border-radius: 4px; cursor: pointer; transition: all 0.3s; }
     .btn-action-order-now:hover { border-color: var(--gold); color: var(--gold); background: rgba(197, 168, 128, 0.05); }
 
-    /* ONGLETS INTERNES DE LA MODALE DÉCOUVRIR */
+    /* MODALES DE DECOUVERTE */
     .tabs-nav-product { display: flex; border-bottom: 1px solid var(--border-fine); margin-bottom: 20px; gap: 15px; }
     .tab-link-product { background: none; border: none; font-family: var(--font-serif); font-size: 1.15rem; color: var(--text-muted); padding-bottom: 8px; cursor: pointer; position: relative; }
     .tab-link-product.active { color: var(--gold); }
@@ -249,7 +259,7 @@
     .tab-pane-product.active { display: block; }
     .product-meta-badge { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 1px; color: var(--gold); background: rgba(197, 168, 128, 0.1); padding: 4px 8px; border-radius: 4px; display: inline-block; margin-bottom: 15px; border: 1px solid var(--border-fine); }
 
-    /* MODALES GENERALES */
+    /* STRUCTURE GENERALES DES MODALES */
     .modal-backdrop-luxe { position: fixed; inset: 0; z-index: 200; background: rgba(17, 10, 5, 0.85); backdrop-filter: blur(8px); display: none; align-items: center; justify-content: center; padding: 15px; }
     .modal-backdrop-luxe.active { display: flex; }
     .modal-box-luxe { background: var(--panel-bg); border: 1px solid var(--gold); padding: 30px; max-width: 520px; width: 100%; border-top: 4px solid var(--gold); box-shadow: var(--shadow-luxe); border-radius: 8px; max-height: 95vh; overflow-y: auto; }
@@ -257,7 +267,7 @@
     .modal-form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 25px; }
     .span-full { grid-column: 1 / -1; }
 
-    /* TOASTS */
+    /* TOASTS POPUP notifications */
     .toast-luxe { position: fixed; bottom: 25px; right: 25px; z-index: 1000; background: var(--panel-bg); border: 1px solid var(--gold); padding: 15px 20px; box-shadow: var(--shadow-luxe); border-radius: 6px; transform: translateY(100px); opacity: 0; transition: all 0.4s ease; pointer-events: none; }
     .toast-luxe.show { transform: translateY(0); opacity: 1; }
 
@@ -269,12 +279,12 @@
       .main-body-content { padding-top: 140px; }
       .nav-controls { width: 100%; justify-content: center; flex-wrap: wrap; gap: 12px; }
       .hero-cinematic { grid-template-columns: 1fr; padding: 25px 20px; gap: 25px; text-align: center; }
-      .hero-title-luxe { font-size: 2rem; }
-      .frame-artisan { max-width: 260px; }
-      .salon-curation { padding: 15px 20px; }
+      .recommendation-container { grid-template-columns: 1fr; }
+      .recommendation-img-side { min-height: 200px; }
+      .salon-curation, .barista-recommendation-section { padding: 15px 20px; }
       .seasonal-indicator { flex-direction: column; text-align: center; gap: 4px; }
       .curation-tabs-row { flex-direction: column; gap: 15px; }
-      .filter-group-luxe { width: 100vw; overflow-x: auto; padding: 5px 20px; gap: 20px; -webkit-overflow-scrolling: touch; display: flex; white-space: nowrap; margin-left: -20px; margin-right: -20px; }
+      .filter-group-luxe { width: 100vw; overflow-x: auto; padding: 5px 20px; gap: 20px; display: flex; white-space: nowrap; margin-left: -20px; margin-right: -20px; }
       .grid-container { padding: 0 20px; }
       .menu-grid-luxe { grid-template-columns: 1fr; gap: 20px; }
       .top-dashboard-admin { padding: 0 15px; }
@@ -393,6 +403,23 @@
         </div>
       </section>
 
+      <section class="barista-recommendation-section">
+        <div class="recommendation-title-block">
+          <h3>Recommandations de votre barista</h3>
+        </div>
+        <div class="recommendation-container">
+          <div class="recommendation-img-side">
+            <img src="https://images.unsplash.com/photo-1541167760496-1628856ab772?w=600&q=80" alt="Caffè Latte de la Maison" />
+          </div>
+          <div class="recommendation-content-side">
+            <span style="font-size: 0.65rem; color: var(--gold); letter-spacing: 2px; text-transform: uppercase; font-weight: 600;">L'Incontournable Douceur</span>
+            <h4 class="recommendation-drink-name">Caffè Latte de la Maison</h4>
+            <p class="recommendation-drink-desc">Notre double espresso extrait à haute précision rencontre un lait entier ou d'avoine soyeux et micro-texturé à 60°C. Une texture veloutée incomparable révélant des notes naturelles de caramel blond et de noisettes grillées.</p>
+            <button type="button" class="btn-luxe" style="width: auto; padding: 12px 25px; margin-top: 10px;" onclick="openOrderModal('rec_2')">Commander cette boisson</button>
+          </div>
+        </div>
+      </section>
+
       <section class="salon-curation">
         <div class="seasonal-indicator">
           <span class="season-label">Collection du Moment</span>
@@ -432,7 +459,7 @@
       <div id="tabDesc" class="tab-pane-product active"></div>
       <div id="tabRecipe" class="tab-pane-product"></div>
       
-      <button type="button" class="btn-luxe" style="margin-top: 20px;" onclick="closeDiscoverModal(); openOrderModal(selectedProduct.id)">Passer à la commande</button>
+      <button type="button" class="btn-luxe" style="margin-top: 20px;" id="btnDiscoverModalAction">Passer à la commande</button>
     </div>
   </div>
 
@@ -628,7 +655,7 @@
       }
     }
 
-    // BASE FIREBASE : LECTURE DU CATALOGUE DES BOISSONS
+    // BASE REALTIME FIREBASE : RECUPERATION DU CATALOGUE RECETTES
     onValue(ref(db, "recipes"), (snapshot) => {
       const data = snapshot.val();
       if (!data) {
@@ -643,7 +670,7 @@
       }
     });
 
-    // BASE FIREBASE : MONITORING LIVE DES TICKETS COMMANDES
+    // BASE REALTIME FIREBASE : RECUPERATION DES TICKETS CLIENTS ET MISE A JOUR DES TRACKERS
     onValue(ref(db, "orders"), (snapshot) => {
       const data = snapshot.val();
       const orders = data ? Object.values(data) : [];
@@ -720,7 +747,7 @@
       }).join("");
     });
 
-    // RENDU INTERACTIF DU MENU DU SALON
+    // RE-RENDU DYNAMIQUE DE LA GRILLE DU SALON
     function renderGrid() {
       const g = document.getElementById("menuGrid");
       if (!g) return;
@@ -773,7 +800,7 @@
       `).join("");
     }
 
-    // MODALE 1 : GESTION DU PANNEAU "DÉCOUVRIR"
+    // OUVERTURE DE LA MODALE DÉCOUVRIR (HISTOIRE & PROFIL)
     function openDiscoverModal(id) {
       if (!catalogData[id]) return;
       selectedProduct = catalogData[id];
@@ -784,6 +811,15 @@
       document.getElementById("tabRecipe").textContent = selectedProduct.recipeInfo;
       
       switchDiscoverTab('desc');
+
+      // Met à jour dynamiquement l'action du bouton interne
+      const btnAction = document.getElementById("btnDiscoverModalAction");
+      if(btnAction) {
+        btnAction.onclick = () => {
+          closeDiscoverModal();
+          openOrderModal(id);
+        };
+      }
       
       const m = document.getElementById("discoverModal");
       if(m) m.classList.add("active");
@@ -805,15 +841,19 @@
       if(currentPane) currentPane.classList.add("active");
     }
 
-    // MODALE 2 : GESTION DU PANNEAU DE COMMANDE AVEC OPTIONS AVANCÉES
+    // OUVERTURE DU POP-UP DE COMMANDE DÉDIÉ
     function openOrderModal(id) {
-      if (!catalogData[id]) return;
-      selectedProduct = catalogData[id];
+      // Si la boisson n'est pas encore chargée dans catalogData, on utilise un fallback pour rec_2
+      if (!catalogData[id] && id === 'rec_2') {
+        selectedProduct = initialCatalog['rec_2'];
+      } else {
+        selectedProduct = catalogData[id];
+      }
+      if (!selectedProduct) return;
       
       document.getElementById("orderProductTitle").textContent = `Commander : ${selectedProduct.title}`;
       
-      // Réinitialise les champs de la modale de commande
-      const nameInput = document.getElementById("orderGuestNameInput");
+      // Réinitialisation des inputs
       const milkSelect = document.getElementById("orderMilkSelect");
       const foamSelect = document.getElementById("orderFoamSelect");
       const customsInput = document.getElementById("orderCustomsInput");
@@ -831,7 +871,7 @@
       if(m) m.classList.remove("active");
     }
 
-    // INTERACTION : COMPILATION ET SOUMISSION DE LA COMMANDE EN BASE DE DONNÉES
+    // FONCTION CORE : TRANSMISSION EFFECTIVE DE LA COMMANDE À FIREBASE (FONCTIONNELLE)
     function submitOrderToFirebase() {
       const gInput = document.getElementById("orderGuestNameInput");
       const name = gInput ? gInput.value.trim() : "";
@@ -841,14 +881,19 @@
       const extraText = document.getElementById("orderCustomsInput").value.trim();
       
       if (!name) {
-        alert("Saisissez votre prénom pour associer votre ticket.");
+        alert("Veuillez saisir votre prénom pour enregistrer votre commande.");
         return;
       }
 
-      // Compilation des structures d'options pour le Barista
+      if (!selectedProduct) {
+        alert("Erreur : Aucun produit sélectionné.");
+        return;
+      }
+
+      // Construction des spécifications structurées pour le Barista
       let compiledCustoms = `Lait : ${milk}\nMousse : ${foam}`;
       if (extraText) {
-        compiledCustoms += `\nNote additionnelle : ${extraText}`;
+        compiledCustoms += `\nNote : ${extraText}`;
       }
 
       const orderRef = ref(db, "orders");
@@ -870,17 +915,17 @@
           myActiveOrderId = ticketId;
           localStorage.setItem("s_my_order_id", ticketId);
           closeOrderModal();
-          showNotification(`Ticket envoyé ! Suivi en temps réel activé.`);
+          showNotification(`Commande enregistrée ! Préparation lancée.`);
         })
         .catch(e => {
-          alert("Erreur réseau lors de l'envoi.");
+          alert("Erreur réseau lors de l'envoi de la commande.");
           console.error(e);
         });
     }
 
     function updateOrderStatus(id, newStatus) {
       update(ref(db, `orders/${id}`), { status: newStatus })
-        .then(() => showNotification(`Commande passée en : ${newStatus}`))
+        .then(() => showNotification(`Ticket mis à jour : ${newStatus}`))
         .catch(e => console.error(e));
     }
 
@@ -897,7 +942,7 @@
     }
 
     function clearAllOrders() {
-      if (confirm("Archiver l'intégralité des commandes de la table ?")) {
+      if (confirm("Archiver l'intégralité des tickets en cours ?")) {
         set(ref(db, "orders"), null)
           .then(() => {
             myActiveOrderId = "";
@@ -907,7 +952,7 @@
       }
     }
 
-    // MODALE 3 : GESTION ADMINISTRATIVE DES DU CATALOGUE RECIPIES
+    // INTERFACE D'EDITION DU MENU (ADMIN)
     function openRecipeAdminModal(id = '') {
       const m = document.getElementById("recipeAdminModal");
       const f = document.getElementById("recipeAdminForm");
@@ -969,7 +1014,7 @@
       }
     }
 
-    // EXPOSITION UNIVERSELLE POUR LE DOM
+    // LIENS AVEC LE CONTEXTE GLOBAL WINDOW
     window.validateGatewayLogin = validateGatewayLogin;
     window.toggleThemeSystem = toggleThemeSystem;
     window.triggerAdminAccessSecret = triggerAdminAccessSecret;
@@ -988,7 +1033,7 @@
     window.deleteRecipe = deleteRecipe;
     window.clearAllOrders = clearAllOrders;
 
-    // CHARGEMENT ET INITIALISATION DES ECOUTEURS
+    // LISTENERS COMPLETS AU CHARGEMENT DU DOM
     document.addEventListener('DOMContentLoaded', () => {
       if (currentRole) {
         document.getElementById('authGate').classList.add('hidden');
