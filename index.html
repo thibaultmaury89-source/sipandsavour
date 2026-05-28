@@ -399,7 +399,7 @@
           <img src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=600&q=80" alt="Café de Spécialité" />
           <div class="frame-caption">
             <h4>Torréfaction Maison</h4>
-            <p>Sélections 100% Arabica Arabica</p>
+            <p>Sélections 100% Arabica</p>
           </div>
         </div>
       </section>
@@ -410,13 +410,13 @@
           <span class="season-desc">Sélection Fine & Recettes signatures</span>
         </div>
         <div class="curation-tabs-row">
-          <div class="filter-group-luxe">
+          <div class="filter-group-luxe" id="categoryTabs">
             <button class="filter-btn-luxe active" data-cat="all">Tous nos cafés</button>
             <button class="filter-btn-luxe" data-cat="signature">Signatures</button>
             <button class="filter-btn-luxe" data-cat="classique">Classiques</button>
             <button class="filter-btn-luxe" data-cat="alternative">Alternatives</button>
           </div>
-          <div class="temp-selector-luxe">
+          <div class="temp-selector-luxe" id="tempTabs">
             <button class="temp-btn-luxe active" data-temp="all">Tous</button>
             <button class="temp-btn-luxe" data-temp="chaud">Chaud</button>
             <button class="temp-btn-luxe" data-temp="glacé">Glacé</button>
@@ -436,9 +436,9 @@
       <span class="product-meta-badge" id="modalProductBadge">Chaud — Signature</span>
       
       <div class="tabs-nav-product">
-        <button class="tab-link-product active" onclick="switchProductTab('desc', this)">Histoire</button>
-        <button class="tab-link-product" onclick="switchProductTab('recipe', this)">Profil aromatique</button>
-        <button class="tab-link-product" onclick="switchProductTab('order', this)">Commander</button>
+        <button id="btnTabDesc" class="tab-link-product active" onclick="switchProductTab('desc')">Histoire</button>
+        <button id="btnTabRecipe" class="tab-link-product" onclick="switchProductTab('recipe')">Profil aromatique</button>
+        <button id="btnTabOrder" class="tab-link-product" onclick="switchProductTab('order')">Commander</button>
       </div>
 
       <div id="tabDesc" class="tab-pane-product active"></div>
@@ -462,7 +462,7 @@
 
   <div class="modal-backdrop-luxe" id="recipeAdminModal" onclick="if(event.target===this) closeRecipeAdminModal()">
     <div class="modal-box-luxe">
-      <h3 class="modal-title-luxe">Nouvel Élixir</h3>
+      <h3 class="modal-title-luxe" id="adminModalTitle">Nouvel Élixir</h3>
       <form id="recipeAdminForm" onsubmit="event.preventDefault(); saveRecipeFromAdminForm();">
         <input type="hidden" id="adminRecipeId">
         <div class="modal-form-grid">
@@ -513,7 +513,6 @@
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
     import { getDatabase, ref, set, onValue, push, update, remove } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
-    // Configuration Firebase stable
     const firebaseConfig = {
       databaseURL: "https://sipandsavour-db-default-rtdb.europe-west1.firebasedatabase.app"
     };
@@ -521,7 +520,6 @@
     const app = initializeApp(firebaseConfig);
     const db = getDatabase(app);
 
-    // Catalogue des boissons d'origine (Affichage instantané)
     const initialCatalog = {
       "rec_1": { id: "rec_1", title: "Espresso Origine", cat: "classique", temp: "chaud", price: "3.50", description: "Un espresso extrait à haute précision à partir de notre récolte de saison.", recipeInfo: "18g de café moulu fin, 36g de boisson en tasse. Notes intenses de cacao brut et d'agrumes doux.", image: "https://images.unsplash.com/photo-1510972527409-cac19ff31d7c?w=500&q=80" },
       "rec_2": { id: "rec_2", title: "Caffè Latte de la Maison", cat: "classique", temp: "chaud", price: "4.80", description: "Double espresso mélangé harmonieusement à un lait soyeux texturé.", recipeInfo: "Double ristretto, lait entier micro-texturé à 60°C pour une douceur naturelle parfaite.", image: "https://images.unsplash.com/photo-1541167760496-1628856ab772?w=500&q=80" },
@@ -530,16 +528,14 @@
       "rec_5": { id: "rec_5", title: "Freddo Cappuccino Athénien", cat: "signature", temp: "glacé", price: "5.20", description: "Double espresso frappé sur glace sous une mousse de lait froide aérienne.", recipeInfo: "Espresso émulsionné au shaker avec glace, surmonté d'une crème de lait écrémé texturée à froid.", image: "https://images.unsplash.com/photo-1553909489-cd47e0907980?w=500&q=80" }
     };
 
-    // États globaux réactifs
     let catalogData = initialCatalog; 
     let activeCat = "all";
     let activeTemp = "all";
     let searchQuery = "";
     let selectedProduct = null;
-    let currentRole = localStorage.getItem("s_role") || ""; // 'family' ou 'barista'
+    let currentRole = localStorage.getItem("s_role") || ""; 
     let myActiveOrderId = localStorage.getItem("s_my_order_id") || "";
 
-    // TOAST DE NOTIFICATION VISUELLE
     function showNotification(msg) {
       const t = document.getElementById("globalToast");
       if(t) {
@@ -549,7 +545,6 @@
       }
     }
 
-    // ACCÈS SALON PRIVÉ / SECURITÉ
     function validateGatewayLogin() {
       const pin = document.getElementById("gateway-password-input").value.trim();
       const err = document.getElementById("gateway-global-error");
@@ -606,7 +601,6 @@
       }
     }
 
-    // GESTION DU THEME D'ORIGINE
     function toggleThemeSystem() {
       const h = document.documentElement;
       const btn = document.getElementById("themeToggle");
@@ -619,16 +613,14 @@
       }
     }
 
-    // REALTIME FIREBASE : LES RECETTES (Version Corrigée)
+    // BASE FIREBASE : LECTURE DU CATALOGUE DES BOISSONS
     onValue(ref(db, "recipes"), (snapshot) => {
       const data = snapshot.val();
       if (!data) {
-        // Affiche immédiatement le catalogue en local pour le hors-ligne / premier déploiement
         catalogData = initialCatalog;
         renderGrid();
         renderAdminCatalog();
-        // Écrit calmement dans Firebase en arrière-plan sans bloquer la vue
-        set(ref(db, "recipes"), initialCatalog).catch(e => console.warn("Firebase écriture restreinte (rules) :", e));
+        set(ref(db, "recipes"), initialCatalog).catch(e => console.warn(e));
       } else {
         catalogData = data;
         renderGrid();
@@ -636,19 +628,16 @@
       }
     });
 
-    // REALTIME FIREBASE : LES COMMANDES TICKET SYSTEM
+    // BASE FIREBASE : MONITORING LIVE DES TICKETS COMMANDES
     onValue(ref(db, "orders"), (snapshot) => {
       const data = snapshot.val();
       const orders = data ? Object.values(data) : [];
-      
-      // Tri chronologique des commandes
       orders.sort((x, y) => (x.timestamp || 0) - (y.timestamp || 0));
 
-      // 1. Mise à jour du tracker client si commande active
       const clientZone = document.getElementById("clientTrackerZone");
       if (currentRole === "family" && myActiveOrderId && data && data[myActiveOrderId]) {
-        const myOrd = data[myActiveOrderId];
         if(clientZone) clientZone.style.display = "block";
+        const myOrd = data[myActiveOrderId];
         
         document.getElementById("trackerDrinkName").textContent = myOrd.drinkTitle;
         document.getElementById("trackerGuestName").textContent = `Pour ${myOrd.guestName}`;
@@ -678,7 +667,6 @@
         if(clientZone) clientZone.style.display = "none";
       }
 
-      // 2. Remplissage du tableau barista
       const tbody = document.getElementById("ordersTableBody");
       if (!tbody) return;
       
@@ -697,7 +685,7 @@
         if (o.status === "pending") {
           actionBtn = `<button class="btn-single-action btn-action-next" onclick="updateOrderStatus('${o.id}', 'preparing')">Préparer</button>`;
         } else if (o.status === "preparing") {
-          actionBtn = `<button class="btn-single-action btn-action-next" style="background:#a8c99b;" onclick="updateOrderStatus('${o.id}', 'ready')">Prêt !</button>`;
+          actionBtn = `<button class="btn-single-action btn-action-next" style="background:#a8c99b; color:#110a05;" onclick="updateOrderStatus('${o.id}', 'ready')">Prêt !</button>`;
         }
 
         return `
@@ -709,7 +697,7 @@
             <td>
               <div class="admin-actions-row">
                 ${actionBtn}
-                <button class="btn-single-action btn-action-delete" onclick="deleteOrderSingle('${o.id}')">X</button>
+                <button class="btn-single-action btn-action-delete" onclick="deleteOrderSingle('${o.id}')">Archiver</button>
               </div>
             </td>
           </tr>
@@ -717,7 +705,7 @@
       }).join("");
     });
 
-    // RENDU D'AFFICHAGE DU CATALOGUE GRAND PUBLIC
+    // SYSTÈME DE FILTRAGE ASSOCIE ET INTERACTIF DU MENU
     function renderGrid() {
       const g = document.getElementById("menuGrid");
       if (!g) return;
@@ -751,15 +739,14 @@
       `).join("");
     }
 
-    // RENDU DE GESTION DU CATALOGUE POUR L'ADMIN
     function renderAdminCatalog() {
       const container = document.getElementById("adminCatalogGrid");
       if (!container) return;
       const list = Object.values(catalogData);
       container.innerHTML = list.map(item => `
         <div class="admin-catalog-card">
-          <span>${item.title}</span>
-          <div style="display:flex; gap:4px;">
+          <span style="font-weight:500;">${item.title}</span>
+          <div style="display:flex; gap:6px;">
             <button class="btn-single-action" onclick="openRecipeAdminModal('${item.id}')">Éditer</button>
             <button class="btn-single-action btn-action-delete" onclick="deleteRecipe('${item.id}')">Suppr</button>
           </div>
@@ -767,14 +754,14 @@
       `).join("");
     }
 
-    // ENVOI D'UNE COMMANDE TICKET
+    // INTERACTION : SOUMISSION D'UNE COMMANDE DE BOISSON
     function submitOrderToFirebase() {
       const gInput = document.getElementById("orderGuestNameInput");
       const name = gInput ? gInput.value.trim() : "";
       const customs = document.getElementById("orderCustomsInput") ? document.getElementById("orderCustomsInput").value.trim() : "";
       
       if (!name) {
-        alert("Saisissez votre prénom ou le nom de votre table pour la commande.");
+        alert("Saisissez votre prénom pour associer votre ticket.");
         return;
       }
 
@@ -797,18 +784,17 @@
           myActiveOrderId = ticketId;
           localStorage.setItem("s_my_order_id", ticketId);
           closeProductModal();
-          showNotification(`Ticket de ${name} transmis au barista !`);
+          showNotification(`Ticket envoyé ! Suivi en temps réel activé.`);
         })
         .catch(e => {
-          alert("Erreur réseau de transmission. Vérifiez l'accès à internet.");
+          alert("Erreur réseau lors de l'envoi.");
           console.error(e);
         });
     }
 
-    // ACTIONS TICKET BARISTA
     function updateOrderStatus(id, newStatus) {
       update(ref(db, `orders/${id}`), { status: newStatus })
-        .then(() => showNotification(`Ticket mis à jour : ${newStatus}`))
+        .then(() => showNotification(`Commande passée en : ${newStatus}`))
         .catch(e => console.error(e));
     }
 
@@ -825,7 +811,7 @@
     }
 
     function clearAllOrders() {
-      if (confirm("Archiver toutes les commandes affichées ?")) {
+      if (confirm("Archiver l'intégralité des commandes de la table ?")) {
         set(ref(db, "orders"), null)
           .then(() => {
             myActiveOrderId = "";
@@ -835,15 +821,17 @@
       }
     }
 
-    // ACTIONS ÉDITION CATALOGUE BARISTA
+    // SYSTEME INTERACTIF COMPLET D'EDITION / CRÉATION ADMIN
     function openRecipeAdminModal(id = '') {
       const m = document.getElementById("recipeAdminModal");
       const f = document.getElementById("recipeAdminForm");
+      const titleElement = document.getElementById("adminModalTitle");
       if(!m || !f) return;
       f.reset();
       
       if(id && catalogData[id]) {
         const item = catalogData[id];
+        if(titleElement) titleElement.textContent = "Modifier l'Élixir";
         document.getElementById("adminRecipeId").value = item.id;
         document.getElementById("adminTitle").value = item.title;
         document.getElementById("adminCat").value = item.cat;
@@ -853,6 +841,7 @@
         document.getElementById("adminDescription").value = item.description;
         document.getElementById("adminRecipeInfo").value = item.recipeInfo;
       } else {
+        if(titleElement) titleElement.textContent = "Nouvel Élixir";
         document.getElementById("adminRecipeId").value = "";
       }
       m.classList.add("active");
@@ -884,17 +873,17 @@
           closeRecipeAdminModal();
           showNotification("Élixir enregistré avec succès");
         })
-        .catch(e => alert("Sauvegarde échouée. Vérifiez vos règles Firebase."));
+        .catch(e => alert("Sauvegarde échouée. Vérifiez vos droits."));
     }
 
-    window.deleteRecipe = function(id) {
-      if(confirm("Supprimer définitivement cette boisson du menu ?")) {
+    function deleteRecipe(id) {
+      if(confirm("Supprimer définitivement cette boisson du menu familial ?")) {
         remove(ref(db, `recipes/${id}`))
           .then(() => showNotification("Boisson retirée du menu"));
       }
     }
 
-    // INTERACTIONS FICHE PRODUIT POPUP
+    // MODALE CLIENTS ET GESTION DES ONGLETS INTERNES
     function openProductModal(id) {
       if (!catalogData[id]) return;
       selectedProduct = catalogData[id];
@@ -904,8 +893,13 @@
       document.getElementById("tabDesc").textContent = selectedProduct.description;
       document.getElementById("tabRecipe").textContent = selectedProduct.recipeInfo;
       
-      // Reset sur le premier onglet
-      switchProductTab('desc', document.querySelector(".tab-link-product"));
+      // Nettoie l'ancien input de commande au cas où
+      const gInput = document.getElementById("orderGuestNameInput");
+      if(gInput && gInput.value === "") {
+        // Optionnel : pré-remplir si déjà stocké localement
+      }
+
+      switchProductTab('desc');
       
       const m = document.getElementById("productModal");
       if(m) m.classList.add("active");
@@ -916,16 +910,19 @@
       if(m) m.classList.remove("active");
     }
 
-    function switchProductTab(paneId, btn) {
+    function switchProductTab(paneId) {
       document.querySelectorAll(".tab-link-product").forEach(b => b.classList.remove("active"));
       document.querySelectorAll(".tab-pane-product").forEach(p => p.classList.remove("active"));
       
-      if(btn) btn.classList.add("active");
+      if(paneId === 'desc') document.getElementById("btnTabDesc").classList.add("active");
+      if(paneId === 'recipe') document.getElementById("btnTabRecipe").classList.add("active");
+      if(paneId === 'order') document.getElementById("btnTabOrder").classList.add("active");
+
       const currentPane = document.getElementById("tab" + paneId.charAt(0).toUpperCase() + paneId.slice(1));
       if(currentPane) currentPane.classList.add("active");
     }
 
-    // EXPOSITION UNIVERSELLE POUR BOUTONS HTML INLINE
+    // EXPOSITION UNIVERSELLE INDISPENSABLE POUR LES BOUTONS HTML INLINE
     window.validateGatewayLogin = validateGatewayLogin;
     window.toggleThemeSystem = toggleThemeSystem;
     window.triggerAdminAccessSecret = triggerAdminAccessSecret;
@@ -938,10 +935,11 @@
     window.switchProductTab = switchProductTab;
     window.openRecipeAdminModal = openRecipeAdminModal;
     window.closeRecipeAdminModal = closeRecipeAdminModal;
-    window.saveRecipeFromAdminForm = saveRecipeFromAdminForm; // <-- Fix de l'enregistrement de la recette appliquée
+    window.saveRecipeFromAdminForm = saveRecipeFromAdminForm;
+    window.deleteRecipe = deleteRecipe;
     window.clearAllOrders = clearAllOrders;
 
-    // ÉCOUTEURS D'ÉVÉNEMENTS DOM AU CHARGEMENT
+    // CAPTURE ET INITIALISATION DES ÉCOUTEURS D'ÉVÉNEMENTS DOM
     document.addEventListener('DOMContentLoaded', () => {
       if (currentRole) {
         document.getElementById('authGate').classList.add('hidden');
@@ -957,23 +955,29 @@
         });
       }
 
-      document.querySelectorAll('.filter-btn-luxe').forEach(btn => {
-        btn.addEventListener('click', () => {
-          document.querySelectorAll('.filter-btn-luxe').forEach(p => p.classList.remove('active'));
-          btn.classList.add('active'); 
-          activeCat = btn.dataset.cat; 
-          renderGrid();
+      const catTabs = document.getElementById('categoryTabs');
+      if(catTabs) {
+        catTabs.querySelectorAll('.filter-btn-luxe').forEach(btn => {
+          btn.addEventListener('click', () => {
+            catTabs.querySelectorAll('.filter-btn-luxe').forEach(p => p.classList.remove('active'));
+            btn.classList.add('active'); 
+            activeCat = btn.dataset.cat; 
+            renderGrid();
+          });
         });
-      });
+      }
 
-      document.querySelectorAll('.temp-btn-luxe').forEach(btn => {
-        btn.addEventListener('click', () => {
-          document.querySelectorAll('.temp-btn-luxe').forEach(p => p.classList.remove('active'));
-          btn.classList.add('active'); 
-          activeTemp = btn.dataset.temp; 
-          renderGrid();
+      const tempTabs = document.getElementById('tempTabs');
+      if(tempTabs) {
+        tempTabs.querySelectorAll('.temp-btn-luxe').forEach(btn => {
+          btn.addEventListener('click', () => {
+            tempTabs.querySelectorAll('.temp-btn-luxe').forEach(p => p.classList.remove('active'));
+            btn.classList.add('active'); 
+            activeTemp = btn.dataset.temp; 
+            renderGrid();
+          });
         });
-      });
+      }
     });
   </script>
 </body>
