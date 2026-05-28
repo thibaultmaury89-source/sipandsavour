@@ -133,15 +133,9 @@
 
     .main-body-content { padding-top: 90px; }
 
-    /* ============================================================
-       SUIVI DE PREPARATION SENS DESIGN
-    ============================================================ */
-    .live-tracker-section {
-      max-width: 1300px; margin: 20px auto 0 auto; padding: 0 40px; display: none;
-    }
-    .tracker-card {
-      background: var(--panel-bg); backdrop-filter: blur(var(--blur)); border: 1px solid var(--gold); border-radius: 8px; padding: 20px; box-shadow: var(--shadow-luxe); display: flex; flex-direction: column; gap: 15px;
-    }
+    /* SUIVI DE PREPARATION */
+    .live-tracker-section { max-width: 1300px; margin: 20px auto 0 auto; padding: 0 40px; display: none; }
+    .tracker-card { background: var(--panel-bg); backdrop-filter: blur(var(--blur)); border: 1px solid var(--gold); border-radius: 8px; padding: 20px; box-shadow: var(--shadow-luxe); display: flex; flex-direction: column; gap: 15px; }
     .tracker-header { display: flex; justify-content: space-between; align-items: center; }
     .tracker-header h4 { font-family: var(--font-serif); font-size: 1.3rem; color: var(--gold); font-weight: 400; }
     .tracker-status-badge { font-size: 0.65rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; padding: 4px 10px; border-radius: 20px; background: rgba(197, 168, 128, 0.1); color: var(--gold); border: 1px solid var(--border-fine); }
@@ -159,9 +153,7 @@
     .tracker-step.done .step-icon { border-color: var(--gold-dim); color: var(--gold); background: rgba(197, 168, 128, 0.1); }
     .tracker-step.done .step-label { color: var(--text-muted); }
 
-    /* ============================================================
-       TABLEAU DE BORD ADMIN & TABLEAU DES COMMANDES
-    ============================================================ */
+    /* TABLEAU DE BORD ADMIN */
     .top-dashboard-admin { display: none; max-width: 1300px; margin: 25px auto 0 auto; padding: 0 40px; }
     .dashboard-container { background: var(--panel-bg); backdrop-filter: blur(var(--blur)); border: 1px solid var(--border-fine); border-top: 4px solid var(--gold); padding: 25px; box-shadow: var(--shadow-luxe); margin-bottom: 25px; border-radius: 4px; }
     .dashboard-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-fine); padding-bottom: 12px; margin-bottom: 20px; flex-wrap: wrap; gap: 10px; }
@@ -174,9 +166,8 @@
     .table-luxe { width: 100%; border-collapse: collapse; text-align: left; font-size: 0.85rem; }
     .table-luxe th { font-family: var(--font-sans); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 2px; color: var(--text-muted); padding: 12px; border-bottom: 2px solid var(--gold); }
     .table-luxe td { padding: 12px; border-bottom: 1px solid var(--border-fine); vertical-align: middle; }
-    .table-luxe tr:hover { background: rgba(197, 168, 128, 0.03); }
 
-    .badge-status-table { display: inline-block; font-size: 0.65rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; padding: 4px 8px; border-radius: 4px; text-align: center; }
+    .badge-status-table { display: inline-block; font-size: 0.65rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; padding: 4px 8px; border-radius: 4px; }
     .badge-pending { background: rgba(197, 168, 128, 0.15); color: #c5a880; border: 1px solid rgba(197, 168, 128, 0.3); }
     .badge-preparing { background: rgba(229, 124, 103, 0.15); color: #e57c67; border: 1px solid rgba(229, 124, 103, 0.3); }
     .badge-ready { background: rgba(168, 201, 155, 0.15); color: #a8c99b; border: 1px solid rgba(168, 201, 155, 0.3); }
@@ -185,7 +176,7 @@
     .table-customs-spec { font-size: 0.75rem; color: var(--text-muted); font-style: italic; white-space: pre-line; background: rgba(197, 168, 128, 0.02); padding: 6px 10px; border-left: 2px solid var(--gold-dim); border-radius: 0 4px 4px 0; }
 
     .admin-actions-row { display: flex; gap: 6px; }
-    .btn-single-action { border: 1px solid var(--gold); background: transparent; color: var(--gold); font-size: 0.65rem; text-transform: uppercase; letter-spacing: 1px; padding: 6px 10px; cursor: pointer; transition: all 0.3s; font-weight: 600; text-align: center; border-radius: 4px; }
+    .btn-single-action { border: 1px solid var(--gold); background: transparent; color: var(--gold); font-size: 0.65rem; text-transform: uppercase; letter-spacing: 1px; padding: 6px 10px; cursor: pointer; transition: all 0.3s; font-weight: 600; border-radius: 4px; }
     .btn-single-action:hover { background: var(--gold); color: #110a05; }
     .btn-action-next { background: var(--gold); color: #110a05; }
     .btn-action-delete { border-color: rgba(214, 107, 83, 0.4); color: #e57c67; }
@@ -193,7 +184,6 @@
 
     .admin-catalog-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 15px; max-height: 400px; overflow-y: auto; }
     .admin-catalog-card { background: rgba(17, 10, 5, 0.3); border: 1px solid var(--border-fine); padding: 15px; border-radius: 6px; display: flex; justify-content: space-between; align-items: center; gap: 10px; }
-    .admin-catalog-card span { font-family: var(--font-serif); font-size: 1.1rem; }
 
     /* HERO & CRÉATIONS */
     .hero-cinematic { min-height: 40vh; display: grid; grid-template-columns: 1.2fr 0.8fr; align-items: center; padding: 40px; max-width: 1300px; margin: 0 auto; gap: 40px; }
@@ -226,15 +216,14 @@
     .grid-container { max-width: 1300px; margin: 0 auto; padding: 0 40px 80px; }
     .menu-grid-luxe { display: grid; grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); gap: 30px; }
     
-    /* CARTES DU MENU */
-    .carte-item { background: var(--panel-bg); border: 1px solid var(--border-fine); padding: 18px; position: relative; transition: all 0.3s ease; display: flex; flex-direction: column; gap: 12px; box-shadow: var(--shadow-luxe); border-radius: 6px; cursor: pointer; }
+    /* CARTES DU MENU MODIFIÉES POUR ACCUEILLIR LES DEUX BOUTONS */
+    .carte-item { background: var(--panel-bg); border: 1px solid var(--border-fine); padding: 18px; position: relative; transition: all 0.3s ease; display: flex; flex-direction: column; gap: 12px; box-shadow: var(--shadow-luxe); border-radius: 6px; }
     .carte-item:hover { border-color: var(--gold); transform: translateY(-3px); }
     
     .item-media { width: 100%; aspect-ratio: 16/10; overflow: hidden; position: relative; border-radius: 4px; background: #1a120b; border: 1px solid rgba(197, 168, 128, 0.1); }
     .item-media img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s; }
-    .carte-item:hover .item-media img { transform: scale(1.04); }
     
-    .item-tag-hot-cold { position: absolute; top: 10px; left: 10px; font-size: 0.55rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; padding: 3px 8px; border-radius: 3px; backdrop-filter: blur(4px); }
+    .item-tag-hot-cold { position: absolute; top: 10px; left: 10px; z-index: 10; font-size: 0.55rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; padding: 3px 8px; border-radius: 3px; backdrop-filter: blur(4px); }
     .tag-hot { background: rgba(214, 107, 83, 0.15); color: #e57c67; border: 1px solid rgba(214, 107, 83, 0.3); }
     .tag-cold { background: rgba(114, 150, 105, 0.15); color: #a8c99b; border: 1px solid rgba(114, 150, 105, 0.3); }
 
@@ -244,19 +233,23 @@
     .item-price { font-family: var(--font-serif); font-size: 1.2rem; color: var(--gold); font-weight: 600; }
     .item-description { font-size: 0.75rem; color: var(--text-muted); line-height: 1.5; min-height: 3em; }
     
-    .btn-view-product { background: transparent; border: 1px solid var(--gold); color: var(--gold); padding: 10px; font-family: var(--font-sans); font-size: 0.65rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; text-align: center; border-radius: 4px; transition: all 0.3s; margin-top: auto; }
-    .carte-item:hover .btn-view-product { background: var(--gold); color: #110a05; }
+    /* SECTION DES DEUX BOUTONS SEPARÉS */
+    .item-actions-dual { display: flex; gap: 10px; margin-top: auto; }
+    .btn-action-discover { flex: 1; background: var(--gold); color: #110a05; border: 1px solid var(--gold); padding: 10px; font-family: var(--font-sans); font-size: 0.65rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; text-align: center; border-radius: 4px; cursor: pointer; transition: all 0.3s; }
+    .btn-action-discover:hover { background: var(--text-light); color: var(--bg-salon); border-color: var(--text-light); }
+    .btn-action-order-now { flex: 1; background: transparent; border: 1px solid var(--border-fine); color: var(--text-light); padding: 10px; font-family: var(--font-sans); font-size: 0.65rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; text-align: center; border-radius: 4px; cursor: pointer; transition: all 0.3s; }
+    .btn-action-order-now:hover { border-color: var(--gold); color: var(--gold); background: rgba(197, 168, 128, 0.05); }
 
-    /* ONGLETS FICHE PRODUIT */
-    .tabs-nav-product { display: flex; border-bottom: 1px solid var(--border-fine); margin-bottom: 20px; gap: 15px; overflow-x: auto; -webkit-overflow-scrolling: touch; }
-    .tab-link-product { background: none; border: none; font-family: var(--font-serif); font-size: 1.15rem; color: var(--text-muted); padding-bottom: 8px; cursor: pointer; position: relative; white-space: nowrap; }
+    /* ONGLETS INTERNES DE LA MODALE DÉCOUVRIR */
+    .tabs-nav-product { display: flex; border-bottom: 1px solid var(--border-fine); margin-bottom: 20px; gap: 15px; }
+    .tab-link-product { background: none; border: none; font-family: var(--font-serif); font-size: 1.15rem; color: var(--text-muted); padding-bottom: 8px; cursor: pointer; position: relative; }
     .tab-link-product.active { color: var(--gold); }
     .tab-link-product.active::after { content: ''; position: absolute; bottom: -1px; left: 0; right: 0; height: 2px; background: var(--gold); }
     .tab-pane-product { display: none; font-size: 0.85rem; color: var(--text-light); line-height: 1.6; white-space: pre-line; min-height: 120px; }
     .tab-pane-product.active { display: block; }
     .product-meta-badge { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 1px; color: var(--gold); background: rgba(197, 168, 128, 0.1); padding: 4px 8px; border-radius: 4px; display: inline-block; margin-bottom: 15px; border: 1px solid var(--border-fine); }
 
-    /* MODALES & TABLES */
+    /* MODALES GENERALES */
     .modal-backdrop-luxe { position: fixed; inset: 0; z-index: 200; background: rgba(17, 10, 5, 0.85); backdrop-filter: blur(8px); display: none; align-items: center; justify-content: center; padding: 15px; }
     .modal-backdrop-luxe.active { display: flex; }
     .modal-box-luxe { background: var(--panel-bg); border: 1px solid var(--gold); padding: 30px; max-width: 520px; width: 100%; border-top: 4px solid var(--gold); box-shadow: var(--shadow-luxe); border-radius: 8px; max-height: 95vh; overflow-y: auto; }
@@ -278,17 +271,13 @@
       .hero-cinematic { grid-template-columns: 1fr; padding: 25px 20px; gap: 25px; text-align: center; }
       .hero-title-luxe { font-size: 2rem; }
       .frame-artisan { max-width: 260px; }
-      .frame-caption { left: 50%; transform: translateX(-50%); bottom: -15px; width: 90%; text-align: center; }
       .salon-curation { padding: 15px 20px; }
-      .live-tracker-section { padding: 0 20px; }
       .seasonal-indicator { flex-direction: column; text-align: center; gap: 4px; }
       .curation-tabs-row { flex-direction: column; gap: 15px; }
       .filter-group-luxe { width: 100vw; overflow-x: auto; padding: 5px 20px; gap: 20px; -webkit-overflow-scrolling: touch; display: flex; white-space: nowrap; margin-left: -20px; margin-right: -20px; }
       .grid-container { padding: 0 20px; }
       .menu-grid-luxe { grid-template-columns: 1fr; gap: 20px; }
       .top-dashboard-admin { padding: 0 15px; }
-      .modal-box-luxe { padding: 20px; }
-      .modal-form-grid { grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -430,33 +419,59 @@
     </div>
   </div>
 
-  <div class="modal-backdrop-luxe" id="productModal" onclick="if(event.target===this) closeProductModal()">
+  <div class="modal-backdrop-luxe" id="discoverModal" onclick="if(event.target===this) closeDiscoverModal()">
     <div class="modal-box-luxe">
-      <h3 class="modal-title-luxe" id="modalProductTitle">Élixir</h3>
-      <span class="product-meta-badge" id="modalProductBadge">Chaud — Signature</span>
+      <h3 class="modal-title-luxe" id="discoverProductTitle">Élixir</h3>
+      <span class="product-meta-badge" id="discoverProductBadge">Chaud — Signature</span>
       
       <div class="tabs-nav-product">
-        <button id="btnTabDesc" class="tab-link-product active" onclick="switchProductTab('desc')">Histoire</button>
-        <button id="btnTabRecipe" class="tab-link-product" onclick="switchProductTab('recipe')">Profil aromatique</button>
-        <button id="btnTabOrder" class="tab-link-product" onclick="switchProductTab('order')">Commander</button>
+        <button id="btnTabDesc" class="tab-link-product active" onclick="switchDiscoverTab('desc')">Histoire</button>
+        <button id="btnTabRecipe" class="tab-link-product" onclick="switchDiscoverTab('recipe')">Profil aromatique</button>
       </div>
 
       <div id="tabDesc" class="tab-pane-product active"></div>
       <div id="tabRecipe" class="tab-pane-product"></div>
       
-      <div id="tabOrder" class="tab-pane-product">
-        <div class="modal-form-grid" style="margin-bottom:10px;">
-          <div class="form-group span-full">
-            <label for="orderGuestNameInput">Votre Prénom / Nom</label>
-            <input type="text" id="orderGuestNameInput" class="form-input" placeholder="Pour votre ticket...">
-          </div>
-          <div class="form-group span-full">
-            <label for="orderCustomsInput">Préférences (Lait d'avoine, léger, sucré...)</label>
-            <textarea id="orderCustomsInput" rows="2" class="form-input" placeholder="Laissez vos instructions au barista..."></textarea>
-          </div>
+      <button type="button" class="btn-luxe" style="margin-top: 20px;" onclick="closeDiscoverModal(); openOrderModal(selectedProduct.id)">Passer à la commande</button>
+    </div>
+  </div>
+
+  <div class="modal-backdrop-luxe" id="orderModal" onclick="if(event.target===this) closeOrderModal()">
+    <div class="modal-box-luxe">
+      <h3 class="modal-title-luxe" id="orderProductTitle">Commander l'élixir</h3>
+      <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 20px;">Personnalisez votre boisson selon vos préférences d'extraction et de dégustation.</p>
+      
+      <div class="modal-form-grid" style="margin-bottom:10px;">
+        <div class="form-group span-full">
+          <label for="orderGuestNameInput">Votre Prénom / Nom</label>
+          <input type="text" id="orderGuestNameInput" class="form-input" placeholder="Pour marquer votre ticket...">
         </div>
-        <button type="button" class="btn-luxe" onclick="submitOrderToFirebase()">Lancer la préparation</button>
+        
+        <div class="form-group">
+          <label for="orderMilkSelect">Type de Lait</label>
+          <select id="orderMilkSelect">
+            <option value="sans lait">Sans lait</option>
+            <option value="avec lait entier">Lait entier</option>
+            <option value="lait d'avoine">Lait d'avoine</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="orderFoamSelect">Mousse de lait</label>
+          <select id="orderFoamSelect">
+            <option value="sans mousse de lait">Sans mousse</option>
+            <option value="mousse de lait légère">Mousse légère</option>
+            <option value="mousse de lait épaisse">Mousse épaisse</option>
+          </select>
+        </div>
+
+        <div class="form-group span-full">
+          <label for="orderCustomsInput">Autre option / Instructions</label>
+          <textarea id="orderCustomsInput" rows="2" class="form-input" placeholder="Ex: très chaud, un sucre, léger en café..."></textarea>
+        </div>
       </div>
+      
+      <button type="button" class="btn-luxe" onclick="submitOrderToFirebase()">Lancer la préparation</button>
     </div>
   </div>
 
@@ -705,7 +720,7 @@
       }).join("");
     });
 
-    // SYSTÈME DE FILTRAGE ASSOCIE ET INTERACTIF DU MENU
+    // RENDU INTERACTIF DU MENU DU SALON
     function renderGrid() {
       const g = document.getElementById("menuGrid");
       if (!g) return;
@@ -723,7 +738,7 @@
       }
 
       g.innerHTML = items.map(item => `
-        <div class="carte-item" onclick="openProductModal('${item.id}')">
+        <div class="carte-item">
           <div class="item-media">
             <span class="item-tag-hot-cold ${item.temp === 'chaud' ? 'tag-hot' : 'tag-cold'}">${item.temp}</span>
             <img src="${item.image || 'https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=500&q=80'}" alt="${item.title}">
@@ -734,7 +749,11 @@
             <span class="item-price">${item.price}€</span>
           </div>
           <p class="item-description">${item.description}</p>
-          <button type="button" class="btn-view-product">Découvrir l'élixir</button>
+          
+          <div class="item-actions-dual">
+            <button type="button" class="btn-action-discover" onclick="openDiscoverModal('${item.id}')">Découvrir</button>
+            <button type="button" class="btn-action-order-now" onclick="openOrderModal('${item.id}')">Commander</button>
+          </div>
         </div>
       `).join("");
     }
@@ -754,15 +773,82 @@
       `).join("");
     }
 
-    // INTERACTION : SOUMISSION D'UNE COMMANDE DE BOISSON
+    // MODALE 1 : GESTION DU PANNEAU "DÉCOUVRIR"
+    function openDiscoverModal(id) {
+      if (!catalogData[id]) return;
+      selectedProduct = catalogData[id];
+      
+      document.getElementById("discoverProductTitle").textContent = selectedProduct.title;
+      document.getElementById("discoverProductBadge").textContent = `${selectedProduct.temp} — ${selectedProduct.cat}`;
+      document.getElementById("tabDesc").textContent = selectedProduct.description;
+      document.getElementById("tabRecipe").textContent = selectedProduct.recipeInfo;
+      
+      switchDiscoverTab('desc');
+      
+      const m = document.getElementById("discoverModal");
+      if(m) m.classList.add("active");
+    }
+
+    function closeDiscoverModal() {
+      const m = document.getElementById("discoverModal");
+      if(m) m.classList.remove("active");
+    }
+
+    function switchDiscoverTab(paneId) {
+      document.querySelectorAll(".tab-link-product").forEach(b => b.classList.remove("active"));
+      document.querySelectorAll(".tab-pane-product").forEach(p => p.classList.remove("active"));
+      
+      if(paneId === 'desc') document.getElementById("btnTabDesc").classList.add("active");
+      if(paneId === 'recipe') document.getElementById("btnTabRecipe").classList.add("active");
+
+      const currentPane = document.getElementById("tab" + paneId.charAt(0).toUpperCase() + paneId.slice(1));
+      if(currentPane) currentPane.classList.add("active");
+    }
+
+    // MODALE 2 : GESTION DU PANNEAU DE COMMANDE AVEC OPTIONS AVANCÉES
+    function openOrderModal(id) {
+      if (!catalogData[id]) return;
+      selectedProduct = catalogData[id];
+      
+      document.getElementById("orderProductTitle").textContent = `Commander : ${selectedProduct.title}`;
+      
+      // Réinitialise les champs de la modale de commande
+      const nameInput = document.getElementById("orderGuestNameInput");
+      const milkSelect = document.getElementById("orderMilkSelect");
+      const foamSelect = document.getElementById("orderFoamSelect");
+      const customsInput = document.getElementById("orderCustomsInput");
+      
+      if(milkSelect) milkSelect.value = "sans lait";
+      if(foamSelect) foamSelect.value = "sans mousse de lait";
+      if(customsInput) customsInput.value = "";
+
+      const m = document.getElementById("orderModal");
+      if(m) m.classList.add("active");
+    }
+
+    function closeOrderModal() {
+      const m = document.getElementById("orderModal");
+      if(m) m.classList.remove("active");
+    }
+
+    // INTERACTION : COMPILATION ET SOUMISSION DE LA COMMANDE EN BASE DE DONNÉES
     function submitOrderToFirebase() {
       const gInput = document.getElementById("orderGuestNameInput");
       const name = gInput ? gInput.value.trim() : "";
-      const customs = document.getElementById("orderCustomsInput") ? document.getElementById("orderCustomsInput").value.trim() : "";
+      
+      const milk = document.getElementById("orderMilkSelect").value;
+      const foam = document.getElementById("orderFoamSelect").value;
+      const extraText = document.getElementById("orderCustomsInput").value.trim();
       
       if (!name) {
         alert("Saisissez votre prénom pour associer votre ticket.");
         return;
+      }
+
+      // Compilation des structures d'options pour le Barista
+      let compiledCustoms = `Lait : ${milk}\nMousse : ${foam}`;
+      if (extraText) {
+        compiledCustoms += `\nNote additionnelle : ${extraText}`;
       }
 
       const orderRef = ref(db, "orders");
@@ -774,7 +860,7 @@
         drinkId: selectedProduct.id,
         drinkTitle: selectedProduct.title,
         guestName: name,
-        customs: customs,
+        customs: compiledCustoms,
         status: "pending",
         timestamp: Date.now()
       };
@@ -783,7 +869,7 @@
         .then(() => {
           myActiveOrderId = ticketId;
           localStorage.setItem("s_my_order_id", ticketId);
-          closeProductModal();
+          closeOrderModal();
           showNotification(`Ticket envoyé ! Suivi en temps réel activé.`);
         })
         .catch(e => {
@@ -821,7 +907,7 @@
       }
     }
 
-    // SYSTEME INTERACTIF COMPLET D'EDITION / CRÉATION ADMIN
+    // MODALE 3 : GESTION ADMINISTRATIVE DES DU CATALOGUE RECIPIES
     function openRecipeAdminModal(id = '') {
       const m = document.getElementById("recipeAdminModal");
       const f = document.getElementById("recipeAdminForm");
@@ -873,56 +959,17 @@
           closeRecipeAdminModal();
           showNotification("Élixir enregistré avec succès");
         })
-        .catch(e => alert("Sauvegarde échouée. Vérifiez vos droits."));
+        .catch(e => alert("Sauvegarde échouée."));
     }
 
     function deleteRecipe(id) {
-      if(confirm("Supprimer définitivement cette boisson du menu familial ?")) {
+      if(confirm("Supprimer définitivement cette boisson du menu ?")) {
         remove(ref(db, `recipes/${id}`))
           .then(() => showNotification("Boisson retirée du menu"));
       }
     }
 
-    // MODALE CLIENTS ET GESTION DES ONGLETS INTERNES
-    function openProductModal(id) {
-      if (!catalogData[id]) return;
-      selectedProduct = catalogData[id];
-      
-      document.getElementById("modalProductTitle").textContent = selectedProduct.title;
-      document.getElementById("modalProductBadge").textContent = `${selectedProduct.temp} — ${selectedProduct.cat}`;
-      document.getElementById("tabDesc").textContent = selectedProduct.description;
-      document.getElementById("tabRecipe").textContent = selectedProduct.recipeInfo;
-      
-      // Nettoie l'ancien input de commande au cas où
-      const gInput = document.getElementById("orderGuestNameInput");
-      if(gInput && gInput.value === "") {
-        // Optionnel : pré-remplir si déjà stocké localement
-      }
-
-      switchProductTab('desc');
-      
-      const m = document.getElementById("productModal");
-      if(m) m.classList.add("active");
-    }
-
-    function closeProductModal() {
-      const m = document.getElementById("productModal");
-      if(m) m.classList.remove("active");
-    }
-
-    function switchProductTab(paneId) {
-      document.querySelectorAll(".tab-link-product").forEach(b => b.classList.remove("active"));
-      document.querySelectorAll(".tab-pane-product").forEach(p => p.classList.remove("active"));
-      
-      if(paneId === 'desc') document.getElementById("btnTabDesc").classList.add("active");
-      if(paneId === 'recipe') document.getElementById("btnTabRecipe").classList.add("active");
-      if(paneId === 'order') document.getElementById("btnTabOrder").classList.add("active");
-
-      const currentPane = document.getElementById("tab" + paneId.charAt(0).toUpperCase() + paneId.slice(1));
-      if(currentPane) currentPane.classList.add("active");
-    }
-
-    // EXPOSITION UNIVERSELLE INDISPENSABLE POUR LES BOUTONS HTML INLINE
+    // EXPOSITION UNIVERSELLE POUR LE DOM
     window.validateGatewayLogin = validateGatewayLogin;
     window.toggleThemeSystem = toggleThemeSystem;
     window.triggerAdminAccessSecret = triggerAdminAccessSecret;
@@ -930,16 +977,18 @@
     window.submitOrderToFirebase = submitOrderToFirebase;
     window.updateOrderStatus = updateOrderStatus;
     window.deleteOrderSingle = deleteOrderSingle;
-    window.openProductModal = openProductModal;
-    window.closeProductModal = closeProductModal;
-    window.switchProductTab = switchProductTab;
+    window.openDiscoverModal = openDiscoverModal;
+    window.closeDiscoverModal = closeDiscoverModal;
+    window.switchDiscoverTab = switchDiscoverTab;
+    window.openOrderModal = openOrderModal;
+    window.closeOrderModal = closeOrderModal;
     window.openRecipeAdminModal = openRecipeAdminModal;
     window.closeRecipeAdminModal = closeRecipeAdminModal;
     window.saveRecipeFromAdminForm = saveRecipeFromAdminForm;
     window.deleteRecipe = deleteRecipe;
     window.clearAllOrders = clearAllOrders;
 
-    // CAPTURE ET INITIALISATION DES ÉCOUTEURS D'ÉVÉNEMENTS DOM
+    // CHARGEMENT ET INITIALISATION DES ECOUTEURS
     document.addEventListener('DOMContentLoaded', () => {
       if (currentRole) {
         document.getElementById('authGate').classList.add('hidden');
