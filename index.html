@@ -133,9 +133,15 @@
 
     .main-body-content { padding-top: 90px; }
 
-    /* SUIVI DE PREPARATION */
-    .live-tracker-section { max-width: 1300px; margin: 20px auto 0 auto; padding: 0 40px; display: none; }
-    .tracker-card { background: var(--panel-bg); backdrop-filter: blur(var(--blur)); border: 1px solid var(--gold); border-radius: 8px; padding: 20px; box-shadow: var(--shadow-luxe); display: flex; flex-direction: column; gap: 15px; }
+    /* ============================================================
+       SUIVI DE PREPARATION SENS DESIGN
+    ============================================================ */
+    .live-tracker-section {
+      max-width: 1300px; margin: 20px auto 0 auto; padding: 0 40px; display: none;
+    }
+    .tracker-card {
+      background: var(--panel-bg); backdrop-filter: blur(var(--blur)); border: 1px solid var(--gold); border-radius: 8px; padding: 20px; box-shadow: var(--shadow-luxe); display: flex; flex-direction: column; gap: 15px;
+    }
     .tracker-header { display: flex; justify-content: space-between; align-items: center; }
     .tracker-header h4 { font-family: var(--font-serif); font-size: 1.3rem; color: var(--gold); font-weight: 400; }
     .tracker-status-badge { font-size: 0.65rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; padding: 4px 10px; border-radius: 20px; background: rgba(197, 168, 128, 0.1); color: var(--gold); border: 1px solid var(--border-fine); }
@@ -153,7 +159,9 @@
     .tracker-step.done .step-icon { border-color: var(--gold-dim); color: var(--gold); background: rgba(197, 168, 128, 0.1); }
     .tracker-step.done .step-label { color: var(--text-muted); }
 
-    /* TABLEAU DE BORD ADMIN */
+    /* ============================================================
+       TABLEAU DE BORD ADMIN & TABLEAU DES COMMANDES
+    ============================================================ */
     .top-dashboard-admin { display: none; max-width: 1300px; margin: 25px auto 0 auto; padding: 0 40px; }
     .dashboard-container { background: var(--panel-bg); backdrop-filter: blur(var(--blur)); border: 1px solid var(--border-fine); border-top: 4px solid var(--gold); padding: 25px; box-shadow: var(--shadow-luxe); margin-bottom: 25px; border-radius: 4px; }
     .dashboard-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-fine); padding-bottom: 12px; margin-bottom: 20px; flex-wrap: wrap; gap: 10px; }
@@ -166,8 +174,9 @@
     .table-luxe { width: 100%; border-collapse: collapse; text-align: left; font-size: 0.85rem; }
     .table-luxe th { font-family: var(--font-sans); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 2px; color: var(--text-muted); padding: 12px; border-bottom: 2px solid var(--gold); }
     .table-luxe td { padding: 12px; border-bottom: 1px solid var(--border-fine); vertical-align: middle; }
+    .table-luxe tr:hover { background: rgba(197, 168, 128, 0.03); }
 
-    .badge-status-table { display: inline-block; font-size: 0.65rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; padding: 4px 8px; border-radius: 4px; }
+    .badge-status-table { display: inline-block; font-size: 0.65rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; padding: 4px 8px; border-radius: 4px; text-align: center; }
     .badge-pending { background: rgba(197, 168, 128, 0.15); color: #c5a880; border: 1px solid rgba(197, 168, 128, 0.3); }
     .badge-preparing { background: rgba(229, 124, 103, 0.15); color: #e57c67; border: 1px solid rgba(229, 124, 103, 0.3); }
     .badge-ready { background: rgba(168, 201, 155, 0.15); color: #a8c99b; border: 1px solid rgba(168, 201, 155, 0.3); }
@@ -176,7 +185,7 @@
     .table-customs-spec { font-size: 0.75rem; color: var(--text-muted); font-style: italic; white-space: pre-line; background: rgba(197, 168, 128, 0.02); padding: 6px 10px; border-left: 2px solid var(--gold-dim); border-radius: 0 4px 4px 0; }
 
     .admin-actions-row { display: flex; gap: 6px; }
-    .btn-single-action { border: 1px solid var(--gold); background: transparent; color: var(--gold); font-size: 0.65rem; text-transform: uppercase; letter-spacing: 1px; padding: 6px 10px; cursor: pointer; transition: all 0.3s; font-weight: 600; border-radius: 4px; }
+    .btn-single-action { border: 1px solid var(--gold); background: transparent; color: var(--gold); font-size: 0.65rem; text-transform: uppercase; letter-spacing: 1px; padding: 6px 10px; cursor: pointer; transition: all 0.3s; font-weight: 600; text-align: center; border-radius: 4px; }
     .btn-single-action:hover { background: var(--gold); color: #110a05; }
     .btn-action-next { background: var(--gold); color: #110a05; }
     .btn-action-delete { border-color: rgba(214, 107, 83, 0.4); color: #e57c67; }
@@ -184,6 +193,7 @@
 
     .admin-catalog-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 15px; max-height: 400px; overflow-y: auto; }
     .admin-catalog-card { background: rgba(17, 10, 5, 0.3); border: 1px solid var(--border-fine); padding: 15px; border-radius: 6px; display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+    .admin-catalog-card span { font-family: var(--font-serif); font-size: 1.1rem; }
 
     /* HERO & CRÉATIONS */
     .hero-cinematic { min-height: 40vh; display: grid; grid-template-columns: 1.2fr 0.8fr; align-items: center; padding: 40px; max-width: 1300px; margin: 0 auto; gap: 40px; }
@@ -197,17 +207,6 @@
     .frame-caption { position: absolute; bottom: 20px; left: -20px; background: var(--bg-salon); border: 1px solid var(--border-fine); padding: 10px 20px; box-shadow: var(--shadow-luxe); }
     .frame-caption h4 { font-family: var(--font-serif); font-size: 1.1rem; color: var(--gold); font-weight: 400; }
     .frame-caption p { font-size: 0.6rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
-
-    /* NOUVELLE SECTION : RECOMMANDATIONS BARISTA */
-    .barista-recommendation-section { max-width: 1300px; margin: 40px auto; padding: 0 40px; }
-    .recommendation-title-block { border-bottom: 1px solid var(--border-fine); padding-bottom: 10px; margin-bottom: 25px; }
-    .recommendation-title-block h3 { font-family: var(--font-serif); font-size: 1.6rem; font-weight: 400; color: var(--gold); }
-    .recommendation-container { background: var(--panel-bg); border: 1px solid var(--border-fine); border-left: 4px solid var(--gold); box-shadow: var(--shadow-luxe); border-radius: 6px; display: grid; grid-template-columns: 0.8fr 1.2fr; overflow: hidden; align-items: center; }
-    .recommendation-img-side { width: 100%; height: 100%; min-height: 250px; overflow: hidden; }
-    .recommendation-img-side img { width: 100%; height: 100%; object-fit: cover; }
-    .recommendation-content-side { padding: 30px; display: flex; flex-direction: column; gap: 12px; align-items: flex-start; }
-    .recommendation-drink-name { font-family: var(--font-serif); font-size: 1.8rem; font-weight: 400; line-height: 1.2; }
-    .recommendation-drink-desc { font-size: 0.85rem; color: var(--text-muted); line-height: 1.6; }
 
     .salon-curation { max-width: 1300px; margin: 0 auto; padding: 20px 40px; }
     .seasonal-indicator { display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--border-fine); padding-bottom: 12px; margin-bottom: 30px; }
@@ -228,13 +227,14 @@
     .menu-grid-luxe { display: grid; grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); gap: 30px; }
     
     /* CARTES DU MENU */
-    .carte-item { background: var(--panel-bg); border: 1px solid var(--border-fine); padding: 18px; position: relative; transition: all 0.3s ease; display: flex; flex-direction: column; gap: 12px; box-shadow: var(--shadow-luxe); border-radius: 6px; }
+    .carte-item { background: var(--panel-bg); border: 1px solid var(--border-fine); padding: 18px; position: relative; transition: all 0.3s ease; display: flex; flex-direction: column; gap: 12px; box-shadow: var(--shadow-luxe); border-radius: 6px; cursor: pointer; }
     .carte-item:hover { border-color: var(--gold); transform: translateY(-3px); }
     
     .item-media { width: 100%; aspect-ratio: 16/10; overflow: hidden; position: relative; border-radius: 4px; background: #1a120b; border: 1px solid rgba(197, 168, 128, 0.1); }
     .item-media img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s; }
+    .carte-item:hover .item-media img { transform: scale(1.04); }
     
-    .item-tag-hot-cold { position: absolute; top: 10px; left: 10px; z-index: 10; font-size: 0.55rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; padding: 3px 8px; border-radius: 3px; backdrop-filter: blur(4px); }
+    .item-tag-hot-cold { position: absolute; top: 10px; left: 10px; font-size: 0.55rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; padding: 3px 8px; border-radius: 3px; backdrop-filter: blur(4px); }
     .tag-hot { background: rgba(214, 107, 83, 0.15); color: #e57c67; border: 1px solid rgba(214, 107, 83, 0.3); }
     .tag-cold { background: rgba(114, 150, 105, 0.15); color: #a8c99b; border: 1px solid rgba(114, 150, 105, 0.3); }
 
@@ -244,22 +244,19 @@
     .item-price { font-family: var(--font-serif); font-size: 1.2rem; color: var(--gold); font-weight: 600; }
     .item-description { font-size: 0.75rem; color: var(--text-muted); line-height: 1.5; min-height: 3em; }
     
-    .item-actions-dual { display: flex; gap: 10px; margin-top: auto; width: 100%; }
-    .btn-action-discover { flex: 1; background: var(--gold); color: #110a05; border: 1px solid var(--gold); padding: 10px; font-family: var(--font-sans); font-size: 0.65rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; text-align: center; border-radius: 4px; cursor: pointer; transition: all 0.3s; }
-    .btn-action-discover:hover { background: var(--text-light); color: var(--bg-salon); border-color: var(--text-light); }
-    .btn-action-order-now { flex: 1; background: transparent; border: 1px solid var(--border-fine); color: var(--text-light); padding: 10px; font-family: var(--font-sans); font-size: 0.65rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; text-align: center; border-radius: 4px; cursor: pointer; transition: all 0.3s; }
-    .btn-action-order-now:hover { border-color: var(--gold); color: var(--gold); background: rgba(197, 168, 128, 0.05); }
+    .btn-view-product { background: transparent; border: 1px solid var(--gold); color: var(--gold); padding: 10px; font-family: var(--font-sans); font-size: 0.65rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; text-align: center; border-radius: 4px; transition: all 0.3s; margin-top: auto; }
+    .carte-item:hover .btn-view-product { background: var(--gold); color: #110a05; }
 
-    /* MODALES DE DECOUVERTE */
-    .tabs-nav-product { display: flex; border-bottom: 1px solid var(--border-fine); margin-bottom: 20px; gap: 15px; }
-    .tab-link-product { background: none; border: none; font-family: var(--font-serif); font-size: 1.15rem; color: var(--text-muted); padding-bottom: 8px; cursor: pointer; position: relative; }
+    /* ONGLETS FICHE PRODUIT */
+    .tabs-nav-product { display: flex; border-bottom: 1px solid var(--border-fine); margin-bottom: 20px; gap: 15px; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+    .tab-link-product { background: none; border: none; font-family: var(--font-serif); font-size: 1.15rem; color: var(--text-muted); padding-bottom: 8px; cursor: pointer; position: relative; white-space: nowrap; }
     .tab-link-product.active { color: var(--gold); }
     .tab-link-product.active::after { content: ''; position: absolute; bottom: -1px; left: 0; right: 0; height: 2px; background: var(--gold); }
     .tab-pane-product { display: none; font-size: 0.85rem; color: var(--text-light); line-height: 1.6; white-space: pre-line; min-height: 120px; }
     .tab-pane-product.active { display: block; }
     .product-meta-badge { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 1px; color: var(--gold); background: rgba(197, 168, 128, 0.1); padding: 4px 8px; border-radius: 4px; display: inline-block; margin-bottom: 15px; border: 1px solid var(--border-fine); }
 
-    /* STRUCTURE GENERALES DES MODALES */
+    /* MODALES & TABLES */
     .modal-backdrop-luxe { position: fixed; inset: 0; z-index: 200; background: rgba(17, 10, 5, 0.85); backdrop-filter: blur(8px); display: none; align-items: center; justify-content: center; padding: 15px; }
     .modal-backdrop-luxe.active { display: flex; }
     .modal-box-luxe { background: var(--panel-bg); border: 1px solid var(--gold); padding: 30px; max-width: 520px; width: 100%; border-top: 4px solid var(--gold); box-shadow: var(--shadow-luxe); border-radius: 8px; max-height: 95vh; overflow-y: auto; }
@@ -267,7 +264,7 @@
     .modal-form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 25px; }
     .span-full { grid-column: 1 / -1; }
 
-    /* TOASTS POPUP notifications */
+    /* TOASTS */
     .toast-luxe { position: fixed; bottom: 25px; right: 25px; z-index: 1000; background: var(--panel-bg); border: 1px solid var(--gold); padding: 15px 20px; box-shadow: var(--shadow-luxe); border-radius: 6px; transform: translateY(100px); opacity: 0; transition: all 0.4s ease; pointer-events: none; }
     .toast-luxe.show { transform: translateY(0); opacity: 1; }
 
@@ -279,15 +276,19 @@
       .main-body-content { padding-top: 140px; }
       .nav-controls { width: 100%; justify-content: center; flex-wrap: wrap; gap: 12px; }
       .hero-cinematic { grid-template-columns: 1fr; padding: 25px 20px; gap: 25px; text-align: center; }
-      .recommendation-container { grid-template-columns: 1fr; }
-      .recommendation-img-side { min-height: 200px; }
-      .salon-curation, .barista-recommendation-section { padding: 15px 20px; }
+      .hero-title-luxe { font-size: 2rem; }
+      .frame-artisan { max-width: 260px; }
+      .frame-caption { left: 50%; transform: translateX(-50%); bottom: -15px; width: 90%; text-align: center; }
+      .salon-curation { padding: 15px 20px; }
+      .live-tracker-section { padding: 0 20px; }
       .seasonal-indicator { flex-direction: column; text-align: center; gap: 4px; }
       .curation-tabs-row { flex-direction: column; gap: 15px; }
-      .filter-group-luxe { width: 100vw; overflow-x: auto; padding: 5px 20px; gap: 20px; display: flex; white-space: nowrap; margin-left: -20px; margin-right: -20px; }
+      .filter-group-luxe { width: 100vw; overflow-x: auto; padding: 5px 20px; gap: 20px; -webkit-overflow-scrolling: touch; display: flex; white-space: nowrap; margin-left: -20px; margin-right: -20px; }
       .grid-container { padding: 0 20px; }
       .menu-grid-luxe { grid-template-columns: 1fr; gap: 20px; }
       .top-dashboard-admin { padding: 0 15px; }
+      .modal-box-luxe { padding: 20px; }
+      .modal-form-grid { grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -398,24 +399,7 @@
           <img src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=600&q=80" alt="Café de Spécialité" />
           <div class="frame-caption">
             <h4>Torréfaction Maison</h4>
-            <p>Sélections 100% Arabica</p>
-          </div>
-        </div>
-      </section>
-
-      <section class="barista-recommendation-section">
-        <div class="recommendation-title-block">
-          <h3>Recommandations de votre barista</h3>
-        </div>
-        <div class="recommendation-container">
-          <div class="recommendation-img-side">
-            <img src="https://images.unsplash.com/photo-1541167760496-1628856ab772?w=600&q=80" alt="Caffè Latte de la Maison" />
-          </div>
-          <div class="recommendation-content-side">
-            <span style="font-size: 0.65rem; color: var(--gold); letter-spacing: 2px; text-transform: uppercase; font-weight: 600;">L'Incontournable Douceur</span>
-            <h4 class="recommendation-drink-name">Caffè Latte de la Maison</h4>
-            <p class="recommendation-drink-desc">Notre double espresso extrait à haute précision rencontre un lait entier ou d'avoine soyeux et micro-texturé à 60°C. Une texture veloutée incomparable révélant des notes naturelles de caramel blond et de noisettes grillées.</p>
-            <button type="button" class="btn-luxe" style="width: auto; padding: 12px 25px; margin-top: 10px;" onclick="openOrderModal('rec_2')">Commander cette boisson</button>
+            <p>Sélections 100% Arabica Arabica</p>
           </div>
         </div>
       </section>
@@ -426,13 +410,13 @@
           <span class="season-desc">Sélection Fine & Recettes signatures</span>
         </div>
         <div class="curation-tabs-row">
-          <div class="filter-group-luxe" id="categoryTabs">
+          <div class="filter-group-luxe">
             <button class="filter-btn-luxe active" data-cat="all">Tous nos cafés</button>
             <button class="filter-btn-luxe" data-cat="signature">Signatures</button>
             <button class="filter-btn-luxe" data-cat="classique">Classiques</button>
             <button class="filter-btn-luxe" data-cat="alternative">Alternatives</button>
           </div>
-          <div class="temp-selector-luxe" id="tempTabs">
+          <div class="temp-selector-luxe">
             <button class="temp-btn-luxe active" data-temp="all">Tous</button>
             <button class="temp-btn-luxe" data-temp="chaud">Chaud</button>
             <button class="temp-btn-luxe" data-temp="glacé">Glacé</button>
@@ -446,65 +430,39 @@
     </div>
   </div>
 
-  <div class="modal-backdrop-luxe" id="discoverModal" onclick="if(event.target===this) closeDiscoverModal()">
+  <div class="modal-backdrop-luxe" id="productModal" onclick="if(event.target===this) closeProductModal()">
     <div class="modal-box-luxe">
-      <h3 class="modal-title-luxe" id="discoverProductTitle">Élixir</h3>
-      <span class="product-meta-badge" id="discoverProductBadge">Chaud — Signature</span>
+      <h3 class="modal-title-luxe" id="modalProductTitle">Élixir</h3>
+      <span class="product-meta-badge" id="modalProductBadge">Chaud — Signature</span>
       
       <div class="tabs-nav-product">
-        <button id="btnTabDesc" class="tab-link-product active" onclick="switchDiscoverTab('desc')">Histoire</button>
-        <button id="btnTabRecipe" class="tab-link-product" onclick="switchDiscoverTab('recipe')">Profil aromatique</button>
+        <button class="tab-link-product active" onclick="switchProductTab('desc', this)">Histoire</button>
+        <button class="tab-link-product" onclick="switchProductTab('recipe', this)">Profil aromatique</button>
+        <button class="tab-link-product" onclick="switchProductTab('order', this)">Commander</button>
       </div>
 
       <div id="tabDesc" class="tab-pane-product active"></div>
       <div id="tabRecipe" class="tab-pane-product"></div>
       
-      <button type="button" class="btn-luxe" style="margin-top: 20px;" id="btnDiscoverModalAction">Passer à la commande</button>
-    </div>
-  </div>
-
-  <div class="modal-backdrop-luxe" id="orderModal" onclick="if(event.target===this) closeOrderModal()">
-    <div class="modal-box-luxe">
-      <h3 class="modal-title-luxe" id="orderProductTitle">Commander l'élixir</h3>
-      <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 20px;">Personnalisez votre boisson selon vos préférences d'extraction et de dégustation.</p>
-      
-      <div class="modal-form-grid" style="margin-bottom:10px;">
-        <div class="form-group span-full">
-          <label for="orderGuestNameInput">Votre Prénom / Nom</label>
-          <input type="text" id="orderGuestNameInput" class="form-input" placeholder="Pour marquer votre ticket...">
+      <div id="tabOrder" class="tab-pane-product">
+        <div class="modal-form-grid" style="margin-bottom:10px;">
+          <div class="form-group span-full">
+            <label for="orderGuestNameInput">Votre Prénom / Nom</label>
+            <input type="text" id="orderGuestNameInput" class="form-input" placeholder="Pour votre ticket...">
+          </div>
+          <div class="form-group span-full">
+            <label for="orderCustomsInput">Préférences (Lait d'avoine, léger, sucré...)</label>
+            <textarea id="orderCustomsInput" rows="2" class="form-input" placeholder="Laissez vos instructions au barista..."></textarea>
+          </div>
         </div>
-        
-        <div class="form-group">
-          <label for="orderMilkSelect">Type de Lait</label>
-          <select id="orderMilkSelect">
-            <option value="sans lait">Sans lait</option>
-            <option value="avec lait entier">Lait entier</option>
-            <option value="lait d'avoine">Lait d'avoine</option>
-          </select>
-        </div>
-
-        <div class="form-group">
-          <label for="orderFoamSelect">Mousse de lait</label>
-          <select id="orderFoamSelect">
-            <option value="sans mousse de lait">Sans mousse</option>
-            <option value="mousse de lait légère">Mousse légère</option>
-            <option value="mousse de lait épaisse">Mousse épaisse</option>
-          </select>
-        </div>
-
-        <div class="form-group span-full">
-          <label for="orderCustomsInput">Autre option / Instructions</label>
-          <textarea id="orderCustomsInput" rows="2" class="form-input" placeholder="Ex: très chaud, un sucre, léger en café..."></textarea>
-        </div>
+        <button type="button" class="btn-luxe" onclick="submitOrderToFirebase()">Lancer la préparation</button>
       </div>
-      
-      <button type="button" class="btn-luxe" onclick="submitOrderToFirebase()">Lancer la préparation</button>
     </div>
   </div>
 
   <div class="modal-backdrop-luxe" id="recipeAdminModal" onclick="if(event.target===this) closeRecipeAdminModal()">
     <div class="modal-box-luxe">
-      <h3 class="modal-title-luxe" id="adminModalTitle">Nouvel Élixir</h3>
+      <h3 class="modal-title-luxe">Nouvel Élixir</h3>
       <form id="recipeAdminForm" onsubmit="event.preventDefault(); saveRecipeFromAdminForm();">
         <input type="hidden" id="adminRecipeId">
         <div class="modal-form-grid">
@@ -555,6 +513,7 @@
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
     import { getDatabase, ref, set, onValue, push, update, remove } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
+    // Configuration Firebase stable
     const firebaseConfig = {
       databaseURL: "https://sipandsavour-db-default-rtdb.europe-west1.firebasedatabase.app"
     };
@@ -562,6 +521,7 @@
     const app = initializeApp(firebaseConfig);
     const db = getDatabase(app);
 
+    // Catalogue des boissons d'origine (Affichage instantané)
     const initialCatalog = {
       "rec_1": { id: "rec_1", title: "Espresso Origine", cat: "classique", temp: "chaud", price: "3.50", description: "Un espresso extrait à haute précision à partir de notre récolte de saison.", recipeInfo: "18g de café moulu fin, 36g de boisson en tasse. Notes intenses de cacao brut et d'agrumes doux.", image: "https://images.unsplash.com/photo-1510972527409-cac19ff31d7c?w=500&q=80" },
       "rec_2": { id: "rec_2", title: "Caffè Latte de la Maison", cat: "classique", temp: "chaud", price: "4.80", description: "Double espresso mélangé harmonieusement à un lait soyeux texturé.", recipeInfo: "Double ristretto, lait entier micro-texturé à 60°C pour une douceur naturelle parfaite.", image: "https://images.unsplash.com/photo-1541167760496-1628856ab772?w=500&q=80" },
@@ -570,14 +530,16 @@
       "rec_5": { id: "rec_5", title: "Freddo Cappuccino Athénien", cat: "signature", temp: "glacé", price: "5.20", description: "Double espresso frappé sur glace sous une mousse de lait froide aérienne.", recipeInfo: "Espresso émulsionné au shaker avec glace, surmonté d'une crème de lait écrémé texturée à froid.", image: "https://images.unsplash.com/photo-1553909489-cd47e0907980?w=500&q=80" }
     };
 
+    // États globaux réactifs
     let catalogData = initialCatalog; 
     let activeCat = "all";
     let activeTemp = "all";
     let searchQuery = "";
-    let selectedProduct = null;
-    let currentRole = localStorage.getItem("s_role") || ""; 
+    window.selectedProduct = null; // Rattaché globalement pour éviter les pertes de contexte
+    let currentRole = localStorage.getItem("s_role") || ""; // 'family' ou 'barista'
     let myActiveOrderId = localStorage.getItem("s_my_order_id") || "";
 
+    // TOAST DE NOTIFICATION VISUELLE
     function showNotification(msg) {
       const t = document.getElementById("globalToast");
       if(t) {
@@ -587,6 +549,7 @@
       }
     }
 
+    // ACCÈS SALON PRIVÉ / SECURITÉ
     function validateGatewayLogin() {
       const pin = document.getElementById("gateway-password-input").value.trim();
       const err = document.getElementById("gateway-global-error");
@@ -643,6 +606,7 @@
       }
     }
 
+    // GESTION DU THEME D'ORIGINE
     function toggleThemeSystem() {
       const h = document.documentElement;
       const btn = document.getElementById("themeToggle");
@@ -655,14 +619,14 @@
       }
     }
 
-    // BASE REALTIME FIREBASE : RECUPERATION DU CATALOGUE RECETTES
+    // REALTIME FIREBASE : LES RECETTES (Version Corrigée)
     onValue(ref(db, "recipes"), (snapshot) => {
       const data = snapshot.val();
       if (!data) {
         catalogData = initialCatalog;
         renderGrid();
         renderAdminCatalog();
-        set(ref(db, "recipes"), initialCatalog).catch(e => console.warn(e));
+        set(ref(db, "recipes"), initialCatalog).catch(e => console.warn("Firebase écriture restreinte (rules) :", e));
       } else {
         catalogData = data;
         renderGrid();
@@ -670,16 +634,18 @@
       }
     });
 
-    // BASE REALTIME FIREBASE : RECUPERATION DES TICKETS CLIENTS ET MISE A JOUR DES TRACKERS
+    // REALTIME FIREBASE : LES COMMANDES TICKET SYSTEM
     onValue(ref(db, "orders"), (snapshot) => {
       const data = snapshot.val();
       const orders = data ? Object.values(data) : [];
+      
       orders.sort((x, y) => (x.timestamp || 0) - (y.timestamp || 0));
 
+      // 1. Tracker client
       const clientZone = document.getElementById("clientTrackerZone");
       if (currentRole === "family" && myActiveOrderId && data && data[myActiveOrderId]) {
-        if(clientZone) clientZone.style.display = "block";
         const myOrd = data[myActiveOrderId];
+        if(clientZone) clientZone.style.display = "block";
         
         document.getElementById("trackerDrinkName").textContent = myOrd.drinkTitle;
         document.getElementById("trackerGuestName").textContent = `Pour ${myOrd.guestName}`;
@@ -709,6 +675,7 @@
         if(clientZone) clientZone.style.display = "none";
       }
 
+      // 2. Tableau Barista
       const tbody = document.getElementById("ordersTableBody");
       if (!tbody) return;
       
@@ -727,7 +694,7 @@
         if (o.status === "pending") {
           actionBtn = `<button class="btn-single-action btn-action-next" onclick="updateOrderStatus('${o.id}', 'preparing')">Préparer</button>`;
         } else if (o.status === "preparing") {
-          actionBtn = `<button class="btn-single-action btn-action-next" style="background:#a8c99b; color:#110a05;" onclick="updateOrderStatus('${o.id}', 'ready')">Prêt !</button>`;
+          actionBtn = `<button class="btn-single-action btn-action-next" style="background:#a8c99b;" onclick="updateOrderStatus('${o.id}', 'ready')">Prêt !</button>`;
         }
 
         return `
@@ -739,7 +706,7 @@
             <td>
               <div class="admin-actions-row">
                 ${actionBtn}
-                <button class="btn-single-action btn-action-delete" onclick="deleteOrderSingle('${o.id}')">Archiver</button>
+                <button class="btn-single-action btn-action-delete" onclick="deleteOrderSingle('${o.id}')">X</button>
               </div>
             </td>
           </tr>
@@ -747,7 +714,7 @@
       }).join("");
     });
 
-    // RE-RENDU DYNAMIQUE DE LA GRILLE DU SALON
+    // RENDU DU MENU DE SURFACE
     function renderGrid() {
       const g = document.getElementById("menuGrid");
       if (!g) return;
@@ -765,7 +732,7 @@
       }
 
       g.innerHTML = items.map(item => `
-        <div class="carte-item">
+        <div class="carte-item" onclick="openProductModal('${item.id}')">
           <div class="item-media">
             <span class="item-tag-hot-cold ${item.temp === 'chaud' ? 'tag-hot' : 'tag-cold'}">${item.temp}</span>
             <img src="${item.image || 'https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=500&q=80'}" alt="${item.title}">
@@ -776,11 +743,7 @@
             <span class="item-price">${item.price}€</span>
           </div>
           <p class="item-description">${item.description}</p>
-          
-          <div class="item-actions-dual">
-            <button type="button" class="btn-action-discover" onclick="openDiscoverModal('${item.id}')">Découvrir</button>
-            <button type="button" class="btn-action-order-now" onclick="openOrderModal('${item.id}')">Commander</button>
-          </div>
+          <button type="button" class="btn-view-product">Découvrir l'élixir</button>
         </div>
       `).join("");
     }
@@ -791,8 +754,8 @@
       const list = Object.values(catalogData);
       container.innerHTML = list.map(item => `
         <div class="admin-catalog-card">
-          <span style="font-weight:500;">${item.title}</span>
-          <div style="display:flex; gap:6px;">
+          <span>${item.title}</span>
+          <div style="display:flex; gap:4px;">
             <button class="btn-single-action" onclick="openRecipeAdminModal('${item.id}')">Éditer</button>
             <button class="btn-single-action btn-action-delete" onclick="deleteRecipe('${item.id}')">Suppr</button>
           </div>
@@ -800,100 +763,21 @@
       `).join("");
     }
 
-    // OUVERTURE DE LA MODALE DÉCOUVRIR (HISTOIRE & PROFIL)
-    function openDiscoverModal(id) {
-      if (!catalogData[id]) return;
-      selectedProduct = catalogData[id];
-      
-      document.getElementById("discoverProductTitle").textContent = selectedProduct.title;
-      document.getElementById("discoverProductBadge").textContent = `${selectedProduct.temp} — ${selectedProduct.cat}`;
-      document.getElementById("tabDesc").textContent = selectedProduct.description;
-      document.getElementById("tabRecipe").textContent = selectedProduct.recipeInfo;
-      
-      switchDiscoverTab('desc');
-
-      // Met à jour dynamiquement l'action du bouton interne
-      const btnAction = document.getElementById("btnDiscoverModalAction");
-      if(btnAction) {
-        btnAction.onclick = () => {
-          closeDiscoverModal();
-          openOrderModal(id);
-        };
-      }
-      
-      const m = document.getElementById("discoverModal");
-      if(m) m.classList.add("active");
-    }
-
-    function closeDiscoverModal() {
-      const m = document.getElementById("discoverModal");
-      if(m) m.classList.remove("active");
-    }
-
-    function switchDiscoverTab(paneId) {
-      document.querySelectorAll(".tab-link-product").forEach(b => b.classList.remove("active"));
-      document.querySelectorAll(".tab-pane-product").forEach(p => p.classList.remove("active"));
-      
-      if(paneId === 'desc') document.getElementById("btnTabDesc").classList.add("active");
-      if(paneId === 'recipe') document.getElementById("btnTabRecipe").classList.add("active");
-
-      const currentPane = document.getElementById("tab" + paneId.charAt(0).toUpperCase() + paneId.slice(1));
-      if(currentPane) currentPane.classList.add("active");
-    }
-
-    // OUVERTURE DU POP-UP DE COMMANDE DÉDIÉ
-    function openOrderModal(id) {
-      // Si la boisson n'est pas encore chargée dans catalogData, on utilise un fallback pour rec_2
-      if (!catalogData[id] && id === 'rec_2') {
-        selectedProduct = initialCatalog['rec_2'];
-      } else {
-        selectedProduct = catalogData[id];
-      }
-      if (!selectedProduct) return;
-      
-      document.getElementById("orderProductTitle").textContent = `Commander : ${selectedProduct.title}`;
-      
-      // Réinitialisation des inputs
-      const milkSelect = document.getElementById("orderMilkSelect");
-      const foamSelect = document.getElementById("orderFoamSelect");
-      const customsInput = document.getElementById("orderCustomsInput");
-      
-      if(milkSelect) milkSelect.value = "sans lait";
-      if(foamSelect) foamSelect.value = "sans mousse de lait";
-      if(customsInput) customsInput.value = "";
-
-      const m = document.getElementById("orderModal");
-      if(m) m.classList.add("active");
-    }
-
-    function closeOrderModal() {
-      const m = document.getElementById("orderModal");
-      if(m) m.classList.remove("active");
-    }
-
-    // FONCTION CORE : TRANSMISSION EFFECTIVE DE LA COMMANDE À FIREBASE (FONCTIONNELLE)
+    // TRANSMISSION DU TICKET DE COMMANDE VERS FIREBASE (Version Sécurisée)
     function submitOrderToFirebase() {
       const gInput = document.getElementById("orderGuestNameInput");
       const name = gInput ? gInput.value.trim() : "";
-      
-      const milk = document.getElementById("orderMilkSelect").value;
-      const foam = document.getElementById("orderFoamSelect").value;
-      const extraText = document.getElementById("orderCustomsInput").value.trim();
+      const customs = document.getElementById("orderCustomsInput") ? document.getElementById("orderCustomsInput").value.trim() : "";
       
       if (!name) {
-        alert("Veuillez saisir votre prénom pour enregistrer votre commande.");
+        alert("Saisissez votre prénom ou le nom de votre table pour lancer la commande.");
         return;
       }
 
-      if (!selectedProduct) {
-        alert("Erreur : Aucun produit sélectionné.");
+      // Sécurité structurelle : On recherche l'objet si la variable est vide
+      if (!window.selectedProduct) {
+        alert("Erreur de sélection : Veuillez refermer et réouvrir la fiche de cet élixir.");
         return;
-      }
-
-      // Construction des spécifications structurées pour le Barista
-      let compiledCustoms = `Lait : ${milk}\nMousse : ${foam}`;
-      if (extraText) {
-        compiledCustoms += `\nNote : ${extraText}`;
       }
 
       const orderRef = ref(db, "orders");
@@ -902,10 +786,10 @@
 
       const orderPayload = {
         id: ticketId,
-        drinkId: selectedProduct.id,
-        drinkTitle: selectedProduct.title,
+        drinkId: window.selectedProduct.id,
+        drinkTitle: window.selectedProduct.title,
         guestName: name,
-        customs: compiledCustoms,
+        customs: customs,
         status: "pending",
         timestamp: Date.now()
       };
@@ -914,15 +798,20 @@
         .then(() => {
           myActiveOrderId = ticketId;
           localStorage.setItem("s_my_order_id", ticketId);
-          closeOrderModal();
-          showNotification(`Commande enregistrée ! Préparation lancée.`);
+          closeProductModal();
+          showNotification(`Ticket de ${name} transmis au barista !`);
+          
+          // Nettoyage des champs de formulaire de commande
+          if (gInput) gInput.value = "";
+          if (document.getElementById("orderCustomsInput")) document.getElementById("orderCustomsInput").value = "";
         })
         .catch(e => {
-          alert("Erreur réseau lors de l'envoi de la commande.");
+          alert("Erreur réseau de transmission. Vérifiez l'accès à internet.");
           console.error(e);
         });
     }
 
+    // ACTIONS TICKET BARISTA
     function updateOrderStatus(id, newStatus) {
       update(ref(db, `orders/${id}`), { status: newStatus })
         .then(() => showNotification(`Ticket mis à jour : ${newStatus}`))
@@ -942,7 +831,7 @@
     }
 
     function clearAllOrders() {
-      if (confirm("Archiver l'intégralité des tickets en cours ?")) {
+      if (confirm("Archiver toutes les commandes affichées ?")) {
         set(ref(db, "orders"), null)
           .then(() => {
             myActiveOrderId = "";
@@ -952,17 +841,15 @@
       }
     }
 
-    // INTERFACE D'EDITION DU MENU (ADMIN)
+    // ENREGISTREMENT RECETTES ADMINISTRATION
     function openRecipeAdminModal(id = '') {
       const m = document.getElementById("recipeAdminModal");
       const f = document.getElementById("recipeAdminForm");
-      const titleElement = document.getElementById("adminModalTitle");
       if(!m || !f) return;
       f.reset();
       
       if(id && catalogData[id]) {
         const item = catalogData[id];
-        if(titleElement) titleElement.textContent = "Modifier l'Élixir";
         document.getElementById("adminRecipeId").value = item.id;
         document.getElementById("adminTitle").value = item.title;
         document.getElementById("adminCat").value = item.cat;
@@ -972,7 +859,6 @@
         document.getElementById("adminDescription").value = item.description;
         document.getElementById("adminRecipeInfo").value = item.recipeInfo;
       } else {
-        if(titleElement) titleElement.textContent = "Nouvel Élixir";
         document.getElementById("adminRecipeId").value = "";
       }
       m.classList.add("active");
@@ -1004,17 +890,50 @@
           closeRecipeAdminModal();
           showNotification("Élixir enregistré avec succès");
         })
-        .catch(e => alert("Sauvegarde échouée."));
+        .catch(e => alert("Sauvegarde échouée. Vérifiez vos règles Firebase."));
     }
 
-    function deleteRecipe(id) {
+    window.deleteRecipe = function(id) {
       if(confirm("Supprimer définitivement cette boisson du menu ?")) {
         remove(ref(db, `recipes/${id}`))
           .then(() => showNotification("Boisson retirée du menu"));
       }
     }
 
-    // LIENS AVEC LE CONTEXTE GLOBAL WINDOW
+    // OUVERTURE DE LA MODALE PRODUIT AVEC RE-LIAISON CONTEXTUELLE
+    function openProductModal(id) {
+      if (!catalogData[id]) return;
+      
+      // Stockage dans l'état local ET dans le contexte window global
+      window.selectedProduct = catalogData[id];
+      
+      document.getElementById("modalProductTitle").textContent = window.selectedProduct.title;
+      document.getElementById("modalProductBadge").textContent = `${window.selectedProduct.temp} — ${window.selectedProduct.cat}`;
+      document.getElementById("tabDesc").textContent = window.selectedProduct.description;
+      document.getElementById("tabRecipe").textContent = window.selectedProduct.recipeInfo;
+      
+      // Force le retour sur le premier onglet à chaque ouverture
+      switchProductTab('desc', document.querySelector(".tab-link-product"));
+      
+      const m = document.getElementById("productModal");
+      if(m) m.classList.add("active");
+    }
+
+    function closeProductModal() {
+      const m = document.getElementById("productModal");
+      if(m) m.classList.remove("active");
+    }
+
+    function switchProductTab(paneId, btn) {
+      document.querySelectorAll(".tab-link-product").forEach(b => b.classList.remove("active"));
+      document.querySelectorAll(".tab-pane-product").forEach(p => p.classList.remove("active"));
+      
+      if(btn) btn.classList.add("active");
+      const currentPane = document.getElementById("tab" + paneId.charAt(0).toUpperCase() + paneId.slice(1));
+      if(currentPane) currentPane.classList.add("active");
+    }
+
+    // EXPOSITION UNIVERSELLE POUR COMPATIBILITÉ DES APPPELS INLINE
     window.validateGatewayLogin = validateGatewayLogin;
     window.toggleThemeSystem = toggleThemeSystem;
     window.triggerAdminAccessSecret = triggerAdminAccessSecret;
@@ -1022,18 +941,15 @@
     window.submitOrderToFirebase = submitOrderToFirebase;
     window.updateOrderStatus = updateOrderStatus;
     window.deleteOrderSingle = deleteOrderSingle;
-    window.openDiscoverModal = openDiscoverModal;
-    window.closeDiscoverModal = closeDiscoverModal;
-    window.switchDiscoverTab = switchDiscoverTab;
-    window.openOrderModal = openOrderModal;
-    window.closeOrderModal = closeOrderModal;
+    window.openProductModal = openProductModal;
+    window.closeProductModal = closeProductModal;
+    window.switchProductTab = switchProductTab;
     window.openRecipeAdminModal = openRecipeAdminModal;
     window.closeRecipeAdminModal = closeRecipeAdminModal;
     window.saveRecipeFromAdminForm = saveRecipeFromAdminForm;
-    window.deleteRecipe = deleteRecipe;
     window.clearAllOrders = clearAllOrders;
 
-    // LISTENERS COMPLETS AU CHARGEMENT DU DOM
+    // INITIALISATION DES LISTENERS DOM AU CHARGEMENT GLOBAL
     document.addEventListener('DOMContentLoaded', () => {
       if (currentRole) {
         document.getElementById('authGate').classList.add('hidden');
@@ -1049,29 +965,23 @@
         });
       }
 
-      const catTabs = document.getElementById('categoryTabs');
-      if(catTabs) {
-        catTabs.querySelectorAll('.filter-btn-luxe').forEach(btn => {
-          btn.addEventListener('click', () => {
-            catTabs.querySelectorAll('.filter-btn-luxe').forEach(p => p.classList.remove('active'));
-            btn.classList.add('active'); 
-            activeCat = btn.dataset.cat; 
-            renderGrid();
-          });
+      document.querySelectorAll('.filter-btn-luxe').forEach(btn => {
+        btn.addEventListener('click', () => {
+          document.querySelectorAll('.filter-btn-luxe').forEach(p => p.classList.remove('active'));
+          btn.classList.add('active'); 
+          activeCat = btn.dataset.cat; 
+          renderGrid();
         });
-      }
+      });
 
-      const tempTabs = document.getElementById('tempTabs');
-      if(tempTabs) {
-        tempTabs.querySelectorAll('.temp-btn-luxe').forEach(btn => {
-          btn.addEventListener('click', () => {
-            tempTabs.querySelectorAll('.temp-btn-luxe').forEach(p => p.classList.remove('active'));
-            btn.classList.add('active'); 
-            activeTemp = btn.dataset.temp; 
-            renderGrid();
-          });
+      document.querySelectorAll('.temp-btn-luxe').forEach(btn => {
+        btn.addEventListener('click', () => {
+          document.querySelectorAll('.temp-btn-luxe').forEach(p => p.classList.remove('active'));
+          btn.classList.add('active'); 
+          activeTemp = btn.dataset.temp; 
+          renderGrid();
         });
-      }
+      });
     });
   </script>
 </body>
