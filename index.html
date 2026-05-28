@@ -122,9 +122,9 @@
     .theme-toggle-btn:hover { background: rgba(197, 168, 128, 0.1); }
 
     .search-luxe { position: relative; display: flex; align-items: center; }
-    .search-luxe svg { position: absolute; left: 0; width: 12px; height: 12px; color: var(--gold-dim); }
     .search-luxe input { background: transparent; border: none; border-bottom: 1px solid var(--border-fine); padding: 4px 0 4px 24px; color: var(--text-light); font-family: inherit; font-size: 0.8rem; outline: none; width: 140px; transition: all 0.3s; }
     .search-luxe input:focus { width: 180px; border-color: var(--gold); }
+    .search-luxe svg { position: absolute; left: 0; width: 12px; height: 12px; color: var(--gold-dim); }
 
     .club-badge { font-size: 0.6rem; font-weight: 600; text-transform: uppercase; letter-spacing: 2px; border: 1px solid var(--gold); padding: 4px 10px; color: var(--gold); border-radius: 3px; cursor: pointer; transition: background 0.3s; }
     .club-badge:hover { background: rgba(197, 168, 128, 0.1); }
@@ -188,6 +188,7 @@
     .btn-single-action { border: 1px solid var(--gold); background: transparent; color: var(--gold); font-size: 0.65rem; text-transform: uppercase; letter-spacing: 1px; padding: 6px 10px; cursor: pointer; transition: all 0.3s; font-weight: 600; text-align: center; border-radius: 4px; }
     .btn-single-action:hover { background: var(--gold); color: #110a05; }
     .btn-action-next { background: var(--gold); color: #110a05; }
+    .btn-single-action.btn-action-next:hover { color: #110a05; background: var(--text-light); }
     .btn-action-delete { border-color: rgba(214, 107, 83, 0.4); color: #e57c67; }
     .btn-action-delete:hover { background: #d66b53; color: white; border-color: #d66b53; }
 
@@ -399,7 +400,7 @@
           <img src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=600&q=80" alt="Café de Spécialité" />
           <div class="frame-caption">
             <h4>Torréfaction Maison</h4>
-            <p>Sélections 100% Arabica Arabica</p>
+            <p>Sélections 100% Arabica</p>
           </div>
         </div>
       </section>
@@ -455,7 +456,7 @@
             <textarea id="orderCustomsInput" rows="2" class="form-input" placeholder="Laissez vos instructions au barista..."></textarea>
           </div>
         </div>
-        <button type="button" id="btnSubmitOrder" class="btn-luxe">Lancer la préparation</button>
+        <button type="button" class="btn-luxe" onclick="submitOrderToFirebase()">Lancer la préparation</button>
       </div>
     </div>
   </div>
@@ -535,8 +536,8 @@
     let activeCat = "all";
     let activeTemp = "all";
     let searchQuery = "";
-    let selectedProduct = null;
-    let currentRole = localStorage.getItem("s_role") || ""; // 'family' ou 'barista'
+    window.selectedProduct = null; 
+    let currentRole = localStorage.getItem("s_role") || ""; 
     let myActiveOrderId = localStorage.getItem("s_my_order_id") || "";
 
     // TOAST DE NOTIFICATION VISUELLE
@@ -556,19 +557,19 @@
       if (pin === "1311") {
         currentRole = "family";
         localStorage.setItem("s_role", "family");
-        err.style.display = "none";
+        if(err) err.style.display = "none";
         document.getElementById("authGate").classList.add("hidden");
         document.getElementById("appWrapper").classList.add("active");
         applyRoleUI();
       } else if (pin === "2408") {
         currentRole = "barista";
         localStorage.setItem("s_role", "barista");
-        err.style.display = "none";
+        if(err) err.style.display = "none";
         document.getElementById("authGate").classList.add("hidden");
         document.getElementById("appWrapper").classList.add("active");
         applyRoleUI();
       } else {
-        err.style.display = "block";
+        if(err) err.style.display = "block";
       }
     }
 
@@ -619,16 +620,14 @@
       }
     }
 
-    // REALTIME FIREBASE : LES RECETTES (Version Corrigée)
+    // REALTIME FIREBASE : LES RECETTES
     onValue(ref(db, "recipes"), (snapshot) => {
       const data = snapshot.val();
       if (!data) {
-        // Affiche immédiatement le catalogue en local pour le hors-ligne / premier déploiement
         catalogData = initialCatalog;
         renderGrid();
         renderAdminCatalog();
-        // Écrit calmement dans Firebase en arrière-plan sans bloquer la vue
-        set(ref(db, "recipes"), initialCatalog).catch(e => console.warn("Firebase écriture restreinte (rules) :", e));
+        set(ref(db, "recipes"), initialCatalog).catch(e => console.warn("Firebase écriture restreinte :", e));
       } else {
         catalogData = data;
         renderGrid();
@@ -641,10 +640,9 @@
       const data = snapshot.val();
       const orders = data ? Object.values(data) : [];
       
-      // Tri chronologique des commandes
       orders.sort((x, y) => (x.timestamp || 0) - (y.timestamp || 0));
 
-      // 1. Mise à jour du tracker client si commande active
+      // 1. Tracker client
       const clientZone = document.getElementById("clientTrackerZone");
       if (currentRole === "family" && myActiveOrderId && data && data[myActiveOrderId]) {
         const myOrd = data[myActiveOrderId];
@@ -659,17 +657,17 @@
         document.querySelectorAll(".tracker-step").forEach(s => s.classList.remove("active", "done"));
         
         if (myOrd.status === "pending") {
-          badge.textContent = "En attente";
-          bar.style.width = "15%";
+          if(badge) badge.textContent = "En attente";
+          if(bar) bar.style.width = "15%";
           document.getElementById("step-pending").classList.add("active");
         } else if (myOrd.status === "preparing") {
-          badge.textContent = "En préparation";
-          bar.style.width = "50%";
+          if(badge) badge.textContent = "En préparation";
+          if(bar) bar.style.width = "50%";
           document.getElementById("step-pending").classList.add("done");
           document.getElementById("step-preparing").classList.add("active");
         } else if (myOrd.status === "ready") {
-          badge.textContent = "Prête à déguster !";
-          bar.style.width = "100%";
+          if(badge) badge.textContent = "Prête à déguster !";
+          if(bar) bar.style.width = "100%";
           document.getElementById("step-pending").classList.add("done");
           document.getElementById("step-preparing").classList.add("done");
           document.getElementById("step-ready").classList.add("active");
@@ -678,7 +676,7 @@
         if(clientZone) clientZone.style.display = "none";
       }
 
-      // 2. Remplissage du tableau barista
+      // 2. Tableau Barista
       const tbody = document.getElementById("ordersTableBody");
       if (!tbody) return;
       
@@ -697,7 +695,7 @@
         if (o.status === "pending") {
           actionBtn = `<button class="btn-single-action btn-action-next" onclick="updateOrderStatus('${o.id}', 'preparing')">Préparer</button>`;
         } else if (o.status === "preparing") {
-          actionBtn = `<button class="btn-single-action btn-action-next" style="background:#a8c99b;" onclick="updateOrderStatus('${o.id}', 'ready')">Prêt !</button>`;
+          actionBtn = `<button class="btn-single-action btn-action-next" style="background:#a8c99b; color:#110a05;" onclick="updateOrderStatus('${o.id}', 'ready')">Prêt !</button>`;
         }
 
         return `
@@ -717,7 +715,7 @@
       }).join("");
     });
 
-    // RENDU D'AFFICHAGE DU CATALOGUE GRAND PUBLIC
+    // RENDU DU MENU DE SURFACE
     function renderGrid() {
       const g = document.getElementById("menuGrid");
       if (!g) return;
@@ -751,7 +749,6 @@
       `).join("");
     }
 
-    // RENDU DE GESTION DU CATALOGUE POUR L'ADMIN
     function renderAdminCatalog() {
       const container = document.getElementById("adminCatalogGrid");
       if (!container) return;
@@ -767,14 +764,19 @@
       `).join("");
     }
 
-    // ENVOI D'UNE COMMANDE TICKET
+    // TRANSMISSION DU TICKET DE COMMANDE VERS FIREBASE
     function submitOrderToFirebase() {
       const gInput = document.getElementById("orderGuestNameInput");
       const name = gInput ? gInput.value.trim() : "";
       const customs = document.getElementById("orderCustomsInput") ? document.getElementById("orderCustomsInput").value.trim() : "";
       
       if (!name) {
-        alert("Saisissez votre prénom ou le nom de votre table pour la commande.");
+        alert("Saisissez votre prénom ou le nom de votre table pour lancer la commande.");
+        return;
+      }
+
+      if (!window.selectedProduct) {
+        alert("Erreur de sélection : Veuillez refermer et réouvrir la fiche de cet élixir.");
         return;
       }
 
@@ -784,8 +786,8 @@
 
       const orderPayload = {
         id: ticketId,
-        drinkId: selectedProduct.id,
-        drinkTitle: selectedProduct.title,
+        drinkId: window.selectedProduct.id,
+        drinkTitle: window.selectedProduct.title,
         guestName: name,
         customs: customs,
         status: "pending",
@@ -798,6 +800,9 @@
           localStorage.setItem("s_my_order_id", ticketId);
           closeProductModal();
           showNotification(`Ticket de ${name} transmis au barista !`);
+          
+          if (gInput) gInput.value = "";
+          if (document.getElementById("orderCustomsInput")) document.getElementById("orderCustomsInput").value = "";
         })
         .catch(e => {
           alert("Erreur réseau de transmission. Vérifiez l'accès à internet.");
@@ -835,7 +840,7 @@
       }
     }
 
-    // ACTIONS ÉDITION CATALOGUE BARISTA
+    // ENREGISTREMENT RECETTES ADMINISTRATION
     function openRecipeAdminModal(id = '') {
       const m = document.getElementById("recipeAdminModal");
       const f = document.getElementById("recipeAdminForm");
@@ -894,17 +899,17 @@
       }
     }
 
-    // INTERACTIONS FICHE PRODUIT POPUP
+    // OUVERTURE DE LA MODALE PRODUIT
     function openProductModal(id) {
       if (!catalogData[id]) return;
-      selectedProduct = catalogData[id];
       
-      document.getElementById("modalProductTitle").textContent = selectedProduct.title;
-      document.getElementById("modalProductBadge").textContent = `${selectedProduct.temp} — ${selectedProduct.cat}`;
-      document.getElementById("tabDesc").textContent = selectedProduct.description;
-      document.getElementById("tabRecipe").textContent = selectedProduct.recipeInfo;
+      window.selectedProduct = catalogData[id];
       
-      // Reset sur le premier onglet
+      document.getElementById("modalProductTitle").textContent = window.selectedProduct.title;
+      document.getElementById("modalProductBadge").textContent = `${window.selectedProduct.temp} — ${window.selectedProduct.cat}`;
+      document.getElementById("tabDesc").textContent = window.selectedProduct.description;
+      document.getElementById("tabRecipe").textContent = window.selectedProduct.recipeInfo;
+      
       switchProductTab('desc', document.querySelector(".tab-link-product"));
       
       const m = document.getElementById("productModal");
@@ -925,7 +930,7 @@
       if(currentPane) currentPane.classList.add("active");
     }
 
-    // EXPOSITION UNIVERSELLE POUR COMPATIBILITE COMPLETE DES BOUTONS INLINE HTML
+    // EXPOSITION UNIVERSELLE POUR COMPATIBILITÉ DES APPPELS INLINE
     window.validateGatewayLogin = validateGatewayLogin;
     window.toggleThemeSystem = toggleThemeSystem;
     window.triggerAdminAccessSecret = triggerAdminAccessSecret;
@@ -941,20 +946,14 @@
     window.saveRecipeFromAdminForm = saveRecipeFromAdminForm;
     window.clearAllOrders = clearAllOrders;
 
-    // ÉCOUTEURS D'ÉVÉNEMENTS DOM AU CHARGEMENT
-    document.addEventListener('DOMContentLoaded', () => {
+    // FONCTION D'INITIALISATION DIRECTE POUR LES MODULES ES
+    function initializeAppSystem() {
       if (currentRole) {
-        document.getElementById('authGate').classList.add('hidden');
-        document.getElementById('appWrapper').classList.add('active');
+        const authGate = document.getElementById('authGate');
+        const appWrapper = document.getElementById('appWrapper');
+        if(authGate) authGate.classList.add('hidden');
+        if(appWrapper) appWrapper.classList.add('active');
         applyRoleUI();
-      }
-      
-      // Liaison dynamique stable pour la soumission des commandes (Résolution du bug de Scope)
-      const btnSubmit = document.getElementById('btnSubmitOrder');
-      if (btnSubmit) {
-        btnSubmit.addEventListener('click', () => {
-          submitOrderToFirebase();
-        });
       }
       
       const sInput = document.getElementById('searchInput');
@@ -982,7 +981,16 @@
           renderGrid();
         });
       });
-    });
+      
+      renderGrid();
+    }
+
+    // Lancement sécurisé peu importe le statut du DOM
+    if (document.readyState === "complete" || document.readyState === "interactive") {
+      initializeAppSystem();
+    } else {
+      document.addEventListener('DOMContentLoaded', initializeAppSystem);
+    }
   </script>
 </body>
 </html>
