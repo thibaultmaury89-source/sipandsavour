@@ -684,17 +684,17 @@
       }
     }
 
-    function toggleThemeSystem() {
-      const h = document.documentElement;
-      const btn = document.getElementById("themeToggle");
-      if (h.getAttribute("data-theme") === "light") {
-        h.setAttribute("data-theme") === "dark" ? null : h.setAttribute("data-theme", "dark");
-        if(btn) btn.textContent = "Mode Clair";
-      } else {
-        h.setAttribute("data-theme", "light");
-        if(btn) btn.textContent = "Mode Sombre";
-      }
-    }
+   function toggleThemeSystem() {
+  const h = document.documentElement;
+  const btn = document.getElementById("themeToggle");
+  if (h.getAttribute("data-theme") === "light") {
+    h.setAttribute("data-theme", "dark");
+    if(btn) btn.textContent = "Mode Clair";
+  } else {
+    h.setAttribute("data-theme", "light");
+    if(btn) btn.textContent = "Mode Sombre";
+  }
+}
 
     // LISTENER RECETTES REALTIME FIREBASE
     onValue(ref(db, "recipes"), (snapshot) => {
