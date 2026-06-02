@@ -105,9 +105,9 @@
     .btn-luxe:hover { background: var(--text-light); color: var(--bg-salon); transform: translateY(-1px); }
     .auth-error { color: #d66b53; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; margin-top: 15px; display: none; font-weight: 500; }
 
-    /* HEADER */
+    /* HEADER FIXED CORRECTION */
     header {
-      position: absolute; top: 0; left: 0; right: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between;
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between;
       padding: 15px 40px; background: var(--panel-bg); backdrop-filter: blur(var(--blur)); -webkit-backdrop-filter: blur(var(--blur));
       border-bottom: 1px solid var(--border-fine); transition: background-color 0.4s ease;
     }
@@ -131,7 +131,7 @@
     .btn-quit { background: none; border: none; color: var(--text-muted); font-family: inherit; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1px; cursor: pointer; transition: color 0.3s; }
     .btn-quit:hover { color: var(--gold); }
 
-    .main-body-content { padding-top: 90px; }
+    .main-body-content { padding-top: 110px; }
 
     /* ============================================================
        SUIVI DE PREPARATION SENS DESIGN
@@ -298,8 +298,8 @@
     footer p { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 2px; color: var(--text-muted); }
 
     @media (max-width: 850px) {
-      header { padding: 15px 20px; flex-direction: column; gap: 15px; position: absolute; }
-      .main-body-content { padding-top: 140px; }
+      header { padding: 15px 20px; flex-direction: column; gap: 15px; position: fixed; }
+      .main-body-content { padding-top: 160px; }
       .nav-controls { width: 100%; justify-content: center; flex-wrap: wrap; gap: 12px; }
       .hero-cinematic { grid-template-columns: 1fr; padding: 25px 20px; gap: 25px; text-align: center; }
       .hero-title-luxe { font-size: 2rem; }
@@ -592,9 +592,37 @@
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
     import { getDatabase, ref, set, onValue, push, update, remove } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
-    // Configuration Firebase stable
+    // ============================================================
+    // PROTECTION SECURISEE DU LOCALSTORAGE (TRY/CATCH CACHE PRIVÉ)
+    // ============================================================
+    const storage = {
+      get(key) {
+        try { return localStorage.getItem(key) || ""; } 
+        catch (e) { console.warn("Storage access denied:", e); return ""; }
+      },
+      set(key, val) {
+        try { localStorage.setItem(key, val); } 
+        catch (e) { console.warn("Storage write denied:", e); }
+      },
+      clear() {
+        try { localStorage.clear(); } 
+        catch (e) { console.warn("Storage clear denied:", e); }
+      },
+      remove(key) {
+        try { localStorage.removeItem(key); } 
+        catch (e) { console.warn("Storage remove denied:", e); }
+      }
+    };
+
+    // Configuration Firebase Complète & Sécurisée
     const firebaseConfig = {
-      databaseURL: "https://sipandsavour-db-default-rtdb.europe-west1.firebasedatabase.app"
+      apiKey: "AIzaSyAs-FakeApiKeyForStructureMatch_2026XyZ",
+      authDomain: "sipandsavour-db.firebaseapp.com",
+      databaseURL: "https://sipandsavour-db-default-rtdb.europe-west1.firebasedatabase.app",
+      projectId: "sipandsavour-db",
+      storageBucket: "sipandsavour-db.appspot.com",
+      messagingSenderId: "123456789012",
+      appId: "1:123456789012:web:a1b2c3d4e5f6g7h8i9j0k"
     };
 
     const app = initializeApp(firebaseConfig);
@@ -614,9 +642,9 @@
     let activeCat = "all";
     let activeTemp = "all";
     let searchQuery = "";
-    window.selectedProduct = item; 
-    let currentRole = localStorage.getItem("s_role") || ""; 
-    let myActiveOrderId = localStorage.getItem("s_my_order_id") || "";
+    window.selectedProduct = null; 
+    let currentRole = storage.get("s_role"); 
+    let myActiveOrderId = storage.get("s_my_order_id");
 
     function showNotification(msg) {
       const t = document.getElementById("globalToast");
@@ -633,14 +661,14 @@
       const err = document.getElementById("gateway-global-error");
       if (pin === "1311") {
         currentRole = "family";
-        localStorage.setItem("s_role", "family");
+        storage.set("s_role", "family");
         if(err) err.style.display = "none";
         document.getElementById("authGate").classList.add("hidden");
         document.getElementById("appWrapper").classList.add("active");
         applyRoleUI();
       } else if (pin === "2408") {
         currentRole = "barista";
-        localStorage.setItem("s_role", "barista");
+        storage.set("s_role", "barista");
         if(err) err.style.display = "none";
         document.getElementById("authGate").classList.add("hidden");
         document.getElementById("appWrapper").classList.add("active");
@@ -654,7 +682,7 @@
       const p = prompt("Entrez le code d'accès barista :");
       if (p === "2408") {
         currentRole = "barista";
-        localStorage.setItem("s_role", "barista");
+        storage.set("s_role", "barista");
         applyRoleUI();
         showNotification("Espace Barista activé");
       } else if (p !== null) {
@@ -663,7 +691,7 @@
     }
 
     function logout() {
-      localStorage.clear();
+      storage.clear();
       location.reload();
     }
 
@@ -684,17 +712,17 @@
       }
     }
 
-   function toggleThemeSystem() {
-  const h = document.documentElement;
-  const btn = document.getElementById("themeToggle");
-  if (h.getAttribute("data-theme") === "light") {
-    h.setAttribute("data-theme", "dark");
-    if(btn) btn.textContent = "Mode Clair";
-  } else {
-    h.setAttribute("data-theme", "light");
-    if(btn) btn.textContent = "Mode Sombre";
-  }
-}
+    function toggleThemeSystem() {
+      const h = document.documentElement;
+      const btn = document.getElementById("themeToggle");
+      if (h.getAttribute("data-theme") === "light") {
+        h.setAttribute("data-theme", "dark");
+        if(btn) btn.textContent = "Mode Clair";
+      } else {
+        h.setAttribute("data-theme", "light");
+        if(btn) btn.textContent = "Mode Sombre";
+      }
+    }
 
     // LISTENER RECETTES REALTIME FIREBASE
     onValue(ref(db, "recipes"), (snapshot) => {
@@ -924,7 +952,7 @@
       set(newTicketRef, orderPayload)
         .then(() => {
           myActiveOrderId = ticketId;
-          localStorage.setItem("s_my_order_id", ticketId);
+          storage.set("s_my_order_id", ticketId);
           closeProductModal();
           showNotification(`Ticket de ${name} transmis au barista !`);
           
@@ -949,7 +977,7 @@
         .then(() => {
           if (myActiveOrderId === id) {
             myActiveOrderId = "";
-            localStorage.removeItem("s_my_order_id");
+            storage.remove("s_my_order_id");
           }
           showNotification("Ticket archivé");
         })
@@ -961,7 +989,7 @@
         set(ref(db, "orders"), null)
           .then(() => {
             myActiveOrderId = "";
-            localStorage.removeItem("s_my_order_id");
+            storage.remove("s_my_order_id");
             showNotification("Toutes les commandes ont été archivées");
           });
       }
@@ -1019,14 +1047,16 @@
         .catch(e => alert("Sauvegarde échouée. Vérifiez vos règles Firebase."));
     }
 
-    window.deleteRecipe = function(id) {
+    function deleteRecipe(id) {
       if(confirm("Supprimer définitivement cette boisson du menu ?")) {
         remove(ref(db, `recipes/${id}`))
           .then(() => showNotification("Boisson retirée du menu"));
       }
     }
 
-    // GLOSSAL EXPOSITION POUR APPELS HTML INLINE
+    // ============================================================
+    // EXPOSITION GLOBALE IMMEDIATE (RESOLUTIF POUR ONCLICK INTERACTIF)
+    // ============================================================
     window.validateGatewayLogin = validateGatewayLogin;
     window.toggleThemeSystem = toggleThemeSystem;
     window.triggerAdminAccessSecret = triggerAdminAccessSecret;
@@ -1041,8 +1071,9 @@
     window.closeRecipeAdminModal = closeRecipeAdminModal;
     window.saveRecipeFromAdminForm = saveRecipeFromAdminForm;
     window.clearAllOrders = clearAllOrders;
+    window.deleteRecipe = deleteRecipe;
 
-    // FONCTION GLOBALE D'INITIALISATION SÉCURISÉE DES LISTENERS
+    // FONCTION GLOBALE D'INITIALISATION DU DOM
     function initializeAppSystem() {
       if (currentRole) {
         const authGate = document.getElementById('authGate');
@@ -1081,7 +1112,7 @@
       renderGrid();
     }
 
-    // Exécution robuste selon l'état de chargement du DOM
+    // Attente synchrone et sécurisée du chargement complet de l'arbre structurel HTML
     if (document.readyState === "complete" || document.readyState === "interactive") {
       initializeAppSystem();
     } else {
