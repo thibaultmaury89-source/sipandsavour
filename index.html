@@ -593,6 +593,27 @@
     import { getDatabase, ref, set, onValue, push, update, remove } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
     // ============================================================
+    // EXPOSITION GLOBALE IMMEDIATE — wrappers définis en premier
+    // afin d'être disponibles dès que le module commence à s'exécuter,
+    // avant même que Firebase soit initialisé.
+    // ============================================================
+    window.validateGatewayLogin      = (...a) => validateGatewayLogin(...a);
+    window.toggleThemeSystem          = (...a) => toggleThemeSystem(...a);
+    window.triggerAdminAccessSecret   = (...a) => triggerAdminAccessSecret(...a);
+    window.logout                     = (...a) => logout(...a);
+    window.submitOrderToFirebase      = (...a) => submitOrderToFirebase(...a);
+    window.updateOrderStatus          = (...a) => updateOrderStatus(...a);
+    window.deleteOrderSingle          = (...a) => deleteOrderSingle(...a);
+    window.openProductModal           = (...a) => openProductModal(...a);
+    window.closeProductModal          = (...a) => closeProductModal(...a);
+    window.switchProductTab           = (...a) => switchProductTab(...a);
+    window.openRecipeAdminModal       = (...a) => openRecipeAdminModal(...a);
+    window.closeRecipeAdminModal      = (...a) => closeRecipeAdminModal(...a);
+    window.saveRecipeFromAdminForm    = (...a) => saveRecipeFromAdminForm(...a);
+    window.clearAllOrders             = (...a) => clearAllOrders(...a);
+    window.deleteRecipe               = (...a) => deleteRecipe(...a);
+
+    // ============================================================
     // PROTECTION SECURISEE DU LOCALSTORAGE (TRY/CATCH CACHE PRIVÉ)
     // ============================================================
     const storage = {
@@ -1053,25 +1074,6 @@
           .then(() => showNotification("Boisson retirée du menu"));
       }
     }
-
-    // ============================================================
-    // EXPOSITION GLOBALE IMMEDIATE (RESOLUTIF POUR ONCLICK INTERACTIF)
-    // ============================================================
-    window.validateGatewayLogin = validateGatewayLogin;
-    window.toggleThemeSystem = toggleThemeSystem;
-    window.triggerAdminAccessSecret = triggerAdminAccessSecret;
-    window.logout = logout;
-    window.submitOrderToFirebase = submitOrderToFirebase;
-    window.updateOrderStatus = updateOrderStatus;
-    window.deleteOrderSingle = deleteOrderSingle;
-    window.openProductModal = openProductModal;
-    window.closeProductModal = closeProductModal;
-    window.switchProductTab = switchProductTab;
-    window.openRecipeAdminModal = openRecipeAdminModal;
-    window.closeRecipeAdminModal = closeRecipeAdminModal;
-    window.saveRecipeFromAdminForm = saveRecipeFromAdminForm;
-    window.clearAllOrders = clearAllOrders;
-    window.deleteRecipe = deleteRecipe;
 
     // FONCTION GLOBALE D'INITIALISATION DU DOM
     function initializeAppSystem() {
