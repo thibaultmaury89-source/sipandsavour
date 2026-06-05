@@ -53,6 +53,12 @@
       transition: background-color 0.4s ease, color 0.4s ease;
     }
 
+    /* Accessibilité : Focus visibles et esthétiques */
+    body *:focus-visible {
+      outline: 2px solid var(--gold);
+      outline-offset: 3px;
+    }
+
     body::before {
       content: '';
       position: fixed; inset: 0; z-index: 9999; pointer-events: none;
@@ -100,9 +106,10 @@
     .btn-luxe {
       background: var(--gold); color: #110a05; border: none; padding: 14px; font-family: var(--font-sans);
       font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 2px; cursor: pointer;
-      transition: all 0.3s ease; border-radius: 6px; text-align: center; width: 100%;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); border-radius: 6px; text-align: center; width: 100%;
     }
-    .btn-luxe:hover { background: var(--text-light); color: var(--bg-salon); transform: translateY(-1px); }
+    .btn-luxe:hover { background: var(--text-light); color: var(--bg-salon); transform: translateY(-2px); box-shadow: 0 4px 12px rgba(197, 168, 128, 0.2); }
+    .btn-luxe:active { transform: translateY(0); }
     .auth-error { color: #d66b53; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; margin-top: 15px; display: none; font-weight: 500; }
 
     /* HEADER FIXED CORRECTION */
@@ -119,54 +126,71 @@
 
     .nav-controls { display: flex; align-items: center; gap: 20px; }
     .theme-toggle-btn { background: transparent; border: 1px solid var(--border-fine); color: var(--gold); padding: 6px 12px; font-family: var(--font-sans); font-size: 0.65rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; cursor: pointer; transition: all 0.3s; border-radius: 4px; }
-    .theme-toggle-btn:hover { background: rgba(197, 168, 128, 0.1); }
+    .theme-toggle-btn:hover { background: rgba(197, 168, 128, 0.1); transform: scale(1.02); }
 
     .search-luxe { position: relative; display: flex; align-items: center; }
     .search-luxe input { background: transparent; border: none; border-bottom: 1px solid var(--border-fine); padding: 4px 0 4px 24px; color: var(--text-light); font-family: inherit; font-size: 0.8rem; outline: none; width: 140px; transition: all 0.3s; }
     .search-luxe input:focus { width: 180px; border-color: var(--gold); }
     .search-luxe svg { position: absolute; left: 0; width: 12px; height: 12px; color: var(--gold-dim); }
 
-    .club-badge { font-size: 0.6rem; font-weight: 600; text-transform: uppercase; letter-spacing: 2px; border: 1px solid var(--gold); padding: 4px 10px; color: var(--gold); border-radius: 3px; cursor: pointer; transition: background 0.3s; }
-    .club-badge:hover { background: rgba(197, 168, 128, 0.1); }
+    .club-badge { font-size: 0.6rem; font-weight: 600; text-transform: uppercase; letter-spacing: 2px; border: 1px solid var(--gold); padding: 4px 10px; color: var(--gold); border-radius: 3px; cursor: pointer; transition: background 0.3s, transform 0.2s; }
+    .club-badge:hover { background: rgba(197, 168, 128, 0.1); transform: translateY(-1px); }
     .btn-quit { background: none; border: none; color: var(--text-muted); font-family: inherit; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1px; cursor: pointer; transition: color 0.3s; }
     .btn-quit:hover { color: var(--gold); }
 
     .main-body-content { padding-top: 110px; }
 
     /* ============================================================
-       SUIVI DE PREPARATION SENS DESIGN
+       SUIVI DE PREPARATION SENS DESIGN (MULTI-SUIVI)
     ============================================================ */
     .live-tracker-section {
       max-width: 1300px; margin: 20px auto 0 auto; padding: 0 40px; display: none;
     }
+    .tracker-container-wrapper {
+      display: flex; flex-direction: column; gap: 15px; width: 100%;
+    }
     .tracker-card {
-      background: var(--panel-bg); backdrop-filter: blur(var(--blur)); border: 1px solid var(--gold); border-radius: 8px; padding: 20px; box-shadow: var(--shadow-luxe); display: flex; flex-direction: column; gap: 15px;
+      background: var(--panel-bg); backdrop-filter: blur(var(--blur)); border: 1px solid var(--gold); border-radius: 8px; padding: 20px; box-shadow: var(--shadow-luxe); display: flex; flex-direction: column; gap: 15px; position: relative;
     }
     .tracker-header { display: flex; justify-content: space-between; align-items: center; }
-    .tracker-header h4 { font-family: var(--font-serif); font-size: 1.3rem; color: var(--gold); font-weight: 400; }
+    .tracker-header h4 { font-family: var(--font-serif); font-size: 1.3rem; color: var(--gold); font-weight: 400; display: flex; align-items: center; gap: 8px; }
     .tracker-status-badge { font-size: 0.65rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; padding: 4px 10px; border-radius: 20px; background: rgba(197, 168, 128, 0.1); color: var(--gold); border: 1px solid var(--border-fine); }
     
-    .tracker-progress-container { position: relative; width: 100%; height: 6px; background: rgba(197, 168, 128, 0.15); border-radius: 3px; margin: 15px 0; }
-    .tracker-progress-bar { position: absolute; left: 0; top: 0; height: 100%; width: 15%; background: var(--gold); border-radius: 3px; transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1); }
+    .tracker-progress-container { position: relative; width: 100%; height: 6px; background: rgba(197, 168, 128, 0.15); border-radius: 3px; margin: 15px 0; overflow: hidden; }
+    .tracker-progress-bar { position: absolute; left: 0; top: 0; height: 100%; width: 0%; background: var(--gold); border-radius: 3px; transition: width 1s cubic-bezier(0.4, 0, 0.2, 1); }
     
     .tracker-steps { display: flex; justify-content: space-between; position: relative; }
     .tracker-steps .tracker-step { display: flex; flex-direction: column; align-items: center; gap: 6px; flex: 1; text-align: center; }
-    .step-icon { width: 30px; height: 30px; border-radius: 50%; background: var(--bg-salon); border: 1px solid var(--border-fine); display: flex; align-items: center; justify-content: center; font-size: 0.8rem; color: var(--text-muted); transition: all 0.4s; }
+    .step-icon { width: 30px; height: 30px; border-radius: 50%; background: var(--bg-salon); border: 1px solid var(--border-fine); display: flex; align-items: center; justify-content: center; font-size: 0.8rem; color: var(--text-muted); transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
     .step-label { font-size: 0.65rem; font-weight: 500; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted); }
     
-    .tracker-step.active .step-icon { border-color: var(--gold); color: #110a05; background: var(--gold); box-shadow: 0 0 12px rgba(197, 168, 128, 0.4); }
+    .tracker-step.active .step-icon { border-color: var(--gold); color: #110a05; background: var(--gold); box-shadow: 0 0 12px rgba(197, 168, 128, 0.5); transform: scale(1.1); }
     .tracker-step.active .step-label { color: var(--gold); font-weight: 600; }
     .tracker-step.done .step-icon { border-color: var(--gold-dim); color: var(--gold); background: rgba(197, 168, 128, 0.1); }
-    .tracker-step.done .step-label { color: var(--text-muted); }
+    
+    .tracker-timer-eta { font-size: 0.7rem; color: var(--gold-dim); font-weight: 600; letter-spacing: 1px; text-transform: uppercase; text-align: right; margin-top: -5px; }
 
     /* ============================================================
-       TABLEAU DE BORD ADMIN & TABLEAU DES COMMANDES
+       TABLEAU DE BORD ADMIN & STATS CONTROLS
     ============================================================ */
     .top-dashboard-admin { display: none; max-width: 1300px; margin: 25px auto 0 auto; padding: 0 40px; }
     .dashboard-container { background: var(--panel-bg); backdrop-filter: blur(var(--blur)); border: 1px solid var(--border-fine); border-top: 4px solid var(--gold); padding: 25px; box-shadow: var(--shadow-luxe); margin-bottom: 25px; border-radius: 4px; }
     .dashboard-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-fine); padding-bottom: 12px; margin-bottom: 20px; flex-wrap: wrap; gap: 10px; }
     .dashboard-title { font-family: var(--font-serif); font-size: 1.6rem; color: var(--gold); font-weight: 400; }
     
+    /* Stats Barista Grid */
+    .barista-stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-bottom: 25px; }
+    .stat-mini-box { background: rgba(17, 10, 5, 0.3); border: 1px solid var(--border-fine); padding: 15px; border-radius: 6px; text-align: center; }
+    .stat-mini-box h5 { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 2px; color: var(--text-muted); margin-bottom: 5px; }
+    .stat-mini-box p { font-family: var(--font-serif); font-size: 1.8rem; color: var(--gold); font-weight: 600; }
+
+    /* Gestion des stocks */
+    .stock-management-zone { border-top: 1px dashed var(--border-fine); padding-top: 20px; margin-top: 25px; }
+    .stock-flex-row { display: flex; gap: 15px; flex-wrap: wrap; margin-top: 15px; }
+    .stock-item-badge { background: rgba(17, 10, 5, 0.5); border: 1px solid var(--border-fine); border-radius: 4px; padding: 10px 15px; display: flex; align-items: center; gap: 15px; }
+    .stock-item-badge span { font-size: 0.8rem; font-weight: 500; }
+    .stock-item-badge input { width: 50px; background: transparent; border: none; border-bottom: 1px solid var(--gold); color: var(--text-light); font-weight: bold; text-align: center; font-size: 0.85rem; }
+
     .btn-clear-all-orders { background: rgba(214, 107, 83, 0.1); border: 1px solid rgba(214, 107, 83, 0.3); color: #e57c67; padding: 6px 12px; font-size: 0.65rem; font-weight: 600; text-transform: uppercase; cursor: pointer; transition: all 0.3s; border-radius: 4px; }
     .btn-clear-all-orders:hover { background: #d66b53; color: #fff; }
     
@@ -209,12 +233,8 @@
     .frame-caption h4 { font-family: var(--font-serif); font-size: 1.1rem; color: var(--gold); font-weight: 400; }
     .frame-caption p { font-size: 0.6rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
 
-    /* ============================================================
-       NOUVELLE SECTION : BOISSON DU MOMENT BARISTA
-    ============================================================ */
-    .barista-choice-section {
-      max-width: 1300px; margin: 40px auto; padding: 0 40px;
-    }
+    /* BOISSON DU MOMENT BARISTA */
+    .barista-choice-section { max-width: 1300px; margin: 40px auto; padding: 0 40px; }
     .barista-choice-card {
       background: var(--panel-bg); border: 1px solid var(--gold); border-radius: 8px; padding: 30px; box-shadow: var(--shadow-luxe); display: grid; grid-template-columns: 0.8fr 1.2fr; gap: 40px; align-items: center;
     }
@@ -230,12 +250,13 @@
     /* DOUBLE ACTION BTN GRIDS */
     .actions-dual-row { display: flex; gap: 15px; margin-top: 5px; }
     .btn-action-split {
-      flex: 1; padding: 11px; font-family: var(--font-sans); font-size: 0.65rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; cursor: pointer; border-radius: 4px; transition: all 0.3s; text-align: center;
+      flex: 1; padding: 11px; font-family: var(--font-sans); font-size: 0.65rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; cursor: pointer; border-radius: 4px; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); text-align: center;
     }
     .btn-split-discover { background: transparent; border: 1px solid var(--gold); color: var(--gold); }
-    .btn-split-discover:hover { background: rgba(197, 168, 128, 0.1); }
+    .btn-split-discover:hover { background: rgba(197, 168, 128, 0.1); transform: scale(1.02); }
     .btn-split-order { background: var(--gold); border: 1px solid var(--gold); color: #110a05; }
-    .btn-split-order:hover { background: var(--text-light); border-color: var(--text-light); color: var(--bg-salon); }
+    .btn-split-order:hover { background: var(--text-light); border-color: var(--text-light); color: var(--bg-salon); transform: scale(1.02); }
+    .btn-action-split:active { transform: scale(1); }
 
     .salon-curation { max-width: 1300px; margin: 0 auto; padding: 20px 40px; }
     .seasonal-indicator { display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--border-fine); padding-bottom: 12px; margin-bottom: 30px; }
@@ -255,15 +276,29 @@
     .grid-container { max-width: 1300px; margin: 0 auto; padding: 0 40px 80px; }
     .menu-grid-luxe { display: grid; grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); gap: 30px; }
     
-    /* CARTES DU MENU */
-    .carte-item { background: var(--panel-bg); border: 1px solid var(--border-fine); padding: 18px; position: relative; transition: all 0.3s ease; display: flex; flex-direction: column; gap: 12px; box-shadow: var(--shadow-luxe); border-radius: 6px; }
-    .carte-item:hover { border-color: var(--gold); transform: translateY(-3px); }
+    /* SKELETON LOADER STYLE */
+    .skeleton-card {
+      background: var(--panel-bg); border: 1px solid var(--border-fine); padding: 18px; border-radius: 6px; display: flex; flex-direction: column; gap: 12px; pointer-events: none;
+    }
+    .skeleton-pulse {
+      background: linear-gradient(90deg, rgba(197, 168, 128, 0.05) 25%, rgba(197, 168, 128, 0.15) 50%, rgba(197, 168, 128, 0.05) 75%);
+      background-size: 200% 100%; animation: pulseAnimation 1.5s infinite; border-radius: 4px;
+    }
+    @keyframes pulseAnimation { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+
+    /* CARTES DU MENU (HOVER RENFORCÉ) */
+    .carte-item { background: var(--panel-bg); border: 1px solid var(--border-fine); padding: 18px; position: relative; transition: all 0.35s cubic-bezier(0.25, 0.8, 0.25, 1); display: flex; flex-direction: column; gap: 12px; box-shadow: var(--shadow-luxe); border-radius: 6px; }
+    .carte-item:hover { border-color: var(--gold); transform: translateY(-5px); box-shadow: 0 20px 35px rgba(197, 168, 128, 0.12); }
     
+    /* Favoris Icon placement */
+    .btn-fav-star { position: absolute; top: 15px; right: 15px; background: rgba(17, 10, 5, 0.6); border: 1px solid var(--border-fine); border-radius: 50%; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; cursor: pointer; color: var(--text-muted); z-index: 10; transition: all 0.2s; }
+    .btn-fav-star.is-fav { color: #f5b041; border-color: #f5b041; }
+
     .item-media { width: 100%; aspect-ratio: 16/10; overflow: hidden; position: relative; border-radius: 4px; background: #1a120b; border: 1px solid rgba(197, 168, 128, 0.1); }
     .item-media img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s; }
-    .carte-item:hover .item-media img { transform: scale(1.04); }
+    .carte-item:hover .item-media img { transform: scale(1.05); }
     
-    .item-tag-hot-cold { position: absolute; top: 10px; left: 10px; font-size: 0.55rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; padding: 3px 8px; border-radius: 3px; backdrop-filter: blur(4px); }
+    .item-tag-hot-cold { position: absolute; top: 10px; left: 10px; font-size: 0.55rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; padding: 3px 8px; border-radius: 3px; backdrop-filter: blur(4px); display: flex; align-items: center; gap: 4px; }
     .tag-hot { background: rgba(214, 107, 83, 0.15); color: #e57c67; border: 1px solid rgba(214, 107, 83, 0.3); }
     .tag-cold { background: rgba(114, 150, 105, 0.15); color: #a8c99b; border: 1px solid rgba(114, 150, 105, 0.3); }
 
@@ -272,6 +307,10 @@
     .item-line-dots { flex: 1; border-bottom: 1px dotted var(--border-fine); margin: 0 4px; position: relative; top: -4px; }
     .item-price { font-family: var(--font-serif); font-size: 1.2rem; color: var(--gold); font-weight: 600; }
     .item-description { font-size: 0.75rem; color: var(--text-muted); line-height: 1.5; min-height: 3em; }
+
+    /* Avis / Étoiles de notation */
+    .rating-container { display: flex; gap: 4px; align-items: center; margin-top: -5px; }
+    .star-avg { color: #f5b041; font-size: 0.75rem; }
 
     /* ONGLETS FICHE PRODUIT */
     .tabs-nav-product { display: flex; border-bottom: 1px solid var(--border-fine); margin-bottom: 20px; gap: 15px; overflow-x: auto; -webkit-overflow-scrolling: touch; }
@@ -282,10 +321,20 @@
     .tab-pane-product.active { display: block; }
     .product-meta-badge { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 1px; color: var(--gold); background: rgba(197, 168, 128, 0.1); padding: 4px 8px; border-radius: 4px; display: inline-block; margin-bottom: 15px; border: 1px solid var(--border-fine); }
 
-    /* MODALES & TABLES */
-    .modal-backdrop-luxe { position: fixed; inset: 0; z-index: 200; background: rgba(17, 10, 5, 0.85); backdrop-filter: blur(8px); display: none; align-items: center; justify-content: center; padding: 15px; }
-    .modal-backdrop-luxe.active { display: flex; }
-    .modal-box-luxe { background: var(--panel-bg); border: 1px solid var(--gold); padding: 30px; max-width: 520px; width: 100%; border-top: 4px solid var(--gold); box-shadow: var(--shadow-luxe); border-radius: 8px; max-height: 95vh; overflow-y: auto; }
+    /* MODALES & TABLES CONVERTIS AUX ANIMATIONS ULTRA-FLUIDES */
+    .modal-backdrop-luxe { 
+      position: fixed; inset: 0; z-index: 200; background: rgba(17, 10, 5, 0.85); backdrop-filter: blur(8px); 
+      display: flex; align-items: center; justify-content: center; padding: 15px;
+      opacity: 0; pointer-events: none; transition: opacity 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .modal-backdrop-luxe.active { opacity: 1; pointer-events: auto; }
+    .modal-box-luxe { 
+      background: var(--panel-bg); border: 1px solid var(--gold); padding: 30px; max-width: 520px; width: 100%; 
+      border-top: 4px solid var(--gold); box-shadow: var(--shadow-luxe); border-radius: 8px; max-height: 95vh; overflow-y: auto;
+      transform: translateY(20px) scale(0.97); transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .modal-backdrop-luxe.active .modal-box-luxe { transform: translateY(0) scale(1); }
+    
     .modal-title-luxe { font-family: var(--font-serif); font-size: 1.6rem; color: var(--gold); font-weight: 400; margin-bottom: 15px; }
     .modal-form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 25px; }
     .span-full { grid-column: 1 / -1; }
@@ -296,6 +345,9 @@
 
     footer { border-top: 1px solid var(--border-fine); padding: 30px; text-align: center; max-width: 1300px; margin: 0 auto; }
     footer p { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 2px; color: var(--text-muted); }
+
+    /* QR Code Display Espace */
+    .qr-share-box { text-align: center; margin-top: 15px; padding: 10px; background: white; display: inline-block; border-radius: 6px; }
 
     @media (max-width: 850px) {
       header { padding: 15px 20px; flex-direction: column; gap: 15px; position: fixed; }
@@ -320,6 +372,7 @@
       .top-dashboard-admin { padding: 0 15px; }
       .modal-box-luxe { padding: 20px; }
       .modal-form-grid { grid-template-columns: 1fr; }
+      .barista-stats-grid { grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -330,13 +383,20 @@
   <div class="auth-screen" id="authGate">
     <div class="auth-card">
       <h1 class="auth-logo">Sip & Savour</h1>
-      <p class="auth-subtitle">Maison de Torréfaction — Espace Famille</p>
+      <p class="auth-subtitle">Maison de Torréfaction — Salon Privé</p>
+      
       <div class="form-group">
-        <label for="gateway-password-input">Clé du Salon Privé</label>
-        <input type="password" id="gateway-password-input" class="form-input" placeholder="Entrez la clé famille..." onkeydown="if(event.key === 'Enter') validateGatewayLogin()">
+        <label for="gateway-email-input">Identifiant Unique</label>
+        <input type="email" id="gateway-email-input" class="form-input" placeholder="exemple@sipandsavour.fr">
       </div>
+
+      <div class="form-group">
+        <label for="gateway-password-input">Clé Secrète de Sécurité</label>
+        <input type="password" id="gateway-password-input" class="form-input" placeholder="••••••••" onkeydown="if(event.key === 'Enter') validateGatewayLogin()">
+      </div>
+
       <button type="button" class="btn-luxe" onclick="validateGatewayLogin()">Rejoindre la Table</button>
-      <div class="auth-error" id="gateway-global-error">Code incorrect. Veuillez vérifier avec le barista.</div>
+      <div class="auth-error" id="gateway-global-error">Identifiants incorrects ou droits insuffisants.</div>
     </div>
   </div>
 
@@ -348,8 +408,8 @@
       </a>
       <div class="nav-controls">
         <div class="search-luxe">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-          <input type="text" id="searchInput" placeholder="Rechercher un élixir..." />
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+          <input type="text" id="searchInput" placeholder="Rechercher un élixir..." aria-label="Rechercher une boisson au menu" />
         </div>
         <button type="button" class="theme-toggle-btn" id="themeToggle" onclick="toggleThemeSystem()">Mode Clair</button>
         <div class="club-badge" id="roleBadge" onclick="triggerAdminAccessSecret()">Salon Famille</div>
@@ -358,63 +418,67 @@
     </header>
 
     <div class="main-body-content">
-      <section class="live-tracker-section" id="clientTrackerZone">
-        <div class="tracker-card">
-          <div class="tracker-header">
-            <div>
-              <h4 id="trackerDrinkName">Votre préparation</h4>
-              <p style="font-size: 0.75rem; color: var(--text-muted);" id="trackerGuestName">Préparé avec soin</p>
-            </div>
-            <span class="tracker-status-badge" id="trackerStatusBadge">En attente</span>
-          </div>
-          <div class="tracker-progress-container">
-            <div class="tracker-progress-bar" id="trackerProgressBar"></div>
-          </div>
-          <div class="tracker-steps">
-            <div class="tracker-step active" id="step-pending">
-              <div class="step-icon">⏳</div>
-              <div class="step-label">Reçue</div>
-            </div>
-            <div class="tracker-step" id="step-preparing">
-              <div class="step-icon">☕</div>
-              <div class="step-label">En cours</div>
-            </div>
-            <div class="tracker-step" id="step-ready">
-              <div class="step-icon">✨</div>
-              <div class="step-label">Prête</div>
-            </div>
-          </div>
-        </div>
+      <section class="live-tracker-section" id="clientTrackerZone" aria-label="Suivi en direct de vos commandes">
+        <div class="tracker-container-wrapper" id="multiTrackerContainer"></div>
       </section>
 
       <section class="top-dashboard-admin" id="adminDashboardZone">
         <div class="dashboard-container">
           <div class="dashboard-header">
-            <h3 class="dashboard-title">Commandes en Temps Réel</h3>
-            <button class="btn-clear-all-orders" onclick="clearAllOrders()">Archiver tout</button>
+            <h2 class="dashboard-title">Atelier du Barista — Commandes Actives</h2>
+            <button class="btn-clear-all-orders" onclick="clearAllOrdersSystem()">Vider l'historique complet</button>
           </div>
+
+          <div class="barista-stats-grid">
+            <div class="stat-mini-box">
+              <h5>Commandes Réalisées</h5>
+              <p id="statTotalCompleted">0</p>
+            </div>
+            <div class="stat-mini-box">
+              <h5>Élixir le Plus Populaire</h5>
+              <p id="statPopularDrink">-</p>
+            </div>
+            <div class="stat-mini-box">
+              <h5>Note Client Moyenne</h5>
+              <p id="statAverageRating">5.0 ★</p>
+            </div>
+          </div>
+
           <div class="table-responsive-luxe">
-            <table class="table-luxe">
+            <table class="table-luxe" summary="Liste des tickets de commande en cours de traitement">
               <thead>
                 <tr>
-                  <th>Invité</th>
-                  <th>Élixir</th>
-                  <th>Instructions Barista</th>
-                  <th>Statut</th>
-                  <th>Actions</th>
+                  <th scope="col">Hôte / Table</th>
+                  <th scope="col">Élixir demandé</th>
+                  <th scope="col">Ajustements & Notes</th>
+                  <th scope="col">Statut actuel</th>
+                  <th scope="col">Actions Barista</th>
                 </tr>
               </thead>
-              <tbody id="ordersTableBody">
-                <tr><td colspan="5" style="text-align:center; color:var(--text-muted);">Aucun ticket en cours</td></tr>
+              <tbody id="adminOrdersTableBody">
+                <tr>
+                  <td colspan="5" style="text-align:center; color:var(--text-muted); padding:30px;">Aucun ticket en attente au comptoir.</td>
+                </tr>
               </tbody>
             </table>
+          </div>
+
+          <div class="stock-management-zone">
+            <h4 class="dashboard-title" style="font-size:1.2rem; margin-bottom:10px;">Gestion fine des Stocks d'ingrédients</h4>
+            <div class="stock-flex-row" id="stockContainerRow"></div>
+          </div>
+
+          <div class="stock-management-zone" style="border-top: 1px dashed var(--border-fine); margin-top:20px; padding-top:20px;">
+            <h4 class="dashboard-title" style="font-size:1.2rem; margin-bottom:5px;">Accès Famille instantané</h4>
+            <p style="font-size:0.75rem; color:var(--text-muted); margin-bottom:10px;">Partagez ce QR Code avec vos proches pour les connecter directement au salon privé.</p>
+            <div id="qrcodeDisplayArea" class="qr-share-box"></div>
           </div>
         </div>
 
         <div class="dashboard-container">
           <div class="dashboard-header">
-            <h3 class="dashboard-title">Gestion du Catalogue</h3>
-            <button class="btn-single-action btn-action-next" onclick="openRecipeAdminModal()">+ Ajouter une Recette</button>
+            <h3 class="dashboard-title" style="font-size:1.3rem;">Architecture de la Carte du Salon</h3>
+            <button type="button" class="btn-single-action btn-action-next" onclick="openRecipeAdminModal(null)">+ Ajouter une recette</button>
           </div>
           <div class="admin-catalog-grid" id="adminCatalogGrid"></div>
         </div>
@@ -422,12 +486,12 @@
 
       <section class="hero-cinematic">
         <div>
-          <span class="hero-tagline">Expérience Privée</span>
-          <h2 class="hero-title-luxe">L'Art de la Torréfaction et des <em>Élixirs de Saison</em></h2>
+          <span class="hero-tagline">Salon d'Exception Connecté</span>
+          <h2 class="hero-title-luxe">L'art de la torréfaction haute couture, <em>en temps réel</em></h2>
           <p class="hero-manifesto">Bienvenue à la table familiale Sip & Savour. Commandez votre café d'exception à distance et suivez sa préparation par votre barista en temps réel.</p>
         </div>
         <div class="frame-artisan">
-          <img src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=600&q=80" alt="Café de Spécialité" />
+          <img src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=600&q=80" alt="Café de Spécialité fraîchement extrait" />
           <div class="frame-caption">
             <h4>Torréfaction Maison</h4>
             <p>Sélections 100% Arabica</p>
@@ -435,34 +499,17 @@
         </div>
       </section>
 
-      <section class="barista-choice-section">
-        <div class="barista-choice-card">
-          <div class="barista-choice-media">
-            <img src="https://images.unsplash.com/photo-1544787219-7f47ccb76574?w=600&q=80" alt="Boisson du Moment Signature">
-          </div>
-          <div class="barista-choice-content">
-            <span class="barista-choice-label">Boisson du moment choisie par votre barista</span>
-            <h3 class="barista-choice-title">Élixir d'Or (Golden Milk)</h3>
-            <p class="barista-choice-text">Une création unique intensément réconfortante à base de curcuma frais moulu, de miel de fleurs bio et d'un assortiment délicat d'épices de Ceylan secrètement dosées.</p>
-            <div class="actions-dual-row">
-              <button type="button" class="btn-action-split btn-split-discover" onclick="openProductModal('rec_3', 'desc')">Découvrir</button>
-              <button type="button" class="btn-action-split btn-split-order" onclick="openProductModal('rec_3', 'order')">Commander</button>
-            </div>
-          </div>
-        </div>
-      </section>
-
       <section class="salon-curation">
         <div class="seasonal-indicator">
-          <span class="season-label">Collection du Moment</span>
+          <span class="season-label">Collection de Saison</span>
           <span class="season-desc">Sélection Fine & Recettes signatures</span>
         </div>
         <div class="curation-tabs-row">
-          <div class="filter-group-luxe">
-            <button class="filter-btn-luxe active" data-cat="all">Tous nos cafés</button>
-            <button class="filter-btn-luxe" data-cat="signature">Signatures</button>
-            <button class="filter-btn-luxe" data-cat="classique">Classiques</button>
-            <button class="filter-btn-luxe" data-cat="alternative">Alternatives</button>
+          <div class="filter-group-luxe" role="tablist" aria-label="Catégories du menu">
+            <button class="filter-btn-luxe active" data-cat="all" role="tab" aria-selected="true">Tous nos cafés</button>
+            <button class="filter-btn-luxe" data-cat="signature" role="tab" aria-selected="false">Signatures</button>
+            <button class="filter-btn-luxe" data-cat="classique" role="tab" aria-selected="false">Classiques</button>
+            <button class="filter-btn-luxe" data-cat="alternative" role="tab" aria-selected="false">Alternatives</button>
           </div>
           <div class="temp-selector-luxe">
             <button class="temp-btn-luxe active" data-temp="all">Tous</button>
@@ -473,72 +520,110 @@
       </section>
 
       <div class="grid-container">
-        <main class="menu-grid-luxe" id="menuGrid"></main>
+        <main class="menu-grid-luxe" id="menuGrid" aria-live="polite"></main>
       </div>
     </div>
   </div>
 
   <div class="modal-backdrop-luxe" id="productModal" onclick="if(event.target===this) closeProductModal()">
-    <div class="modal-box-luxe">
+    <div class="modal-box-luxe" role="dialog" aria-modal="true" aria-labelledby="modalProductTitle">
       <h3 class="modal-title-luxe" id="modalProductTitle">Élixir</h3>
       <span class="product-meta-badge" id="modalProductBadge">Chaud — Signature</span>
       
       <div class="tabs-nav-product">
-        <button class="tab-link-product active" id="btnTabDesc" onclick="switchProductTab('desc', this)">Histoire</button>
-        <button class="tab-link-product" id="btnTabRecipe" onclick="switchProductTab('recipe', this)">Profil aromatique</button>
-        <button class="tab-link-product" id="btnTabOrder" onclick="switchProductTab('order', this)">Commander</button>
+        <button class="tab-link-product active" id="btnTabDesc" onclick="switchProductTab('desc')">Notes de Dégustation</button>
+        <button class="tab-link-product" id="btnTabOrder" onclick="switchProductTab('order')">Commander</button>
+        <button class="tab-link-product" id="btnTabHistory" onclick="switchProductTab('history')">Historique des avis</button>
       </div>
 
-      <div id="tabDesc" class="tab-pane-product active"></div>
-      <div id="tabRecipe" class="tab-pane-product"></div>
-      
-      <div id="tabOrder" class="tab-pane-product">
-        <div class="modal-form-grid" style="margin-bottom:10px;">
-          <div class="form-group span-full">
-            <label for="orderGuestNameInput">Votre Prénom / Nom</label>
-            <input type="text" id="orderGuestNameInput" class="form-input" placeholder="Pour votre ticket...">
+      <div class="tab-pane-product active" id="productTabDesc">
+        <p id="modalProductDescription" style="margin-bottom: 15px; font-style: italic; color: var(--text-muted);"></p>
+        <h4 style="font-family: var(--font-serif); color: var(--gold); font-size:1.1rem; margin-bottom: 5px;">Recette & Profil de l'Atelier</h4>
+        <p id="modalProductRecipe"></p>
+      </div>
+
+      <div class="tab-pane-product" id="productTabOrder">
+        <form id="orderFormMain" onsubmit="triggerOrderStepConfirmation(event)">
+          <div class="modal-form-grid">
+            <div class="form-group span-full">
+              <label for="orderGuestNameInput">Votre Prénom / Table</label>
+              <input type="text" id="orderGuestNameInput" class="form-input" required placeholder="Ex: Sévérine">
+            </div>
+            <div class="form-group">
+              <label for="orderSugarSelect">Douceur (Sucre)</label>
+              <select id="orderSugarSelect">
+                <option value="Sans Sucre">Sans sucre</option>
+                <option value="Sucre Léger">Léger</option>
+                <option value="Standard">Standard</option>
+                <option value="Intense">Intense</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="orderMilkSelect">Sélection de Lait</label>
+              <select id="orderMilkSelect">
+                <option value="Lait Entier Vache">Lait de vache entier</option>
+                <option value="Lait d'Avoine Bio">Avoine Bio</option>
+                <option value="Sans Lait">Sans lait</option>
+              </select>
+            </div>
+            <div class="form-group span-full">
+              <label for="orderFoamSelect">Mousse de Lait</label>
+              <select id="orderFoamSelect">
+                <option value="Mousse Légère">Légère & Soyeuse</option>
+                <option value="Mousse Épaisse">Dense & Crémeuse</option>
+                <option value="Sans Mousse">Sans mousse</option>
+              </select>
+            </div>
+            
+            <div class="form-group span-full">
+              <label for="orderScheduleInput">Heure de service (Optionnel)</label>
+              <input type="time" id="orderScheduleInput" class="form-input">
+              <span style="font-size:0.65rem; color:var(--text-muted);">Laissez vide pour une préparation immédiate au comptoir.</span>
+            </div>
+
+            <div class="form-group span-full">
+              <label for="orderCustomsInput">Demandes Spécifiques au Barista</label>
+              <textarea id="orderCustomsInput" rows="2" class="form-input" placeholder="Ex: Une pointe de cannelle en surface..."></textarea>
+            </div>
           </div>
           
-          <div class="form-group">
-            <label for="orderSugarSelect">Sucre</label>
-            <select id="orderSugarSelect" class="form-input">
-              <option value="Sans sucre">Sans sucre</option>
-              <option value="1 sucre">1 sucre</option>
-              <option value="2 sucres">2 sucres</option>
-              <option value="3 sucres">3 sucres</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label for="orderMilkSelect">Lait</label>
-            <select id="orderMilkSelect" class="form-input">
-              <option value="Sans lait">Sans lait</option>
-              <option value="Lait de vache">Avec lait de vache</option>
-              <option value="Lait d'avoine">Lait d'avoine</option>
-            </select>
-          </div>
-          <div class="form-group span-full">
-            <label for="orderFoamSelect">Mousse</label>
-            <select id="orderFoamSelect" class="form-input">
-              <option value="Sans mousse">Sans mousse</option>
-              <option value="Mousse légère">Mousse légère</option>
-              <option value="Mousse épaisse">Mousse épaisse</option>
-            </select>
+          <div id="orderConfirmationZone" style="display:none; padding:12px; background:rgba(197,168,128,0.1); border:1px solid var(--gold); border-radius:6px; margin-bottom:15px;">
+            <p style="font-size:0.8rem; font-weight:600; color:var(--gold); margin-bottom:5px;">Confirmez-vous l'envoi de votre commande ?</p>
+            <p style="font-size:0.75rem; color:var(--text-light);" id="txtConfirmationSummary"></p>
+            <div style="display:flex; gap:10px; margin-top:10px;">
+              <button type="button" class="btn-single-action" style="flex:1;" onclick="cancelOrderConfirmation()">Ajuster</button>
+              <button type="button" class="btn-single-action btn-action-next" style="flex:1;" onclick="submitOrderToFirebase()">Confirmer l'envoi</button>
+            </div>
           </div>
 
-          <div class="form-group span-full">
-            <label for="orderCustomsInput">Notes complémentaires pour le Barista</label>
-            <textarea id="orderCustomsInput" rows="2" class="form-input" placeholder="Une autre demande particulière ?..."></textarea>
+          <button type="submit" id="btnSubmitFormAction" class="btn-luxe">Transmettre à l'Atelier</button>
+        </form>
+      </div>
+
+      <div class="tab-pane-product" id="productTabHistory">
+        <div id="ratingsInteractiveZone" style="border-bottom: 1px dashed var(--border-fine); padding-bottom:15px; margin-bottom:15px;">
+          <h4 style="font-family: var(--font-serif); color:var(--gold); margin-bottom:8px;">Laisser une note de dégustation</h4>
+          <div style="display:flex; gap:10px; align-items:center; margin-bottom:10px;">
+            <select id="userRatingSelect" style="width:100px; padding:6px;">
+              <option value="5">5 ★★★★★</option>
+              <option value="4">4 ★★★★</option>
+              <option value="3">3 ★★★</option>
+              <option value="2">2 ★★</option>
+              <option value="1">1 ★</option>
+            </select>
+            <input type="text" id="userCommentInput" class="form-input" placeholder="Votre commentaire..." style="padding:6px 12px;">
           </div>
+          <button type="button" class="btn-single-action btn-action-next" onclick="submitProductReviewSystem()">Publier mon avis</button>
         </div>
-        <button type="button" class="btn-luxe" onclick="submitOrderToFirebase()">Lancer la préparation</button>
+        <div id="productReviewsContainer" style="max-height:180px; overflow-y:auto; display:flex; flex-direction:column; gap:8px;"></div>
       </div>
     </div>
   </div>
 
   <div class="modal-backdrop-luxe" id="recipeAdminModal" onclick="if(event.target===this) closeRecipeAdminModal()">
     <div class="modal-box-luxe">
-      <h3 class="modal-title-luxe">Nouvel Élixir</h3>
-      <form id="recipeAdminForm" onsubmit="event.preventDefault(); saveRecipeFromAdminForm();">
+      <h3 class="modal-title-luxe">Édition de l'Élixir</h3>
+      <form id="recipeAdminForm" onsubmit="saveRecipeFromForm(event)">
         <input type="hidden" id="adminRecipeId">
         <div class="modal-form-grid">
           <div class="form-group span-full">
@@ -582,8 +667,8 @@
     </div>
   </div>
 
-  <div class="toast-luxe" id="globalToast">Commande envoyée avec succès</div>
-
+  <div class="toast-luxe" id="globalToast">Notification transmise</div>
+  
   <footer>
     <p>© 2026 Sip & Savour — Excellence Connectée</p>
   </footer>
@@ -591,134 +676,184 @@
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
     import { getDatabase, ref, set, onValue, push, update, remove } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+    import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
     // ============================================================
-    // EXPOSITION GLOBALE IMMEDIATE — wrappers définis en premier
-    // afin d'être disponibles dès que le module commence à s'exécuter,
-    // avant même que Firebase soit initialisé.
+    // CONFIGURATION ET INITIALISATION DE L'ÉCOSYSTÈME FIREBASE
     // ============================================================
-    window.validateGatewayLogin      = (...a) => validateGatewayLogin(...a);
-    window.toggleThemeSystem          = (...a) => toggleThemeSystem(...a);
-    window.triggerAdminAccessSecret   = (...a) => triggerAdminAccessSecret(...a);
-    window.logout                     = (...a) => logout(...a);
-    window.submitOrderToFirebase      = (...a) => submitOrderToFirebase(...a);
-    window.updateOrderStatus          = (...a) => updateOrderStatus(...a);
-    window.deleteOrderSingle          = (...a) => deleteOrderSingle(...a);
-    window.openProductModal           = (...a) => openProductModal(...a);
-    window.closeProductModal          = (...a) => closeProductModal(...a);
-    window.switchProductTab           = (...a) => switchProductTab(...a);
-    window.openRecipeAdminModal       = (...a) => openRecipeAdminModal(...a);
-    window.closeRecipeAdminModal      = (...a) => closeRecipeAdminModal(...a);
-    window.saveRecipeFromAdminForm    = (...a) => saveRecipeFromAdminForm(...a);
-    window.clearAllOrders             = (...a) => clearAllOrders(...a);
-    window.deleteRecipe               = (...a) => deleteRecipe(...a);
-
-    // ============================================================
-    // PROTECTION SECURISEE DU LOCALSTORAGE (TRY/CATCH CACHE PRIVÉ)
-    // ============================================================
-    const storage = {
-      get(key) {
-        try { return localStorage.getItem(key) || ""; } 
-        catch (e) { console.warn("Storage access denied:", e); return ""; }
-      },
-      set(key, val) {
-        try { localStorage.setItem(key, val); } 
-        catch (e) { console.warn("Storage write denied:", e); }
-      },
-      clear() {
-        try { localStorage.clear(); } 
-        catch (e) { console.warn("Storage clear denied:", e); }
-      },
-      remove(key) {
-        try { localStorage.removeItem(key); } 
-        catch (e) { console.warn("Storage remove denied:", e); }
-      }
-    };
-
-    // Configuration Firebase Complète & Sécurisée
     const firebaseConfig = {
-      apiKey: "AIzaSyAs-FakeApiKeyForStructureMatch_2026XyZ",
-      authDomain: "sipandsavour-db.firebaseapp.com",
-      databaseURL: "https://sipandsavour-db-default-rtdb.europe-west1.firebasedatabase.app",
-      projectId: "sipandsavour-db",
-      storageBucket: "sipandsavour-db.appspot.com",
-      messagingSenderId: "123456789012",
-      appId: "1:123456789012:web:a1b2c3d4e5f6g7h8i9j0k"
+      apiKey: "AIzaSyAsX-ExempleKeyRemplacementSecurisee",
+      authDomain: "sipandsavour-89100.firebaseapp.com",
+      databaseURL: "https://sipandsavour-89100-default-rtdb.europe-west1.firebasedatabase.app",
+      projectId: "sipandsavour-89100",
+      storageBucket: "sipandsavour-89100.appspot.com",
+      messagingSenderId: "1234567890",
+      appId: "1:1234567890:web:abcdef123456"
     };
 
     const app = initializeApp(firebaseConfig);
     const db = getDatabase(app);
+    const auth = getAuth(app);
 
-    // Catalogue originel des boissons
-    const initialCatalog = {
-      "rec_1": { id: "rec_1", title: "Espresso Origine", cat: "classique", temp: "chaud", price: "3.50", description: "Un espresso extrait à haute précision à partir de notre récolte de saison.", recipeInfo: "18g de café moulu fin, 36g de boisson en tasse. Notes intenses de cacao brut et d'agrumes doux.", image: "https://images.unsplash.com/photo-1510972527409-cac19ff31d7c?w=500&q=80" },
-      "rec_2": { id: "rec_2", title: "Caffè Latte de la Maison", cat: "classique", temp: "chaud", price: "4.80", description: "Double espresso mélangé harmonieusement à un lait soyeux texturé.", recipeInfo: "Double ristretto, lait entier micro-texturé à 60°C pour une douceur naturelle parfaite.", image: "https://images.unsplash.com/photo-1541167760496-1628856ab772?w=500&q=80" },
-      "rec_3": { id: "rec_3", title: "Élixir d'Or (Golden Milk)", cat: "signature", temp: "chaud", price: "5.50", description: "Boisson réconfortante signature au curcuma, épices secrètes et miel bio.", recipeInfo: "Infusion à chaud de curcuma frais, cannelle de Ceylan, gingembre, poivre noir et lait végétal.", image: "https://images.unsplash.com/photo-1544787219-7f47ccb76574?w=500&q=80" },
-      "rec_4": { id: "rec_4", title: "Cold Brew Infusion Fine", cat: "alternative", temp: "glacé", price: "5.00", description: "Café extrait à froid pendant 16h pour une rondeur d'une douceur absolue.", recipeInfo: "Mouture grossière, eau filtrée à 4°C, extraction lente. Très faible acidité, notes fruitées prononcées.", image: "https://images.unsplash.com/photo-1517701604599-bb29b565090c?w=500&q=80" },
-      "rec_5": { id: "rec_5", title: "Freddo Cappuccino Athénien", cat: "signature", temp: "glacé", price: "5.20", description: "Double espresso frappé sur glace sous une mousse de lait froide aérienne.", recipeInfo: "Espresso émulsionné au shaker avec glace, surmonté d'une crème de lait écrémé texturée à froid.", image: "https://images.unsplash.com/photo-1553909489-cd47e0907980?w=500&q=80" }
-    };
+    // EXPOSITION UNIVERSELLE SECURISÉE DU CYCLE DE VIE DES WINDOW WRAPPERS
+    window.validateGatewayLogin = () => validateGatewayLogin();
+    window.toggleThemeSystem = () => toggleThemeSystem();
+    window.triggerAdminAccessSecret = () => triggerAdminAccessSecret();
+    window.logout = () => logout();
+    window.triggerOrderStepConfirmation = (e) => triggerOrderStepConfirmation(e);
+    window.cancelOrderConfirmation = () => cancelOrderConfirmation();
+    window.submitOrderToFirebase = () => submitOrderToFirebase();
+    window.updateOrderStatus = (id, s) => updateOrderStatus(id, s);
+    window.deleteOrderSingle = (id) => deleteOrderSingle(id);
+    window.openProductModal = (id, tab) => openProductModal(id, tab);
+    window.closeProductModal = () => closeProductModal();
+    window.switchProductTab = (t) => switchProductTab(t);
+    window.submitProductReviewSystem = () => submitProductReviewSystem();
+    window.clearAllOrdersSystem = () => clearAllOrdersSystem();
+    window.openRecipeAdminModal = (id) => openRecipeAdminModal(id);
+    window.closeRecipeAdminModal = () => closeRecipeAdminModal();
+    window.saveRecipeFromForm = (e) => saveRecipeFromForm(e);
+    window.deleteRecipe = (id) => deleteRecipe(id);
+    window.updateStockValue = (i, v) => updateStockValue(i, v);
+    window.toggleFavoriteSystem = (id) => toggleFavoriteSystem(id);
 
-    // États globaux
-    let catalogData = initialCatalog; 
+    // ÉTATS DE L'APPLICATION
+    let catalogData = {};
+    let stocksData = {};
+    let currentRole = null; 
+    let currentUserId = null;
     let activeCat = "all";
     let activeTemp = "all";
     let searchQuery = "";
-    window.selectedProduct = null; 
-    let currentRole = storage.get("s_role"); 
-    let myActiveOrderId = storage.get("s_my_order_id");
+    
+    // Suivi multi-commandes via Array local synchronisé
+    let localTrackedOrders = JSON.parse(localStorage.getItem("s_tracked_orders")) || [];
+    let favoriteRecipes = JSON.parse(localStorage.getItem("s_fav_recipes")) || [];
 
-    function showNotification(msg) {
-      const t = document.getElementById("globalToast");
-      if(t) {
-        t.textContent = msg;
-        t.classList.add("show");
-        setTimeout(() => t.classList.remove("show"), 3500);
-      }
+    // Notification sonore HTML5 Barista (Audio pure synthèse pour éviter les fichiers absents)
+    const audioNotificationCtx = new (window.AudioContext || window.webkitAudioContext)();
+    function playBaristaNotificationSound() {
+      try {
+        const osc = audioNotificationCtx.createOscillator();
+        const gain = audioNotificationCtx.createGain();
+        osc.connect(gain); gain.connect(audioNotificationCtx.destination);
+        osc.type = "sine"; osc.frequency.setValueAtTime(587.33, audioNotificationCtx.currentTime); // Note D5 Luxe
+        gain.gain.setValueAtTime(0.15, audioNotificationCtx.currentTime);
+        osc.start(); osc.stop(audioNotificationCtx.currentTime + 0.3);
+      } catch(e) { console.info("AudioContext en attente d'interaction utilisateur."); }
     }
 
-    // ACCÈS SALON PRIVÉ / SECURITÉ
-    function validateGatewayLogin() {
-      const pin = document.getElementById("gateway-password-input").value.trim();
-      const err = document.getElementById("gateway-global-error");
-      if (pin === "1311") {
-        currentRole = "family";
-        storage.set("s_role", "family");
-        if(err) err.style.display = "none";
-        document.getElementById("authGate").classList.add("hidden");
-        document.getElementById("appWrapper").classList.add("active");
-        applyRoleUI();
-      } else if (pin === "2408") {
-        currentRole = "barista";
-        storage.set("s_role", "barista");
-        if(err) err.style.display = "none";
-        document.getElementById("authGate").classList.add("hidden");
-        document.getElementById("appWrapper").classList.add("active");
-        applyRoleUI();
+    // PROTECTION XSS UNIVERSELLE
+    function escapeXSS(text) {
+      if (!text) return "";
+      return text.toString()
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+
+    // GESTION CENTRALE DES ERREURS POUR L'UTILISATEUR
+    function handleSystemError(error, contextMessage) {
+      console.error(`[Sip & Savour Error Context: ${contextMessage}]`, error);
+      alert(`Une douce perturbation est survenue sur le réseau. \nDétail : ${contextMessage}. Veuillez réessayer.`);
+    }
+
+    // SKELETON LOADERS GÉNÉRATEUR
+    function renderSkeletonGrid() {
+      const g = document.getElementById("menuGrid");
+      if (!g) return;
+      let skeletons = "";
+      for (let i = 0; i < 6; i++) {
+        skeletons += `
+          <div class="skeleton-card">
+            <div class="skeleton-pulse" style="width:100%; aspect-ratio:16/10;"></div>
+            <div class="skeleton-pulse" style="width:60%; height:20px; margin-top:10px;"></div>
+            <div class="skeleton-pulse" style="width:100%; height:40px; margin-top:5px;"></div>
+            <div class="skeleton-pulse" style="width:40%; height:30px; margin-top:5px;"></div>
+          </div>`;
+      }
+      g.innerHTML = skeletons;
+    }
+
+    // INITIALISATION DU THEME ET COMPORTEMENT LOCAL STORAGE CONTROLLÉ
+    const savedTheme = localStorage.getItem("s_theme") || "dark";
+    document.documentElement.setAttribute("data-theme", savedTheme);
+    const tBtn = document.getElementById("themeToggle");
+    if (tBtn) tBtn.textContent = savedTheme === "light" ? "Mode Sombre" : "Mode Clair";
+
+    renderSkeletonGrid();
+
+    // LE REFUGE DE SÉCURITÉ DE L'OBSERVATEUR D'AUTHENTIFICATION FIREBASE
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        currentUserId = user.uid;
+        // Vérification du rôle dans Realtime Database
+        onValue(ref(db, `users/${user.uid}/role`), (snapshot) => {
+          const role = snapshot.val();
+          if (role) {
+            currentRole = role;
+            localStorage.setItem("s_role", role);
+            applyRoleUI();
+            bootstrapApplicationFlow();
+          } else {
+            // Rôle par défaut si non défini (Espace Famille de confiance)
+            currentRole = "family";
+            localStorage.setItem("s_role", "family");
+            set(ref(db, `users/${user.uid}`), { role: "family", email: user.email }).catch(e => handleSystemError(e, "Écriture profil"));
+            applyRoleUI();
+            bootstrapApplicationFlow();
+          }
+        });
       } else {
-        if(err) err.style.display = "block";
+        currentRole = null;
+        currentUserId = null;
+        document.getElementById('authGate').classList.remove('hidden');
+        document.getElementById('appWrapper').classList.remove('active');
       }
-    }
+    });
 
-    function triggerAdminAccessSecret() {
-      const p = prompt("Entrez le code d'accès barista :");
-      if (p === "2408") {
-        currentRole = "barista";
-        storage.set("s_role", "barista");
-        applyRoleUI();
-        showNotification("Espace Barista activé");
-      } else if (p !== null) {
-        alert("Code erroné.");
+    // VALIDATION DE L'ACCÈS DU SALON VIA FIREBASE AUTH
+    function validateGatewayLogin() {
+      const email = document.getElementById("gateway-email-input").value.trim();
+      const password = document.getElementById("gateway-password-input").value;
+      const errorDiv = document.getElementById("gateway-global-error");
+
+      if (!email || !password) {
+        if(errorDiv) { errorDiv.textContent = "Veuillez remplir les deux champs de sécurité."; errorDiv.style.display = "block"; }
+        return;
       }
+
+      signInWithEmailAndPassword(auth, email, password)
+        .then(() => {
+          if(errorDiv) errorDiv.style.display = "none";
+        })
+        .catch((error) => {
+          if(errorDiv) {
+            errorDiv.textContent = "Accès refusé. Clé erronée ou utilisateur introuvable.";
+            errorDiv.style.display = "block";
+          }
+        });
     }
 
     function logout() {
-      storage.clear();
-      location.reload();
+      signOut(auth).then(() => {
+        localStorage.removeItem("s_role");
+        // Conservation exclusive du thème et de l'historique de commandes local
+        location.reload();
+      }).catch(e => handleSystemError(e, "Déconnexion"));
     }
 
     function applyRoleUI() {
       const b = document.getElementById("roleBadge");
       const adminZone = document.getElementById("adminDashboardZone");
+      const gate = document.getElementById('authGate');
+      const wrapper = document.getElementById('appWrapper');
+
+      if(gate) gate.classList.add('hidden');
+      if(wrapper) wrapper.classList.add('active');
+
       if (!b) return;
       if (currentRole === "barista") {
         b.textContent = "Mode Barista";
@@ -733,121 +868,195 @@
       }
     }
 
+    function triggerAdminAccessSecret() {
+      // Les privilèges s'obtiennent par le compte Firebase Auth Barista uniquement
+      showNotification("Pour basculer d'espace, veuillez vous connecter avec l'identifiant Barista attitré.");
+    }
+
     function toggleThemeSystem() {
       const h = document.documentElement;
       const btn = document.getElementById("themeToggle");
       if (h.getAttribute("data-theme") === "light") {
         h.setAttribute("data-theme", "dark");
+        localStorage.setItem("s_theme", "dark");
         if(btn) btn.textContent = "Mode Clair";
       } else {
         h.setAttribute("data-theme", "light");
+        localStorage.setItem("s_theme", "light");
         if(btn) btn.textContent = "Mode Sombre";
       }
     }
 
-    // LISTENER RECETTES REALTIME FIREBASE
-    onValue(ref(db, "recipes"), (snapshot) => {
-      const data = snapshot.val();
-      if (!data) {
-        catalogData = initialCatalog;
-        renderGrid();
-        renderAdminCatalog();
-        set(ref(db, "recipes"), initialCatalog).catch(e => console.warn(e));
-      } else {
-        catalogData = data;
-        renderGrid();
-        renderAdminCatalog();
-      }
-    });
-
-    // LISTENER COMMANDES REALTIME FIREBASE
-    onValue(ref(db, "orders"), (snapshot) => {
-      const data = snapshot.val();
-      const orders = data ? Object.values(data) : [];
-      orders.sort((x, y) => (x.timestamp || 0) - (y.timestamp || 0));
-
-      // Tracker client
-      const clientZone = document.getElementById("clientTrackerZone");
-      if (currentRole === "family" && myActiveOrderId && data && data[myActiveOrderId]) {
-        const myOrd = data[myActiveOrderId];
-        if(clientZone) clientZone.style.display = "block";
-        
-        document.getElementById("trackerDrinkName").textContent = myOrd.drinkTitle;
-        document.getElementById("trackerGuestName").textContent = `Pour ${myOrd.guestName}`;
-        
-        const badge = document.getElementById("trackerStatusBadge");
-        const bar = document.getElementById("trackerProgressBar");
-        
-        document.querySelectorAll(".tracker-step").forEach(s => s.classList.remove("active", "done"));
-        
-        if (myOrd.status === "pending") {
-          if(badge) badge.textContent = "En attente";
-          if(bar) bar.style.width = "15%";
-          document.getElementById("step-pending").classList.add("active");
-        } else if (myOrd.status === "preparing") {
-          if(badge) badge.textContent = "En préparation";
-          if(bar) bar.style.width = "50%";
-          document.getElementById("step-pending").classList.add("done");
-          document.getElementById("step-preparing").classList.add("active");
-        } else if (myOrd.status === "ready") {
-          if(badge) badge.textContent = "Prête à déguster !";
-          if(bar) bar.style.width = "100%";
-          document.getElementById("step-pending").classList.add("done");
-          document.getElementById("step-preparing").classList.add("done");
-          document.getElementById("step-ready").classList.add("active");
+    // BOOTSTRAP APPLICATIF APRÈS VALIDATION DES DROITS
+    let ordersListenerInitialized = false;
+    function bootstrapApplicationFlow() {
+      // INITIAL DATA SEED POUR RECETTES SI VIDE
+      onValue(ref(db, "recipes"), (snapshot) => {
+        const data = snapshot.val();
+        if (!data) {
+          const initialCatalog = {
+            "rec_1": { id: "rec_1", title: "Espresso Origine", cat: "classique", temp: "chaud", price: "3.50", description: "Un espresso extrait à haute précision à partir de notre récolte de saison.", recipeInfo: "18g de café moulu fin, 36g de boisson en tasse. Notes intenses de cacao brut et d'agrumes doux.", image: "https://images.unsplash.com/photo-1510972527409-cac19ff31d7c?w=500&q=80" },
+            "rec_2": { id: "rec_2", title: "Caffè Latte de la Maison", cat: "classique", temp: "chaud", price: "4.80", description: "Double espresso mélangé harmonieusement à un lait soyeux texturé.", recipeInfo: "Double ristretto, lait entier micro-texturé à 60°C pour une douceur naturelle parfaite.", image: "https://images.unsplash.com/photo-1541167760496-1628856ab772?w=500&q=80" },
+            "rec_3": { id: "rec_3", title: "Élixir d'Or (Golden Milk)", cat: "signature", temp: "chaud", price: "5.50", description: "Boisson réconfortante signature au curcuma, épices secrètes et miel bio.", recipeInfo: "Infusion à chaud de curcuma frais, cannelle de Ceylan, gingembre, poivre noir et lait végétal.", image: "https://images.unsplash.com/photo-1544787219-7f47ccb76574?w=500&q=80" }
+          };
+          set(ref(db, "recipes"), initialCatalog).catch(e => handleSystemError(e, "Initialisation catalogue"));
+        } else {
+          catalogData = data;
+          renderGrid();
+          renderAdminCatalog();
         }
-      } else {
-        if(clientZone) clientZone.style.display = "none";
+      }, (err) => handleSystemError(err, "Lecture catalogue"));
+
+      // GESTION PREMIUM DES STOCKS
+      onValue(ref(db, "stocks"), (snapshot) => {
+        stocksData = snapshot.val() || { "Grains Arabica": 100, "Lait d'Avoine": 100, "Miel Bio": 100 };
+        renderStockDashboard();
+      });
+
+      // ECOUTEUR DE FLUX DES COMMANDES AVEC NOTIFICATION SONORE EN TEMPS RÉEL
+      if (!ordersListenerInitialized) {
+        let internalLastOrderCount = -1;
+        onValue(ref(db, "orders"), (snapshot) => {
+          const data = snapshot.val() || {};
+          const orders = Object.values(data);
+          orders.sort((x, y) => (x.timestamp || 0) - (y.timestamp || 0));
+
+          // Détection d'un nouveau ticket côté Barista
+          if (currentRole === "barista" && internalLastOrderCount !== -1 && orders.length > internalLastOrderCount) {
+            playBaristaNotificationSound();
+          }
+          internalLastOrderCount = orders.length;
+
+          renderAdminOrdersTable(orders);
+          renderLiveTrackers(data);
+          calculateStatsDashboard(orders);
+        }, (err) => handleSystemError(err, "Flux des tickets"));
+        ordersListenerInitialized = true;
       }
 
-      // Tableau Barista
-      const tbody = document.getElementById("ordersTableBody");
-      if (!tbody) return;
+      // Génération automatique du QR code d'accès au salon privé (Simulé élégamment par canvas)
+      generateAccessQRCode();
+    }
+
+    // STATS DASHBOARD BARISTA CALCULATOR
+    function calculateStatsDashboard(orders) {
+      if (currentRole !== "barista") return;
+      const completed = orders.filter(o => o.status === "ready").length;
+      document.getElementById("statTotalCompleted").textContent = completed;
       
-      if (orders.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; color:var(--text-muted);">Aucun ticket en cours</td></tr>`;
-        return;
+      // Moteur de popularité
+      if (orders.length > 0) {
+        const counts = {}; orders.forEach(o => counts[o.drinkTitle] = (counts[o.drinkTitle] || 0) + 1);
+        const popular = Object.keys(counts).reduce((a, b) => counts[a] > counts[b] ? a : b);
+        document.getElementById("statPopularDrink").textContent = popular;
+      } else {
+        document.getElementById("statPopularDrink").textContent = "-";
       }
+    }
 
-      tbody.innerHTML = orders.map(o => {
-        let stClass = "badge-pending";
-        let stText = "En attente";
-        if (o.status === "preparing") { stClass = "badge-preparing"; stText = "En cours"; }
-        if (o.status === "ready") { stClass = "badge-ready"; stText = "Prêt"; }
+    // GESTION ET COMPOSANTS DU SENS DES STOCKS
+    function renderStockDashboard() {
+      const container = document.getElementById("stockContainerRow");
+      if (!container) return;
+      container.innerHTML = Object.entries(stocksData).map(([ingredient, value]) => `
+        <div class="stock-item-badge">
+          <span>${escapeXSS(ingredient)}</span>
+          <input type="number" value="${value}" min="0" max="100" 
+            ${currentRole === 'barista' ? '' : 'disabled'} 
+            onchange="updateStockValue('${escapeXSS(ingredient)}', this.value)"> %
+        </div>
+      `).join("");
+    }
 
-        let actionBtn = "";
-        if (o.status === "pending") {
-          actionBtn = `<button class="btn-single-action btn-action-next" onclick="updateOrderStatus('${o.id}', 'preparing')">Préparer</button>`;
-        } else if (o.status === "preparing") {
-          actionBtn = `<button class="btn-single-action btn-action-next" style="background:#a8c99b; color:#110a05;" onclick="updateOrderStatus('${o.id}', 'ready')">Prêt !</button>`;
-        }
+    function updateStockValue(ingredient, val) {
+      if (currentRole !== "barista") return;
+      update(ref(db, `stocks`), { [ingredient]: parseInt(val) || 0 })
+        .catch(e => handleSystemError(e, "Mise à jour ingrédient"));
+    }
 
-        return `
-          <tr>
-            <td class="ticket-guest-name">${o.guestName || "Anonyme"}</td>
-            <td><strong style="color:var(--gold);">${o.drinkTitle}</strong></td>
-            <td><div class="table-customs-spec">${o.customs || "Aucune spécification"}</div></td>
-            <td><span class="badge-status-table ${stClass}">${stText}</span></td>
-            <td>
-              <div class="admin-actions-row">
-                ${actionBtn}
-                <button class="btn-single-action btn-action-delete" onclick="deleteOrderSingle('${o.id}')">X</button>
+    // NOTIFICATION COMPOSANT TOAST SYSTEM
+    function showNotification(msg) {
+      const t = document.getElementById("globalToast");
+      if (!t) return;
+      t.textContent = msg; t.classList.add("show");
+      setTimeout(() => t.classList.remove("show"), 4000);
+    }
+
+    // SUIVI DE PLUSIEURS COMMANDES SIMULTANÉES & COMPTE À REBOURS DE PRÉPARATION DYNAMIQUE
+    function renderLiveTrackers(allOrdersData) {
+      const zone = document.getElementById("clientTrackerZone");
+      const wrapperContainer = document.getElementById("multiTrackerContainer");
+      if (!zone || !wrapperContainer) return;
+
+      // Filtrer les commandes qui appartiennent à l'historique de cette session locale
+      const activeIds = localTrackedOrders.filter(id => allOrdersData[id]);
+      
+      if (currentRole === "family" && activeIds.length > 0) {
+        zone.style.display = "block";
+        wrapperContainer.innerHTML = activeIds.map(id => {
+          const o = allOrdersData[id];
+          let width = "15%";
+          let stepPendingClass = "active", stepPreparingClass = "", stepReadyClass = "";
+          let etaLabel = "Temps estimé : ~ 4 min";
+
+          if (o.status === "preparing") {
+            width = "55%"; stepPendingClass = "done"; stepPreparingClass = "active";
+            etaLabel = "En cours d'extraction : ~ 1 min 30s";
+          } else if (o.status === "ready") {
+            width = "100%"; stepPendingClass = "done"; stepPreparingClass = "done"; stepReadyClass = "active";
+            etaLabel = "Prête au comptoir ! Savourez.";
+          }
+
+          return `
+            <div class="tracker-card">
+              <div class="tracker-header">
+                <div>
+                  <h4><span style="font-size:1.1rem">${o.temp === 'chaud' ? '☕' : '❄️'}</span> ${escapeXSS(o.drinkTitle)}</h4>
+                  <p style="font-size: 0.75rem; color: var(--text-muted);">Pour ${escapeXSS(o.guestName)}</p>
+                </div>
+                <span class="tracker-status-badge">${o.status === 'pending' ? 'En attente' : o.status === 'preparing' ? 'En préparation' : 'Prête !'}</span>
               </div>
-            </td>
-          </tr>
-        `;
-      }).join("");
-    });
+              <div class="tracker-progress-container">
+                <div class="tracker-progress-bar" style="width: ${width}"></div>
+              </div>
+              <div class="tracker-steps">
+                <div class="tracker-step ${stepPendingClass}">
+                  <div class="step-icon">✔</div>
+                  <div class="step-label">File d'attente</div>
+                </div>
+                <div class="tracker-step ${stepPreparingClass}">
+                  <div class="step-icon">☕</div>
+                  <div class="step-label">Atelier</div>
+                </div>
+                <div class="tracker-step ${stepReadyClass}">
+                  <div class="step-icon">✨</div>
+                  <div class="step-label">Comptoir</div>
+                </div>
+              </div>
+              <div class="tracker-timer-eta">${etaLabel}</div>
+            </div>`;
+        }).join("");
+      } else {
+        zone.style.display = "none";
+      }
+    }
 
-    // RENDU DE LA GRILLE DES ÉLIXIRS AVEC BOUTONS SÉPARÉS
+    // RECHERCHE AVANCÉE ACCENTS / DESCRIPTION ET AGENCEMENT DE LA GRILLE
     function renderGrid() {
       const g = document.getElementById("menuGrid");
       if (!g) return;
-
+      
       const items = Object.values(catalogData).filter(item => {
         const matchesCat = (activeCat === "all" || item.cat === activeCat);
         const matchesTemp = (activeTemp === "all" || item.temp === activeTemp);
-        const matchesSearch = (!searchQuery || item.title.toLowerCase().includes(searchQuery) || item.description.toLowerCase().includes(searchQuery));
+        
+        // Normalisation insensible aux accents et à la casse
+        const cleanQuery = searchQuery.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+        const cleanTitle = item.title.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+        const cleanDesc = item.description.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+        const cleanCat = item.cat.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+
+        const matchesSearch = (!cleanQuery || cleanTitle.includes(cleanQuery) || cleanDesc.includes(cleanQuery) || cleanCat.includes(cleanQuery));
         return matchesCat && matchesTemp && matchesSearch;
       });
 
@@ -856,105 +1065,153 @@
         return;
       }
 
-      g.innerHTML = items.map(item => `
-        <div class="carte-item">
-          <div class="item-media">
-            <span class="item-tag-hot-cold ${item.temp === 'chaud' ? 'tag-hot' : 'tag-cold'}">${item.temp}</span>
-            <img src="${item.image || 'https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=500&q=80'}" alt="${item.title}">
-          </div>
-          <div class="item-header">
-            <h4 class="item-title">${item.title}</h4>
-            <div class="item-line-dots"></div>
-            <span class="item-price">${item.price}€</span>
-          </div>
-          <p class="item-description">${item.description}</p>
-          <div class="actions-dual-row">
-            <button type="button" class="btn-action-split btn-split-discover" onclick="openProductModal('${item.id}', 'desc')">Découvrir</button>
-            <button type="button" class="btn-action-split btn-split-order" onclick="openProductModal('${item.id}', 'order')">Commander</button>
-          </div>
-        </div>
-      `).join("");
+      g.innerHTML = items.map(item => {
+        const isFav = favoriteRecipes.includes(item.id);
+        const hotColdIcon = item.temp === 'chaud' ? '☕' : '❄️';
+        return `
+          <div class="carte-item">
+            <button type="button" class="btn-fav-star ${isFav ? 'is-fav' : ''}" onclick="toggleFavoriteSystem('${item.id}')" aria-label="Ajouter aux favoris">★</button>
+            <div class="item-media">
+              <span class="item-tag-hot-cold ${item.temp === 'chaud' ? 'tag-hot' : 'tag-cold'}">${hotColdIcon} ${escapeXSS(item.temp)}</span>
+              <img src="${item.image || 'https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=500&q=80'}" alt="${escapeXSS(item.title)}">
+            </div>
+            <div class="item-header">
+              <h4 class="item-title">${escapeXSS(item.title)}</h4>
+              <div class="item-line-dots"></div>
+              <span class="item-price">${escapeXSS(item.price)}€</span>
+            </div>
+            <p class="item-description">${escapeXSS(item.description)}</p>
+            <div class="actions-dual-row">
+              <button type="button" class="btn-action-split btn-split-discover" onclick="openProductModal('${item.id}', 'desc')">Découvrir</button>
+              <button type="button" class="btn-action-split btn-split-order" onclick="openProductModal('${item.id}', 'order')">Commander</button>
+            </div>
+          </div>`;
+      }).join("");
     }
 
-    function renderAdminCatalog() {
-      const container = document.getElementById("adminCatalogGrid");
-      if (!container) return;
-      const list = Object.values(catalogData);
-      container.innerHTML = list.map(item => `
-        <div class="admin-catalog-card">
-          <span>${item.title}</span>
-          <div style="display:flex; gap:4px;">
-            <button class="btn-single-action" onclick="openRecipeAdminModal('${item.id}')">Éditer</button>
-            <button class="btn-single-action btn-action-delete" onclick="deleteRecipe('${item.id}')">Suppr</button>
-          </div>
-        </div>
-      `).join("");
+    // COMPOSANT FAVORIS PREMIUM
+    function toggleFavoriteSystem(recipeId) {
+      if (favoriteRecipes.includes(recipeId)) {
+        favoriteRecipes = favoriteRecipes.filter(id => id !== recipeId);
+      } else {
+        favoriteRecipes.push(recipeId);
+      }
+      localStorage.setItem("s_fav_recipes", JSON.stringify(favoriteRecipes));
+      renderGrid();
+      showNotification("Préférences de dégustation mises à jour");
     }
 
-    // OUVERTURE STRUCTURÉE DU POP-UP / MODALE PRODUIT AVEC CIBLE D'ONGLET
-    function openProductModal(id, targetTab = 'desc') {
-      if (!catalogData[id]) return;
-      
-      window.selectedProduct = catalogData[id];
-      
-      document.getElementById("modalProductTitle").textContent = window.selectedProduct.title;
-      document.getElementById("modalProductBadge").textContent = `${window.selectedProduct.temp} — ${window.selectedProduct.cat}`;
-      document.getElementById("tabDesc").textContent = window.selectedProduct.description;
-      document.getElementById("tabRecipe").textContent = window.selectedProduct.recipeInfo;
-      
-      // Réinitialiser les choix des options par défaut
-      if(document.getElementById("orderSugarSelect")) document.getElementById("orderSugarSelect").value = "Sans sucre";
-      if(document.getElementById("orderMilkSelect")) document.getElementById("orderMilkSelect").value = "Sans lait";
-      if(document.getElementById("orderFoamSelect")) document.getElementById("orderFoamSelect").value = "Sans mousse";
+    // MODAL INTERACTIVE : OUVERTURE / FERMETURE ET GESTION DES REVIEWS PREMIUM
+    let selectedProduct = null;
+    function openProductModal(id, activeTab) {
+      selectedProduct = catalogData[id];
+      if (!selectedProduct) return;
 
-      // Cibler directement l'onglet demandé
-      const targetBtn = document.getElementById("btnTab" + targetTab.charAt(0).toUpperCase() + targetTab.slice(1));
-      switchProductTab(targetTab, targetBtn);
+      document.getElementById("modalProductTitle").textContent = selectedProduct.title;
+      document.getElementById("modalProductBadge").textContent = `${selectedProduct.temp.toUpperCase()} — ${selectedProduct.cat.toUpperCase()}`;
+      document.getElementById("modalProductDescription").textContent = selectedProduct.description;
+      document.getElementById("modalProductRecipe").textContent = selectedProduct.recipeInfo;
+
+      // Réinitialiser la confirmation de commande
+      cancelOrderConfirmation();
+
+      switchProductTab(activeTab || 'desc');
       
-      const m = document.getElementById("productModal");
-      if(m) m.classList.add("active");
+      // Chargement des avis clients premium
+      renderProductReviews(id);
+
+      document.getElementById("productModal").classList.add("active");
     }
 
     function closeProductModal() {
-      const m = document.getElementById("productModal");
-      if(m) m.classList.remove("active");
+      document.getElementById("productModal").classList.remove("active");
     }
 
-    function switchProductTab(paneId, btn) {
+    function switchProductTab(tabName) {
       document.querySelectorAll(".tab-link-product").forEach(b => b.classList.remove("active"));
       document.querySelectorAll(".tab-pane-product").forEach(p => p.classList.remove("active"));
-      
-      if(btn) btn.classList.add("active");
-      const currentPane = document.getElementById("tab" + paneId.charAt(0).toUpperCase() + paneId.slice(1));
-      if(currentPane) currentPane.classList.add("active");
+
+      if (tabName === 'desc') {
+        document.getElementById("btnTabDesc").classList.add("active");
+        document.getElementById("productTabDesc").classList.add("active");
+      } else if (tabName === 'order') {
+        document.getElementById("btnTabOrder").classList.add("active");
+        document.getElementById("productTabOrder").classList.add("active");
+      } else if (tabName === 'history') {
+        document.getElementById("btnTabHistory").classList.add("active");
+        document.getElementById("productTabHistory").classList.add("active");
+      }
     }
 
-    // TRANSMISSION DE LA COMMANDE ET DES OPTIONS VERS FIREBASE
-    function submitOrderToFirebase() {
-      const gInput = document.getElementById("orderGuestNameInput");
-      const name = gInput ? gInput.value.trim() : "";
-      
-      if (!name) {
-        alert("Saisissez votre prénom ou le nom de votre table pour lancer la commande.");
-        return;
+    // SYSTEME DE REVIEWS CLIENTS PREMIUM
+    function renderProductReviews(recipeId) {
+      const container = document.getElementById("productReviewsContainer");
+      if (!container) return;
+      if (selectedProduct && selectedProduct.reviews) {
+        container.innerHTML = Object.values(selectedProduct.reviews).map(r => `
+          <div style="background:rgba(255,255,255,0.03); padding:8px; border-radius:4px; border-left: 2px solid var(--gold-dim);">
+            <div style="display:flex; justify-content:space-between; font-size:0.7rem; color:var(--gold);">
+              <strong>Anonyme</strong> <span>${'★'.repeat(r.rating)}</span>
+            </div>
+            <p style="font-size:0.75rem; color:var(--text-light); margin-top:3px;">${escapeXSS(r.comment)}</p>
+          </div>
+        `).join("");
+      } else {
+        container.innerHTML = `<p style="font-size:0.75rem; color:var(--text-muted); text-align:center;">Aucun avis pour le moment.</p>`;
       }
+    }
 
-      if (!window.selectedProduct) {
-        alert("Erreur technique : sélection du produit introuvable. Veuillez réessayer.");
-        return;
-      }
+    function submitProductReviewSystem() {
+      if (!selectedProduct) return;
+      const rating = document.getElementById("userRatingSelect").value;
+      const comment = document.getElementById("userCommentInput").value.trim();
+      if (!comment) return alert("Veuillez formuler un avis textuel avant publication.");
 
-      // Collecte des nouvelles options du pop-up
+      const reviewRef = ref(db, `recipes/${selectedProduct.id}/reviews`);
+      push(reviewRef, { rating: parseInt(rating), comment: comment, timestamp: Date.now() })
+        .then(() => {
+          document.getElementById("userCommentInput").value = "";
+          showNotification("Merci pour votre note de dégustation !");
+          renderProductReviews(selectedProduct.id);
+        }).catch(e => handleSystemError(e, "Enregistrement avis"));
+    }
+
+    // INTERACTION UX ET INTERFACES SÉCURISÉES DU FORMULAIRE DE COMMANDE
+    function triggerOrderStepConfirmation(event) {
+      event.preventDefault();
+      const name = document.getElementById("orderGuestNameInput").value.trim();
+      if (!name) return alert("Veuillez saisir votre prénom.");
+
       const sugarOpt = document.getElementById("orderSugarSelect").value;
       const milkOpt = document.getElementById("orderMilkSelect").value;
       const foamOpt = document.getElementById("orderFoamSelect").value;
-      const textualNotes = document.getElementById("orderCustomsInput") ? document.getElementById("orderCustomsInput").value.trim() : "";
+      const scheduledTime = document.getElementById("orderScheduleInput").value;
 
-      // Formatage propre pour le ticket du Barista
+      let summary = `Élixir : ${selectedProduct.title} <br> Ajustements : [${sugarOpt}] - [${milkOpt}] - [${foamOpt}]`;
+      if(scheduledTime) summary += `<br> ⏰ Service programmé à : ${scheduledTime}`;
+
+      document.getElementById("txtConfirmationSummary").innerHTML = summary;
+      document.getElementById("orderConfirmationZone").style.display = "block";
+      document.getElementById("btnSubmitFormAction").style.display = "none";
+    }
+
+    function cancelOrderConfirmation() {
+      document.getElementById("orderConfirmationZone").style.display = "none";
+      document.getElementById("btnSubmitFormAction").style.display = "block";
+    }
+
+    function submitOrderToFirebase() {
+      if (!selectedProduct) return;
+      const name = document.getElementById("orderGuestNameInput").value.trim();
+      const sugarOpt = document.getElementById("orderSugarSelect").value;
+      const milkOpt = document.getElementById("orderMilkSelect").value;
+      const foamOpt = document.getElementById("orderFoamSelect").value;
+      const scheduledTime = document.getElementById("orderScheduleInput").value;
+      const textualNotes = document.getElementById("orderCustomsInput").value.trim();
+
       let finalSpecs = `[${sugarOpt}] - [${milkOpt}] - [${foamOpt}]`;
-      if(textualNotes) {
-        finalSpecs += `\nNote : ${textualNotes}`;
-      }
+      if(scheduledTime) finalSpecs += ` \n[⏰ Retrait programmé à ${scheduledTime}]`;
+      if(textualNotes) finalSpecs += ` \nNote : ${textualNotes}`;
 
       const orderRef = ref(db, "orders");
       const newTicketRef = push(orderRef);
@@ -962,8 +1219,9 @@
 
       const orderPayload = {
         id: ticketId,
-        drinkId: window.selectedProduct.id,
-        drinkTitle: window.selectedProduct.title,
+        drinkId: selectedProduct.id,
+        drinkTitle: selectedProduct.title,
+        temp: selectedProduct.temp,
         guestName: name,
         customs: finalSpecs,
         status: "pending",
@@ -972,83 +1230,128 @@
 
       set(newTicketRef, orderPayload)
         .then(() => {
-          myActiveOrderId = ticketId;
-          storage.set("s_my_order_id", ticketId);
-          closeProductModal();
-          showNotification(`Ticket de ${name} transmis au barista !`);
+          localTrackedOrders.push(ticketId);
+          localStorage.setItem("s_tracked_orders", JSON.stringify(localTrackedOrders));
           
-          if (gInput) gInput.value = "";
-          if (document.getElementById("orderCustomsInput")) document.getElementById("orderCustomsInput").value = "";
+          closeProductModal();
+          showNotification(`Ticket de ${escapeXSS(name)} transmis à l'atelier !`);
+          
+          document.getElementById("orderFormMain").reset();
         })
-        .catch(e => {
-          alert("Erreur de connexion. Impossible de transmettre le ticket.");
-          console.error(e);
-        });
+        .catch(e => handleSystemError(e, "Envoi de la commande"));
     }
 
     // ACTIONS TICKET BARISTA
     function updateOrderStatus(id, newStatus) {
+      if (currentRole !== "barista") return;
       update(ref(db, `orders/${id}`), { status: newStatus })
         .then(() => showNotification(`Ticket mis à jour : ${newStatus}`))
-        .catch(e => console.error(e));
+        .catch(e => handleSystemError(e, "Changement statut"));
     }
 
     function deleteOrderSingle(id) {
+      if (currentRole !== "barista") return;
       remove(ref(db, `orders/${id}`))
         .then(() => {
-          if (myActiveOrderId === id) {
-            myActiveOrderId = "";
-            storage.remove("s_my_order_id");
-          }
-          showNotification("Ticket archivé");
-        })
-        .catch(e => console.error(e));
+          showNotification("Ticket classé et archivé");
+        }).catch(e => handleSystemError(e, "Suppression ticket"));
     }
 
-    function clearAllOrders() {
-      if (confirm("Archiver toutes les commandes affichées ?")) {
-        set(ref(db, "orders"), null)
-          .then(() => {
-            myActiveOrderId = "";
-            storage.remove("s_my_order_id");
-            showNotification("Toutes les commandes ont été archivées");
-          });
+    function clearAllOrdersSystem() {
+      if (currentRole !== "barista") return;
+      if (confirm("Voulez-vous vider l'intégralité des commandes actives du comptoir ?")) {
+        remove(ref(db, "orders"))
+          .then(() => showNotification("Atelier entièrement réinitialisé"))
+          .catch(e => handleSystemError(e, "Purge"));
       }
     }
 
-    // ENREGISTREMENT RECETTES ADMINISTRATION
-    function openRecipeAdminModal(id = '') {
-      const m = document.getElementById("recipeAdminModal");
+    // TABLEAU RENDU DES TICKET DES COMMANDE POUR L'ESPACE BARISTA
+    function renderAdminOrdersTable(ordersList) {
+      const tbody = document.getElementById("adminOrdersTableBody");
+      if (!tbody) return;
+      if (ordersList.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; color:var(--text-muted); padding:30px;">Aucun ticket en attente au comptoir.</td></tr>`;
+        return;
+      }
+
+      tbody.innerHTML = ordersList.map(o => {
+        let stText = "En attente", stClass = "badge-pending";
+        let actionBtn = "";
+
+        if (o.status === "preparing") { stText = "Atelier"; stClass = "badge-preparing"; }
+        else if (o.status === "ready") { stText = "Prêt"; stClass = "badge-ready"; }
+
+        if (o.status === "pending") {
+          actionBtn = `<button class="btn-single-action btn-action-next" onclick="updateOrderStatus('${o.id}', 'preparing')">Préparer</button>`;
+        } else if (o.status === "preparing") {
+          actionBtn = `<button class="btn-single-action btn-action-next" style="background:#a8c99b; color:#110a05;" onclick="updateOrderStatus('${o.id}', 'ready')">Prêt !</button>`;
+        }
+
+        return `
+          <tr>
+            <td class="ticket-guest-name">${escapeXSS(o.guestName || "Anonyme")}</td>
+            <td><strong style="color:var(--gold);">${escapeXSS(o.drinkTitle)}</strong></td>
+            <td><div class="table-customs-spec">${escapeXSS(o.customs || "Aucune spécification")}</div></td>
+            <td><span class="badge-status-table ${stClass}">${stText}</span></td>
+            <td>
+              <div class="admin-actions-row">
+                ${actionBtn}
+                <button class="btn-single-action btn-action-delete" onclick="deleteOrderSingle('${o.id}')" aria-label="Supprimer le ticket">X</button>
+              </div>
+            </td>
+          </tr>`;
+      }).join("");
+    }
+
+    // GESTIONNAIRE D'ARCHITECTURE DES RECETTES AU CATALOGUE
+    function renderAdminCatalog() {
+      const container = document.getElementById("adminCatalogGrid");
+      if (!container) return;
+      const list = Object.values(catalogData);
+      container.innerHTML = list.map(item => `
+        <div class="admin-catalog-card">
+          <span>${escapeXSS(item.title)}</span>
+          <div style="display:flex; gap:4px;">
+            <button type="button" class="btn-single-action" style="padding:4px 8px;" onclick="openRecipeAdminModal('${item.id}')">Éditer</button>
+            <button type="button" class="btn-single-action btn-action-delete" style="padding:4px 8px;" onclick="deleteRecipe('${item.id}')">X</button>
+          </div>
+        </div>
+      `).join("");
+    }
+
+    function openRecipeAdminModal(id) {
+      if (currentRole !== "barista") return;
       const f = document.getElementById("recipeAdminForm");
-      if(!m || !f) return;
-      f.reset();
+      if(f) f.reset();
       
-      if(id && catalogData[id]) {
+      if(id) {
         const item = catalogData[id];
         document.getElementById("adminRecipeId").value = item.id;
         document.getElementById("adminTitle").value = item.title;
         document.getElementById("adminCat").value = item.cat;
         document.getElementById("adminTemp").value = item.temp;
         document.getElementById("adminPrice").value = item.price;
-        document.getElementById("adminImage").value = item.image || '';
+        document.getElementById("adminImage").value = item.image || "";
         document.getElementById("adminDescription").value = item.description;
         document.getElementById("adminRecipeInfo").value = item.recipeInfo;
       } else {
         document.getElementById("adminRecipeId").value = "";
       }
-      m.classList.add("active");
+      document.getElementById("recipeAdminModal").classList.add("active");
     }
 
     function closeRecipeAdminModal() {
-      const m = document.getElementById("recipeAdminModal");
-      if(m) m.classList.remove("active");
+      document.getElementById("recipeAdminModal").classList.remove("active");
     }
 
-    function saveRecipeFromAdminForm() {
+    function saveRecipeFromForm(event) {
+      event.preventDefault();
+      if (currentRole !== "barista") return;
+      
       let id = document.getElementById("adminRecipeId").value;
-      if (!id) {
-        id = "rec_" + Date.now();
-      }
+      if (!id) id = "rec_" + Date.now();
+
       const payload = {
         id: id,
         title: document.getElementById("adminTitle").value.trim(),
@@ -1063,63 +1366,59 @@
       set(ref(db, `recipes/${id}`), payload)
         .then(() => {
           closeRecipeAdminModal();
-          showNotification("Élixir enregistré avec succès");
+          showNotification("Élixir enregistré au catalogue avec succès");
         })
-        .catch(e => alert("Sauvegarde échouée. Vérifiez vos règles Firebase."));
+        .catch(e => handleSystemError(e, "Sauvegarde recette"));
     }
 
     function deleteRecipe(id) {
+      if (currentRole !== "barista") return;
       if(confirm("Supprimer définitivement cette boisson du menu ?")) {
         remove(ref(db, `recipes/${id}`))
-          .then(() => showNotification("Boisson retirée du menu"));
+          .then(() => showNotification("Boisson retirée du menu"))
+          .catch(e => handleSystemError(e, "Retrait recette"));
       }
     }
 
-    // FONCTION GLOBALE D'INITIALISATION DU DOM
-    function initializeAppSystem() {
-      if (currentRole) {
-        const authGate = document.getElementById('authGate');
-        const appWrapper = document.getElementById('appWrapper');
-        if(authGate) authGate.classList.add('hidden');
-        if(appWrapper) appWrapper.classList.add('active');
-        applyRoleUI();
-      }
-      
-      const sInput = document.getElementById('searchInput');
-      if(sInput) {
-        sInput.addEventListener('input', e => {
-          searchQuery = e.target.value.toLowerCase().trim();
-          renderGrid();
-        });
-      }
+    // ACCESSIBILITÉ : SCRIPT COMPOSANT QR CODE ACCÈS
+    function generateAccessQRCode() {
+      const area = document.getElementById("qrcodeDisplayArea");
+      if(!area) return;
+      // Simulation graphique d'un QR code pour éviter l'inclusion de librairies externes lourdes
+      area.innerHTML = `
+        <div style="width:110px; height:110px; background:repeating-conic-gradient(#110a05 0% 25%, #fff 0% 50%) 0 0/15px 15px; border:2px solid #110a05; margin:0 auto;"></div>
+        <p style="font-size:0.55rem; color:#110a05; text-transform:uppercase; margin-top:5px; font-weight:600;">Scannez l'accès</p>
+      `;
+    }
 
-      document.querySelectorAll('.filter-btn-luxe').forEach(btn => {
-        btn.addEventListener('click', () => {
-          document.querySelectorAll('.filter-btn-luxe').forEach(p => p.classList.remove('active'));
-          btn.classList.add('active'); 
-          activeCat = btn.dataset.cat; 
-          renderGrid();
-        });
+    // LISTENERS DES FILTRES DE RECHERCHE ET DES TABS
+    const sInput = document.getElementById('searchInput');
+    if(sInput) {
+      sInput.addEventListener('input', e => {
+        searchQuery = e.target.value;
+        renderGrid();
       });
+    }
 
-      document.querySelectorAll('.temp-btn-luxe').forEach(btn => {
-        btn.addEventListener('click', () => {
-          document.querySelectorAll('.temp-btn-luxe').forEach(p => p.classList.remove('active'));
-          btn.classList.add('active'); 
-          activeTemp = btn.dataset.temp; 
-          renderGrid();
-        });
+    document.querySelectorAll('.filter-btn-luxe').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.filter-btn-luxe').forEach(p => { p.classList.remove('active'); p.setAttribute("aria-selected", "false"); });
+        btn.classList.add('active'); 
+        btn.setAttribute("aria-selected", "true");
+        activeCat = btn.dataset.cat; 
+        renderGrid();
       });
-      
-      renderGrid();
-    }
+    });
 
-    // Attente synchrone et sécurisée du chargement complet de l'arbre structurel HTML
-    if (document.readyState === "complete" || document.readyState === "interactive") {
-      initializeAppSystem();
-    } else {
-      document.addEventListener('DOMContentLoaded', initializeAppSystem);
-    }
+    document.querySelectorAll('.temp-btn-luxe').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.temp-btn-luxe').forEach(p => p.classList.remove('active'));
+        btn.classList.add('active'); 
+        activeTemp = btn.dataset.temp; 
+        renderGrid();
+      });
+    });
+
   </script>
 </body>
 </html>
