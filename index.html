@@ -929,16 +929,29 @@
       if(currentPane) currentPane.classList.add("active");
     }
 
-    // TRANSMISSION DE LA COMMANDE ET DES OPTIONS VERS FIREBASE
-    function submitOrderToFirebase() {
-  alert("Le bouton fonctionne !");
-      const gInput = document.getElementById("orderGuestNameInput");
-      const name = gInput ? gInput.value.trim() : "";
-      
-      if (!name) {
-        alert("Saisissez votre prénom ou le nom de votre table pour lancer la commande.");
-        return;
-      }
+  window.submitOrderToFirebase = async function () {
+  alert("STEP 1 OK");
+
+  try {
+    console.log("STEP 2");
+
+    const test = {
+      test: "ok",
+      time: Date.now()
+    };
+
+    console.log("STEP 3", test);
+
+    // SI TU UTILISES FIREBASE :
+    // await set(ref(db, "test"), test);
+
+    alert("STEP 4 - FIN NORMAL");
+
+  } catch (e) {
+    console.error("ERREUR:", e);
+    alert("ERREUR: " + e.message);
+  }
+};
 
       if (!window.selectedProduct) {
         alert("Erreur technique : sélection du produit introuvable. Veuillez réessayer.");
