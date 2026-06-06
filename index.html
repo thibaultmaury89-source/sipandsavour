@@ -302,7 +302,6 @@
   <div class="ambiance-glow glow-1"></div>
   <div class="ambiance-glow glow-2"></div>
 
-  <!-- AUTH GATE -->
   <div class="auth-screen" id="authGate">
     <div class="auth-card">
       <h1 class="auth-logo">Sip & Savour</h1>
@@ -317,7 +316,6 @@
     </div>
   </div>
 
-  <!-- APP WRAPPER -->
   <div class="wrapper" id="appWrapper">
     <header id="mainHeader">
       <a href="#top" class="brand-signature" onclick="window.scrollTo({top:0,behavior:'smooth'})">
@@ -337,23 +335,22 @@
 
     <div class="main-body-content">
 
-      <!-- TRACKER CLIENT -->
       <section class="live-tracker-section" id="clientTrackerZone">
         <div class="tracker-card">
           <div class="tracker-header">
             <div>
               <h4 id="trackerDrinkName">Votre préparation</h4>
-              <p style="font-size:0.75rem;color:var(--text-muted);" id="trackerGuestName">Pour vous</p>
+              <p style="font-size:0.75rem;color:var(--text-muted);margin-top:2px;" id="trackerSpecs">Options sélectionnées</p>
             </div>
-            <span class="tracker-status-badge" id="trackerStatusBadge">En attente</span>
+            <div class="tracker-status-badge" id="trackerStatusLabel">En attente</div>
           </div>
           <div class="tracker-progress-container">
             <div class="tracker-progress-bar" id="trackerProgressBar"></div>
           </div>
           <div class="tracker-steps">
             <div class="tracker-step" id="step-pending">
-              <div class="step-icon">⏰</div>
-              <div class="step-label">File d'attente</div>
+              <div class="step-icon">⏳</div>
+              <div class="step-label">Reçue</div>
             </div>
             <div class="tracker-step" id="step-preparing">
               <div class="step-icon">☕</div>
@@ -361,28 +358,27 @@
             </div>
             <div class="tracker-step" id="step-ready">
               <div class="step-icon">✨</div>
-              <div class="step-label">Prêt</div>
+              <div class="step-label">Prête</div>
             </div>
           </div>
         </div>
       </section>
 
-      <!-- DASHBOARD BARISTA -->
       <section class="top-dashboard-admin" id="adminDashboardZone">
         <div class="dashboard-container">
           <div class="dashboard-header">
-            <h3 class="dashboard-title">Atelier du Barista — Commandes Actives</h3>
-            <button type="button" class="btn-clear-all-orders" onclick="window.clearAllOrders()">Tout archiver</button>
+            <h3 class="dashboard-title">Commandes en cours (Cuisine Barista)</h3>
+            <button type="button" class="btn-clear-all-orders" onclick="window.clearAllOrders()">Archiver toutes les commandes terminées</button>
           </div>
           <div class="table-responsive-luxe">
             <table class="table-luxe">
               <thead>
                 <tr>
-                  <th>Hôte / Table</th>
+                  <th>Client / Table</th>
                   <th>Élixir demandé</th>
-                  <th>Ajustements</th>
-                  <th>Statut</th>
-                  <th>Actions</th>
+                  <th>Spécifications & Notes</th>
+                  <th>Statut actuel</th>
+                  <th>Actions Barista</th>
                 </tr>
               </thead>
               <tbody id="ordersTableBody">
@@ -391,6 +387,7 @@
             </table>
           </div>
         </div>
+
         <div class="dashboard-container">
           <div class="dashboard-header">
             <h3 class="dashboard-title">Curation de la Carte Générale</h3>
@@ -398,12 +395,13 @@
           </div>
           <div class="admin-catalog-grid" id="adminCatalogGrid"></div>
         </div>
+
         <div class="dashboard-container">
           <div class="dashboard-header">
             <h3 class="dashboard-title">Personnalisation du pop-up</h3>
-            <button type="button" class="btn-single-action" onclick="window.resetCustomizationAdmin()">R&eacute;initialiser</button>
+            <button type="button" class="btn-single-action" onclick="window.resetCustomizationAdmin()">Réinitialiser</button>
           </div>
-          <p class="admin-help-text">Modifiez les choix propos&eacute;s dans le pop-up de commande. Saisissez une option par ligne.</p>
+          <p class="admin-help-text">Modifiez les choix proposés dans le pop-up de commande. Saisissez une option par ligne.</p>
           <div class="admin-customization-panel">
             <div class="form-group">
               <label for="adminSugarOptions">Sucrage</label>
@@ -424,7 +422,6 @@
         </div>
       </section>
 
-      <!-- HERO -->
       <section class="hero-cinematic">
         <div>
           <span class="hero-tagline">Salon Privé Sip & Savour</span>
@@ -440,434 +437,237 @@
         </div>
       </section>
 
-      <!-- BOISSON DU MOMENT -->
       <section class="barista-choice-section">
         <div class="barista-choice-card">
           <div class="barista-choice-media">
-            <img src="https://images.unsplash.com/photo-1544787219-7f47ccb76574?w=600&q=80" alt="Boisson du Moment">
+            <img src="https://images.unsplash.com/photo-1544787219-7f47ccb76574?w=600&q=80" alt="Signature" />
           </div>
           <div class="barista-choice-content">
-            <span class="barista-choice-label">Boisson du moment — Choix du barista</span>
-            <h3 class="barista-choice-title">Élixir d'Or (Golden Milk)</h3>
-            <p class="barista-choice-text">Une création unique intensément réconfortante à base de curcuma frais moulu, de miel de fleurs bio et d'un assortiment délicat d'épices de Ceylan secrètement dosées.</p>
+            <span class="barista-choice-label">Inspiration du Moment</span>
+            <h3 class="barista-choice-title">Shakerato Miel Sauvage & Fleur de Sel</h3>
+            <p class="barista-choice-text">Un double ristretto intense vigoureusement frappé au shaker avec des glaçons cristallins, du miel sauvage d'acacia récolté localement et une micro-pincée de fleur de sel de Guérande pour exalter les notes de caramel.</p>
             <div class="actions-dual-row">
-              <button type="button" class="btn-action-split btn-split-discover" onclick="window.openProductModal('rec_3','desc')">Découvrir</button>
-              <button type="button" class="btn-action-split btn-split-order" onclick="window.openProductModal('rec_3','order')">Commander</button>
+              <button type="button" class="btn-action-split btn-split-discover" onclick="window.scrollTo({top: document.getElementById('carteZone').offsetTop - 100, behavior:'smooth'})">Explorer la Curation</button>
+              <button type="button" class="btn-action-split btn-split-order" onclick="window.openProductModal('rec_c5', 'order')">Commander l'Élixir</button>
             </div>
           </div>
         </div>
       </section>
 
-      <!-- FILTRES -->
-      <section class="salon-curation">
+      <section class="salon-curation" id="carteZone">
         <div class="seasonal-indicator">
-          <span class="season-label">Collection du Moment</span>
-          <span class="season-desc">Cafés · Thés · Infusions · Signatures</span>
+          <h3 class="season-label">La Carte du Salon d'Hiver</h3>
+          <span class="season-desc">Sélection Fine & Recettes Calibrées</span>
         </div>
+
         <div class="curation-tabs-row">
           <div class="filter-group-luxe">
-            <button type="button" class="filter-btn-luxe active" data-cat="all">Tous</button>
-            <button type="button" class="filter-btn-luxe" data-cat="cafe">Cafés</button>
-            <button type="button" class="filter-btn-luxe" data-cat="the">Thés</button>
-            <button type="button" class="filter-btn-luxe" data-cat="infusion">Infusions</button>
-            <button type="button" class="filter-btn-luxe" data-cat="signature">Signatures</button>
-            <button type="button" class="filter-btn-luxe" data-cat="classique">Classiques</button>
+            <button type="button" class="filter-btn-luxe active" data-filter-cat="all">Tout</button>
+            <button type="button" class="filter-btn-luxe" data-filter-cat="cafe">Cafés</button>
+            <button type="button" class="filter-btn-luxe" data-filter-cat="the">Thés</button>
+            <button type="button" class="filter-btn-luxe" data-filter-cat="infusion">Infusions</button>
           </div>
           <div class="temp-selector-luxe">
-            <button type="button" class="temp-btn-luxe active" data-temp="all">Tous</button>
-            <button type="button" class="temp-btn-luxe" data-temp="chaud">Chaud</button>
-            <button type="button" class="temp-btn-luxe" data-temp="glacé">Glacé</button>
+            <button type="button" class="temp-btn-luxe active" data-filter-temp="all">Tous</button>
+            <button type="button" class="temp-btn-luxe" data-filter-temp="chaud">Chauds</button>
+            <button type="button" class="temp-btn-luxe" data-filter-temp="froid">Glacés</button>
           </div>
         </div>
       </section>
 
       <div class="grid-container">
-        <main class="menu-grid-luxe" id="menuGrid"></main>
+        <div class="menu-grid-luxe" id="menuGrid"></div>
       </div>
+
     </div>
+
+    <footer>
+      <p>© 2026 Sip & Savour — Expérience Sensorielle Privée Domestique</p>
+    </footer>
   </div>
 
-  <!-- MODALE PRODUIT -->
-  <div class="modal-backdrop-luxe" id="productModal" onclick="if(event.target===this) window.closeProductModal()">
+  <div class="modal-backdrop-luxe" id="productModal">
     <div class="modal-box-luxe">
-      <button type="button" class="modal-close-luxe" aria-label="Fermer" onclick="window.closeProductModal()">?</button>
-      <h3 class="modal-title-luxe" id="modalProductTitle">Élixir</h3>
-      <span class="product-meta-badge" id="modalProductBadge">Chaud — Signature</span>
+      <button type="button" class="modal-close-luxe" onclick="window.closeProductModal()">×</button>
+      <span class="product-meta-badge" id="modalProductCategoryBadge">Élixir de Saison</span>
+      <h3 class="modal-title-luxe" id="modalProductTitle">Nom du produit</h3>
+      
       <div class="tabs-nav-product">
         <button type="button" class="tab-link-product active" id="tabLinkDesc" onclick="window.switchProductTab('desc')">Notes de Dégustation</button>
-        <button type="button" class="tab-link-product" id="tabLinkOrder" onclick="window.switchProductTab('order')">Ajuster ma Recette</button>
+        <button type="button" class="tab-link-product" id="tabLinkOrder" onclick="window.switchProductTab('order')">Lancer la Commande</button>
       </div>
-      <div class="tab-content-product">
-        <div class="tab-pane-product active" id="tabPaneDesc">
-          <p id="modalProductDescription"></p>
-          <div style="margin-top:15px;border-top:1px dashed var(--border-fine);padding-top:12px;">
-            <strong style="color:var(--gold);font-size:0.75rem;text-transform:uppercase;letter-spacing:1px;display:block;margin-bottom:4px;">Protocole de Service :</strong>
-            <p id="modalProductRecipe" style="font-style:italic;color:var(--text-muted);font-size:0.8rem;"></p>
+
+      <div class="tab-pane-product active" id="tabPaneDesc">
+        <p id="modalProductDescription"></p>
+        <div style="margin-top:15px;border-top:1px dashed var(--border-fine);padding-top:12px;">
+          <strong style="color:var(--gold);font-size:0.75rem;text-transform:uppercase;letter-spacing:1px;display:block;margin-bottom:4px;">Protocole de Service :</strong>
+          <p id="modalProductRecipe" style="font-style:italic;color:var(--text-muted);font-size:0.8rem;"></p>
+        </div>
+      </div>
+
+      <div class="tab-pane-product" id="tabPaneOrder">
+        <div class="modal-form-grid">
+          <div class="form-group span-full">
+            <label for="orderGuestNameInput">Votre Prénom / Table</label>
+            <input type="text" id="orderGuestNameInput" class="form-input" placeholder="Ex: Sophie, Table Salon...">
+          </div>
+          <div class="form-group">
+            <label for="orderSugarSelect">Sucrage</label>
+            <select id="orderSugarSelect" data-config-select="sugar">
+              <option value="Sans Sucre">Sans Sucre</option>
+              <option value="Léger">Léger</option>
+              <option value="Standard" selected>Équilibre Barista</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="orderMilkSelect">Option Laitière</label>
+            <select id="orderMilkSelect" data-config-select="milk">
+              <option value="Sans Lait" selected>Aucun — Nature</option>
+              <option value="Lait Entier">Lait Entier</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="orderFoamSelect">Épaisseur Mousse</label>
+            <select id="orderFoamSelect" data-config-select="foam">
+              <option value="Sans Mousse" selected>Liquide & Pur</option>
+              <option value="Fine">Mousse Fine</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="orderScheduleInput">Planifier le retrait</label>
+            <input type="time" id="orderScheduleInput" class="form-input">
+          </div>
+          <div class="form-group span-full">
+            <label for="orderCustomsInput">Notes d'ajustement particulières</label>
+            <textarea id="orderCustomsInput" rows="2" class="form-input" placeholder="Ex: Très chaud, double shot, tasse de voyage..."></textarea>
           </div>
         </div>
-        <div class="tab-pane-product" id="tabPaneOrder">
-          <div class="modal-form-grid">
-            <div class="form-group span-full">
-              <label for="orderGuestNameInput">Votre Prénom / Table</label>
-              <input type="text" id="orderGuestNameInput" class="form-input" placeholder="Ex: Sophie, Table Salon...">
-            </div>
-            <div class="form-group">
-              <label for="orderSugarSelect">Sucrage</label>
-              <select id="orderSugarSelect" data-config-select="sugar">
-                <option value="Sans Sucre">Sans Sucre</option>
-                <option value="Léger">Léger (Miel sauvage)</option>
-                <option value="Standard" selected>Équilibre Barista</option>
-              </select>
-            </div>
-            <div class="form-group">
-              <label for="orderMilkSelect">Option Laitière</label>
-              <select id="orderMilkSelect" data-config-select="milk">
-                <option value="Sans Lait" selected>Aucun — Nature</option>
-                <option value="Lait Entier">Lait Entier Micro-texturé</option>
-                <option value="Lait d'Avoine">Lait d'Avoine Bio</option>
-                <option value="Lait d'Amande">Lait d'Amande</option>
-              </select>
-            </div>
-            <div class="form-group">
-              <label for="orderFoamSelect">Épaisseur Mousse</label>
-              <select id="orderFoamSelect" data-config-select="foam">
-                <option value="Sans Mousse" selected>Liquide & Pur</option>
-                <option value="Fine">Mousse Fine & Soyeuse</option>
-                <option value="Généreuse">Mousse Épaisse</option>
-              </select>
-            </div>
-            <div class="form-group">
-              <label for="orderScheduleInput">Planifier le retrait</label>
-              <input type="time" id="orderScheduleInput" class="form-input">
-            </div>
-            <div class="form-group span-full">
-              <label for="orderCustomsInput">Instructions Spéciales</label>
-              <textarea id="orderCustomsInput" rows="2" class="form-input" placeholder="Une préférence particulière ?"></textarea>
-            </div>
-          </div>
-          <button type="button" class="btn-luxe" id="btnLaunchOrderPreparation" onclick="window.submitOrderToFirebase()">Lancer la préparation</button>
-        </div>
+        <button type="button" id="btnLaunchOrderPreparation" class="btn-luxe" onclick="window.submitOrderToFirebase()">Envoyer le ticket au comptoir</button>
       </div>
     </div>
   </div>
 
-  <!-- MODALE ADMIN RECETTE -->
-  <div class="modal-backdrop-luxe" id="recipeAdminModal" onclick="if(event.target===this) window.closeRecipeAdminModal()">
+  <div class="modal-backdrop-luxe" id="recipeAdminModal">
     <div class="modal-box-luxe">
-      <button type="button" class="modal-close-luxe" aria-label="Fermer" onclick="window.closeRecipeAdminModal()">?</button>
+      <button type="button" class="modal-close-luxe" onclick="window.closeRecipeAdminModal()">×</button>
       <h3 class="modal-title-luxe" id="recipeAdminTitle">Ajouter une création</h3>
       <form id="recipeAdminForm" onsubmit="window.saveRecipeAdmin(event)">
-        <input type="hidden" id="adminRecipeId">
+        <input type="hidden" id="adminRecipeId" value="" />
         <div class="modal-form-grid">
           <div class="form-group span-full">
-            <label>Nom de la boisson</label>
-            <input type="text" id="adminTitle" class="form-input" required>
+            <label for="adminTitle">Nom officiel</label>
+            <input type="text" id="adminTitle" class="form-input" required />
           </div>
           <div class="form-group">
-            <label>Catégorie</label>
-            <select id="adminCat">
+            <label for="adminCat">Famille</label>
+            <select id="adminCat" required>
               <option value="cafe">Café</option>
               <option value="the">Thé</option>
               <option value="infusion">Infusion</option>
-              <option value="classique">Classique</option>
-              <option value="signature">Signature</option>
-              <option value="alternative">Alternative</option>
             </select>
           </div>
           <div class="form-group">
-            <label>Température</label>
-            <select id="adminTemp">
+            <label for="adminTemp">Format thermique</label>
+            <select id="adminTemp" required>
               <option value="chaud">Chaud</option>
-              <option value="glacé">Glacé</option>
+              <option value="froid">Glacé</option>
             </select>
           </div>
-          <div class="form-group span-full">
-            <label>Prix (€)</label>
-            <input type="text" id="adminPrice" class="form-input" required placeholder="Ex: 4.50">
+          <div class="form-group">
+            <label for="adminPrice">Prix fictif (€)</label>
+            <input type="text" id="adminPrice" class="form-input" value="4.00" required />
+          </div>
+          <div class="form-group">
+            <label for="adminImage">Lien Photo Unsplash</label>
+            <input type="url" id="adminImage" class="form-input" placeholder="https://..." />
           </div>
           <div class="form-group span-full">
-            <label>URL de l'image</label>
-            <input type="url" id="adminImage" class="form-input" placeholder="https://images.unsplash.com/...">
-          </div>
-          <div class="form-group span-full">
-            <label>Histoire & Description</label>
+            <label for="adminDescription">Description grand public</label>
             <textarea id="adminDescription" rows="2" class="form-input" required></textarea>
           </div>
           <div class="form-group span-full">
-            <label>Profil aromatique & Recette</label>
-            <textarea id="adminRecipeInfo" rows="2" class="form-input" required></textarea>
+            <label for="adminRecipeInfo">Protocole technique Barista</label>
+            <textarea id="adminRecipeInfo" rows="2" class="form-input" placeholder="Dosages, temps d'infusion, température..."></textarea>
           </div>
         </div>
-        <button type="submit" class="btn-luxe">Enregistrer au Menu</button>
+        <button type="submit" class="btn-luxe">Enregistrer sur la Carte Cloud</button>
       </form>
     </div>
   </div>
 
-  <div class="toast-luxe" id="globalToast">Action réalisée avec succès</div>
+  <div class="toast-luxe" id="toastBox">Événement enregistré</div>
 
-  <footer>
-    <p>© 2026 Sip & Savour — Excellence Connectée</p>
-  </footer>
 
-  <script>
-    // -- DONNEES LOCALES ROBUSTES ------------------------------------------
-    // Cette couche garde le fichier utilisable directement dans le navigateur,
-    // meme si les imports Firebase ou le reseau ne sont pas disponibles.
-    const db = { mode: "local" };
-    const LOCAL_DB_KEY = "sip_savour_local_database";
-    const localListeners = new Map();
+  <script type="module">
+    // IMPORTATION DES SCRIPTS NATIFS FIREBASE OFFICIELS
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { getDatabase, ref, set, push, onValue, remove } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
-    function cleanPath(path = "") {
-      return String(path).replace(/^\/+|\/+$/g, "");
-    }
-
-    function readLocalDatabase() {
-      try { return JSON.parse(localStorage.getItem(LOCAL_DB_KEY)) || {}; }
-      catch (e) { return {}; }
-    }
-
-    function writeLocalDatabase(data) {
-      try { localStorage.setItem(LOCAL_DB_KEY, JSON.stringify(data)); }
-      catch (e) { console.warn("Stockage local indisponible", e); }
-    }
-
-    function getAtPath(data, path) {
-      const parts = cleanPath(path).split("/").filter(Boolean);
-      let node = data;
-      for (const part of parts) {
-        if (!node || typeof node !== "object" || !(part in node)) return null;
-        node = node[part];
-      }
-      return node ?? null;
-    }
-
-    function setAtPath(data, path, value) {
-      const parts = cleanPath(path).split("/").filter(Boolean);
-      if (parts.length === 0) return value || {};
-      let node = data;
-      for (let i = 0; i < parts.length - 1; i += 1) {
-        const part = parts[i];
-        if (!node[part] || typeof node[part] !== "object") node[part] = {};
-        node = node[part];
-      }
-      const last = parts[parts.length - 1];
-      if (value === null) delete node[last];
-      else node[last] = value;
-      return data;
-    }
-
-    function notifyLocal(path) {
-      const data = readLocalDatabase();
-      const clean = cleanPath(path);
-      const paths = new Set([clean]);
-      const parent = clean.split("/").slice(0, -1).join("/");
-      if (parent) paths.add(parent);
-      paths.forEach(p => {
-        const listeners = localListeners.get(p);
-        if (!listeners) return;
-        const snapshot = { val: () => getAtPath(data, p) };
-        listeners.forEach(callback => callback(snapshot));
-      });
-    }
-
-    function ref(_db, path) { return { path: cleanPath(path) }; }
-    function push(reference) {
-      const key = `ticket_${Date.now().toString(36)}_${Math.random().toString(36).slice(2, 7)}`;
-      return { path: cleanPath(`${reference.path}/${key}`), key };
-    }
-    function set(reference, value) {
-      const data = setAtPath(readLocalDatabase(), reference.path, value);
-      writeLocalDatabase(data);
-      notifyLocal(reference.path);
-      return Promise.resolve();
-    }
-    function update(reference, patch) {
-      const current = getAtPath(readLocalDatabase(), reference.path) || {};
-      return set(reference, { ...current, ...patch });
-    }
-    function remove(reference) { return set(reference, null); }
-    function onValue(reference, callback) {
-      const path = cleanPath(reference.path);
-      if (!localListeners.has(path)) localListeners.set(path, new Set());
-      localListeners.get(path).add(callback);
-      setTimeout(() => callback({ val: () => getAtPath(readLocalDatabase(), path) }), 0);
-      return () => localListeners.get(path)?.delete(callback);
-    }
-// ── STOCKAGE LOCAL ───────────────────────────────────────────
-    const storage = {
-      get:    k     => { try { return localStorage.getItem(k); } catch(e){ return null; } },
-      set:    (k,v) => { try { localStorage.setItem(k, v); } catch(e){} },
-      remove: k     => { try { localStorage.removeItem(k); } catch(e){} },
-      clear:  ()    => { try { localStorage.clear(); } catch(e){} }
+    // ⚠️ METTEZ ICI VOS CLÈS OBTENUES SUR VOTRE CONSOLE FIREBASE
+    const firebaseConfig = {
+      apiKey: "VOTRE_API_KEY",
+      authDomain: "votre-projet.firebaseapp.com",
+      databaseURL: "https://votre-projet-default-rtdb.firebaseio.com",
+      projectId: "votre-projet",
+      storageBucket: "votre-projet.appspot.com",
+      messagingSenderId: "1234567890",
+      appId: "1:123456:web:abcdef"
     };
 
-    // ── ÉTAT GLOBAL ──────────────────────────────────────────────
-    let catalogData      = {};
-    let myActiveOrderId  = storage.get("s_my_order_id") || "";
-    let currentRole      = storage.get("s_role") || "family";
-    let activeCat        = "all";
-    let activeTemp       = "all";
-    let searchQuery      = "";
-    let selectedProduct  = null;
+    // Initialisation officielle de la liaison Cloud avec Realtime Database
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+
+    // Exposition au contexte global de l'application
+    window.db = db;
+
+    // Utilitaires de session locale pour conserver l'état du rôle utilisateur ou de sa commande
+    const storage = {
+      get: k => localStorage.getItem(k),
+      set: (k, v) => localStorage.setItem(k, v),
+      clear: () => localStorage.clear()
+    };
+
+    function escapeXSS(str) {
+      if (!str) return "";
+      return String(str)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#x27;");
+    }
+
+    let catalogData = {};
+    let allOrdersData = {};
+    let myActiveOrderId = storage.get("s_my_order_id") || null;
+    let currentRole = storage.get("s_role") || "family";
+    let activeCat = "all";
+    let activeTemp = "all";
+    let searchQuery = "";
+    let selectedProduct = null;
     let customizationData = {};
 
-    // ── CATALOGUE INITIAL ENRICHI ────────────────────────────────
+    // CATALOGUE D'ÉLIXIRS INITIALS
     const initialCatalog = {
-      // CAFÉS CHAUDS
-      "rec_1": {
-        id: "rec_1", cat: "cafe", temp: "chaud", price: "3.50",
-        title: "Espresso Origine",
-        description: "Un espresso extrait à haute précision à partir de notre récolte de saison. Concentré, intense, sans compromis.",
-        recipeInfo: "18g de café moulu fin, 36g en tasse en 25–28s. Notes intenses de cacao brut et d'agrumes doux.",
-        image: "https://images.unsplash.com/photo-1510972527409-cac19ff31d7c?w=500&q=80"
-      },
-      "rec_2": {
-        id: "rec_2", cat: "cafe", temp: "chaud", price: "4.80",
-        title: "Caffè Latte de la Maison",
-        description: "Double espresso mélangé harmonieusement à un lait soyeux micro-texturé. Douceur enveloppante.",
-        recipeInfo: "Double ristretto, lait entier micro-texturé à 60°C pour une douceur naturelle parfaite.",
-        image: "https://images.unsplash.com/photo-1541167760496-1628856ab772?w=500&q=80"
-      },
-      "rec_c3": {
-        id: "rec_c3", cat: "cafe", temp: "chaud", price: "4.20",
-        title: "Cappuccino Velours",
-        description: "L'équilibre parfait entre espresso puissant et mousse de lait généreuse et aérienne, servie dans une tasse préchauffée.",
-        recipeInfo: "Simple espresso, 120ml de lait entier monté en mousse épaisse à 65°C. Ratio 1:2 café/mousse.",
-        image: "https://images.unsplash.com/photo-1572442388796-11668a67e53d?w=500&q=80"
-      },
-      "rec_c4": {
-        id: "rec_c4", cat: "cafe", temp: "chaud", price: "5.20",
-        title: "Flat White Australien",
-        description: "Ristretto double concentré sur une petite quantité de lait micro-texturé. Intensité et onctuosité réunies.",
-        recipeInfo: "Double ristretto (30ml), 90ml lait texturé très finement à 60°C. Ratio café/lait élevé pour les amateurs d'intensité.",
-        image: "https://images.unsplash.com/photo-1577968897966-3d4325b36b61?w=500&q=80"
-      },
-      // CAFÉS GLACÉS
-      "rec_4": {
-        id: "rec_4", cat: "cafe", temp: "glacé", price: "5.00",
-        title: "Cold Brew Infusion Fine",
-        description: "Café extrait à froid pendant 16h pour une rondeur d'une douceur absolue. Zéro amertume.",
-        recipeInfo: "Mouture grossière, eau filtrée à 4°C, extraction lente 16h. Très faible acidité, notes fruitées prononcées.",
-        image: "https://images.unsplash.com/photo-1517701604599-bb29b565090c?w=500&q=80"
-      },
-      "rec_5": {
-        id: "rec_5", cat: "cafe", temp: "glacé", price: "5.20",
-        title: "Freddo Cappuccino Athénien",
-        description: "Double espresso frappé sur glace sous une mousse de lait froide aérienne. La signature grecque de l'été.",
-        recipeInfo: "Espresso émulsionné au shaker avec glace, nappé de lait écrémé monté en crème froide compacte.",
-        image: "https://images.unsplash.com/photo-1461023058943-07fcbe16d735?w=500&q=80"
-      },
-      "rec_c5": {
-        id: "rec_c5", cat: "cafe", temp: "glacé", price: "5.80",
-        title: "Iced Caramel Macchiato",
-        description: "Espresso versé en cascade sur glace et lait vanillé, nappé d'un caramel artisanal maison.",
-        recipeInfo: "Verre de glace, 150ml lait entier, double espresso en cascade, filet de caramel maison non industriel.",
-        image: "https://images.unsplash.com/photo-1485808191679-5f86510bd9a8?w=500&q=80"
-      },
-      // THÉS CHAUDS
-      "rec_t1": {
-        id: "rec_t1", cat: "the", temp: "chaud", price: "4.00",
-        title: "Darjeeling Premier Flush",
-        description: "Thé noir de haute altitude aux arômes floraux et muscatés, cueilli en première saison. Le champagne des thés.",
-        recipeInfo: "2.5g de feuilles entières, eau à 90°C, infusion 3 minutes. Servir nature pour en saisir toute la finesse.",
-        image: "https://images.unsplash.com/photo-1556679343-c7306c1976bc?w=500&q=80"
-      },
-      "rec_t2": {
-        id: "rec_t2", cat: "the", temp: "chaud", price: "4.50",
-        title: "Matcha Cérémonie",
-        description: "Poudre de matcha cérémonie grade A de Uji, Japon. Battu au chasen selon le rite du thé, umami et douceur végétale.",
-        recipeInfo: "1.5g de poudre tamisée, 70ml d'eau à 80°C exactement. Fouetter en W avec le chasen jusqu'à mousse fine.",
-        image: "https://images.unsplash.com/photo-1536256263959-770b48d82b0a?w=500&q=80"
-      },
-      "rec_t3": {
-        id: "rec_t3", cat: "the", temp: "chaud", price: "4.20",
-        title: "Oolong Oriental Beauty",
-        description: "Oolong de Taiwan légèrement oxydé aux notes de miel, pêche et fleur de magnolia. Un thé d'exception.",
-        recipeInfo: "3g de feuilles, eau à 85°C, infusion 2 min. Peut être infusé 3 à 4 fois en augmentant le temps de 30s.",
-        image: "https://images.unsplash.com/photo-1544025162-d76694265947?w=500&q=80"
-      },
-      // THÉS GLACÉS
-      "rec_t4": {
-        id: "rec_t4", cat: "the", temp: "glacé", price: "4.80",
-        title: "Thé Vert Sencha Citron",
-        description: "Sencha japonais infusé à froid avec des zestes de citron yuzu bio. Fraîcheur délicate et végétale.",
-        recipeInfo: "4g de Sencha, eau froide filtrée, 6h d'infusion au réfrigérateur. Servir sur glace avec un zeste de yuzu frais.",
-        image: "https://images.unsplash.com/photo-1564890369478-c89ca6d9cde9?w=500&q=80"
-      },
-      "rec_t5": {
-        id: "rec_t5", cat: "the", temp: "glacé", price: "5.20",
-        title: "Ice Matcha Latte",
-        description: "Matcha cérémonie battu en shot crémeux, versé sur glace et lait d'avoine barista. La douceur du Japon en version fraîche.",
-        recipeInfo: "2g matcha + 30ml eau 80°C battu au chasen, versé sur 150ml lait d'avoine barista glacé.",
-        image: "https://images.unsplash.com/photo-1515823662972-da6a2e4d3002?w=500&q=80"
-      },
-      // INFUSIONS CHAUDES
-      "rec_3": {
-        id: "rec_3", cat: "infusion", temp: "chaud", price: "5.50",
-        title: "Élixir d'Or (Golden Milk)",
-        description: "Boisson réconfortante signature au curcuma, épices secrètes et miel bio. La chaleur en tasse.",
-        recipeInfo: "Infusion à chaud de curcuma frais, cannelle de Ceylan, gingembre, poivre noir et lait végétal.",
-        image: "https://images.unsplash.com/photo-1544787219-7f47ccb76574?w=600&q=80"
-      },
-      "rec_i1": {
-        id: "rec_i1", cat: "infusion", temp: "chaud", price: "3.80",
-        title: "Rooibos Vanille & Agrumes",
-        description: "Rooibos rouge d'Afrique du Sud naturellement sans caféine, aromatisé à la vanille Bourbon et zestes d'orange.",
-        recipeInfo: "3g de rooibos, eau bouillante (100°C), infusion 5 minutes. Notes douces, idéale le soir.",
-        image: "https://images.unsplash.com/photo-1563822249366-3efb23b8e0c9?w=500&q=80"
-      },
-      "rec_i2": {
-        id: "rec_i2", cat: "infusion", temp: "chaud", price: "4.00",
-        title: "Verveine Citron & Gingembre",
-        description: "Tisane vivifiante de verveine citronnelle, gingembre frais râpé et une pointe de miel de montagne.",
-        recipeInfo: "Feuilles de verveine fraîches, rondelles de gingembre frais, eau à 98°C, infusion 6 minutes.",
-        image: "https://images.unsplash.com/photo-1597481499750-3e6b22637536?w=500&q=80"
-      },
-      "rec_i3": {
-        id: "rec_i3", cat: "infusion", temp: "chaud", price: "4.20",
-        title: "Camomille & Fleurs de Lavande",
-        description: "Infusion apaisante de camomille romaine et fleurs de lavande de Provence. Un moment de sérénité absolue.",
-        recipeInfo: "Mélange de camomille bio et lavande séchée, eau à 95°C, infusion 5 min. Ajouter une touche de miel d'acacia.",
-        image: "https://images.unsplash.com/photo-1585846888147-29e2ee1c9949?w=500&q=80"
-      },
-      // INFUSIONS GLACÉES
-      "rec_i4": {
-        id: "rec_i4", cat: "infusion", temp: "glacé", price: "4.50",
-        title: "Cold Brew Hibiscus & Fruits Rouges",
-        description: "Hibiscus fleurs entières infusées à froid avec des fruits rouges séchés. Rouge grenat, acidité fruitée naturelle.",
-        recipeInfo: "5g fleurs d'hibiscus + fruits rouges, eau froide 8h au réfrigérateur. Servir sur glace, avec ou sans paille de canne.",
-        image: "https://images.unsplash.com/photo-1568702846914-96b305d2aaeb?w=500&q=80"
-      },
-      "rec_i5": {
-        id: "rec_i5", cat: "infusion", temp: "glacé", price: "4.80",
-        title: "Limonade de Fleurs de Sureau",
-        description: "Sirop artisanal de fleurs de sureau, jus de citron pressé et eau pétillante. Élégance florale et légèreté.",
-        recipeInfo: "30ml sirop fleurs de sureau maison, jus d'un demi-citron, eau pétillante, menthe fraîche, glace pilée.",
-        image: "https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?w=500&q=80"
-      },
-      // SIGNATURES
-      "rec_s1": {
-        id: "rec_s1", cat: "signature", temp: "chaud", price: "6.00",
-        title: "Café Cardamome & Rose",
-        description: "Espresso signature infusé à la cardamome verte moulue, agrémenté d'eau de rose pure et d'une mousse légère.",
-        recipeInfo: "Double espresso, 2 gousses de cardamome fraîchement moulues, 5ml eau de rose, mousse de lait entier.",
-        image: "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=500&q=80"
-      },
-      "rec_s2": {
-        id: "rec_s2", cat: "signature", temp: "glacé", price: "6.50",
-        title: "Nitro Cold Brew Maison",
-        description: "Cold brew infusé à l'azote pour une texture veloutée unique, légèrement crémeuse sans ajout de lait.",
-        recipeInfo: "Cold brew 20h, nitrogenation sous pression, servie à la pression directement du fût. Aucun sucre, aucun lait.",
-        image: "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=500&q=80"
-      }
+      "rec_1": { id: "rec_1", cat: "cafe", temp: "chaud", price: "3.50", title: "Espresso Origine", description: "Un espresso extrait à haute précision à partir de notre récolte de saison. Concentré, intense, sans compromis.", recipeInfo: "18g de café moulu fin, 36g en tasse en 25–28s. Notes intenses de cacao brut et d'agrumes doux.", image: "https://images.unsplash.com/photo-1510972527409-cac19ff31d7c?w=500&q=80" },
+      "rec_2": { id: "rec_2", cat: "cafe", temp: "chaud", price: "4.80", title: "Caffè Latte de la Maison", description: "Double espresso mélangé harmonieusement à un lait soyeux micro-texturé. Douceur enveloppante.", recipeInfo: "Double ristretto, lait entier micro-texturé à 60°C pour une douceur naturelle parfaite.", image: "https://images.unsplash.com/photo-1541167760496-1628856ab772?w=500&q=80" },
+      "rec_c3": { id: "rec_c3", cat: "cafe", temp: "chaud", price: "4.20", title: "Cappuccino Velours", description: "L'équilibre parfait entre espresso puissant et mousse de lait généreuse et aérienne, servie dans une tasse préchauffée.", recipeInfo: "1/3 Espresso, 1/3 lait chaud, 1/3 mousse de lait dense. Saupoudrer de cacao pur sur demande.", image: "https://images.unsplash.com/photo-1534778101976-62847782c213?w=500&q=80" },
+      "rec_c4": { id: "rec_c4", cat: "cafe", temp: "chaud", price: "5.00", title: "Machaon Moka d'Éthiopie", description: "L'alliance décadente d'un espresso single-origin et d'un chocolat noir grand cru fondu, couronné d'un lait velouté.", recipeInfo: "20g de chocolat noir fondu au fond de la tasse, extraire le double shot directement dessus, lisser au lait chaud.", image: "https://images.unsplash.com/photo-1578314675249-a6910f80cc4e?w=500&q=80" },
+      "rec_c5": { id: "rec_c5", cat: "cafe", temp: "froid", price: "4.90", title: "Shakerato Miel & Sel", description: "Un double ristretto intense vigoureusement frappé au shaker avec des glaçons cristallins, du miel sauvage d'acacia et une pincée de fleur de sel.", recipeInfo: "Frapper 15 secondes au shaker à cocktail pour créer une émulsion dense et glacée, filtrer dans une coupe de cristal.", image: "https://images.unsplash.com/photo-1544787219-7f47ccb76574?w=600&q=80" },
+      "rec_c6": { id: "rec_c6", cat: "cafe", temp: "froid", price: "5.50", title: "Iced Latte Caramel Royal", description: "Lait frais versé sur glace pure, surmonté d'un espresso en cascade vanillé, nappé d'un caramel artisanal maison.", recipeInfo: "Verre de glace, 150ml lait entier, double espresso en cascade, filet de caramel maison non industriel.", image: "https://images.unsplash.com/photo-1485808191679-5f86510bd9a8?w=500&q=80" },
+      "rec_t1": { id: "rec_t1", cat: "the", temp: "chaud", price: "4.00", title: "Darjeeling Premier Flush", description: "Thé noir de haute altitude aux arômes floraux et muscatés, cueilli en première saison. Le champagne des thés.", recipeInfo: "2.5g de feuilles entières, eau à 90°C, infusion 3 minutes. Servir nature pour en saisir toute la finesse.", image: "https://images.unsplash.com/photo-1556679343-c7306c1976bc?w=500&q=80" },
+      "rec_t2": { id: "rec_t2", cat: "the", temp: "chaud", price: "4.50", title: "Matcha Cérémonie", description: "Poudre de matcha cérémonie grade A de Uji, Japon. Battu au chasen selon le rite du thé, umami et douceur végétale.", recipeInfo: "1.5g de poudre tamisée, 70ml d'eau à 80°C exactement. Fouetter en W avec le chasen jusqu'à mousse fine.", image: "https://images.unsplash.com/photo-1536256263959-770b48d82b0a?w=500&q=80" },
+      "rec_t3": { id: "rec_t3", cat: "the", temp: "froid", price: "4.20", title: "Thé Vert Glacé Pêche & Menthe", description: "Thé vert Sencha infusé à froid pendant 8 heures, agrémenté d'une purée fine de pêches blanches de vigne et feuilles de menthe.", recipeInfo: "Infusion lente à froid. Servir sur glace pilée avec une branche de menthe fraîche froissée.", image: "https://images.unsplash.com/photo-1556881286-fc6915169721?w=500&q=80" },
+      "rec_i1": { id: "rec_i1", cat: "infusion", temp: "chaud", price: "3.80", title: "Rooibos Vanille & Agrumes", description: "Rooibos rouge d'Afrique du Sud naturellement sans caféine, aromatisé à la vanille Bourbon et zestes d'orange.", recipeInfo: "3g de rooibos, eau bouillante (100°C), infusion 5 minutes. Notes douces, idéale le soir.", image: "https://images.unsplash.com/photo-1563822249366-3efb23b8e0c9?w=500&q=80" },
+      "rec_i2": { id: "rec_i2", cat: "infusion", temp: "chaud", price: "4.00", title: "Verveine Citron & Gingembre", description: "Tisane vivifiante de verveine citronnelle, gingembre frais râpé et une pointe de miel de montagne.", recipeInfo: "Feuilles de verveine fraîches, rondelles de gingembre frais, eau à 98°C, infusion 6 minutes.", image: "https://images.unsplash.com/photo-1597481499750-3e6b22637536?w=500&q=80" },
+      "rec_i3": { id: "rec_i3", cat: "infusion", temp: "froid", price: "4.50", title: "Infusion Hibiscus Écarlate", description: "Fleurs de bissap d'Afrique séchées, infusées intensément et glacées, rehaussées d'un filet de jus de citron vert.", recipeInfo: "Infusion concentrée à chaud puis refroidie instantanément sur lit de glace. Couleur rubis éclatante.", image: "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=500&q=80" }
     };
 
-    // ── UTILITAIRES ──────────────────────────────────────────────
-
     const defaultCustomization = {
-      sugar: ["Sans sucre", "L\u00e9ger", "\u00c9quilibre Barista"],
-      milk: ["Sans lait", "Lait de vache", "Lait d'avoine"],
-      foam: ["Sans mousse", "Mousse fine", "Mousse g\u00e9n\u00e9reuse"]
+      sugar: ["Sans Sucre", "Léger", "Équilibre Barista"],
+      milk: ["Sans Lait", "Lait Entier", "Lait d'Avoine", "Lait d'Amande"],
+      foam: ["Sans Mousse", "Mousse Fine", "Mousse Généreuse"]
     };
 
     function normalizeCustomization(data = {}) {
@@ -921,52 +721,48 @@
         foam: textareaOptions("adminFoamOptions", defaultCustomization.foam)
       });
       set(ref(db, "customization"), payload)
-        .then(() => showNotification("Options du pop-up mises \u00e0 jour"))
-        .catch(() => alert("Erreur d'enregistrement des options"));
+        .then(() => showNotification("Options du formulaire enregistrées sur Firebase"))
+        .catch(() => alert("Erreur d'enregistrement"));
     }
 
     function resetCustomizationAdmin() {
-      if (!confirm("R\u00e9initialiser les options du pop-up de commande ?")) return;
-      set(ref(db, "customization"), defaultCustomization)
-        .then(() => showNotification("Options r\u00e9initialis\u00e9es"))
-        .catch(() => alert("Erreur de r\u00e9initialisation"));
+      if (confirm("Réinitialiser avec les options par défaut de l'établissement ?")) {
+        set(ref(db, "customization"), defaultCustomization)
+          .then(() => showNotification("Options réinitialisées"));
+      }
     }
 
-    function escapeXSS(t) {
-      if (!t) return "";
-      return t.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#x27;");
+    // INTERFACE ET GESTION INITIALE
+    function initializeAppSystem() {
+      const isGatePassed = storage.get("s_gate_passed") === "true";
+      const gate = document.getElementById("authGate");
+      const wrapper = document.getElementById("appWrapper");
+
+      if (isGatePassed) {
+        gate?.classList.add("hidden");
+        wrapper?.classList.add("active");
+        applyRoleUI();
+        attachFilterDOMEvents();
+      } else {
+        gate?.classList.remove("hidden");
+        wrapper?.classList.remove("active");
+      }
     }
 
-    function showNotification(txt) {
-      const toast = document.getElementById("globalToast");
-      if (!toast) return;
-      toast.textContent = txt;
-      toast.classList.add("show");
-      setTimeout(() => toast.classList.remove("show"), 3500);
-    }
-
-    function getCatTag(cat) {
-      if (cat === "cafe") return `<span class="item-family-tag tag-cafe">☕ Café</span>`;
-      if (cat === "the")  return `<span class="item-family-tag tag-the">🍃 Thé</span>`;
-      if (cat === "infusion") return `<span class="item-family-tag tag-infusion">🌸 Infusion</span>`;
-      return "";
-    }
-
-    // ── AUTHENTIFICATION ─────────────────────────────────────────
     function validateGatewayLogin() {
       const input = document.getElementById("gateway-password-input");
-      const err   = document.getElementById("gateway-global-error");
-      if (!input) return;
-      const key = input.value.trim();
-      if (key === "2408") {
-        storage.set("s_gate_passed","true");
-        storage.set("s_role","family");
-        currentRole = "family";
-        initializeAppSystem();
-      } else if (key === "1311") {
-        storage.set("s_gate_passed","true");
-        storage.set("s_role","barista");
+      const err = document.getElementById("gateway-global-error");
+      const key = input ? input.value.trim() : "";
+
+      if (key === "1311") {
+        storage.set("s_gate_passed", "true");
+        storage.set("s_role", "barista");
         currentRole = "barista";
+        initializeAppSystem();
+      } else if (key.toLowerCase() === "famille" || key === "1234") {
+        storage.set("s_gate_passed", "true");
+        storage.set("s_role", "family");
+        currentRole = "family";
         initializeAppSystem();
       } else {
         if (err) err.style.display = "block";
@@ -977,7 +773,7 @@
       const p = prompt("Entrez le code Atelier Barista :");
       if (p === "1311") {
         currentRole = "barista";
-        storage.set("s_role","barista");
+        storage.set("s_role", "barista");
         applyRoleUI();
         showNotification("Espace Barista activé");
       } else if (p !== null) {
@@ -991,7 +787,7 @@
     }
 
     function applyRoleUI() {
-      const b         = document.getElementById("roleBadge");
+      const b = document.getElementById("roleBadge");
       const adminZone = document.getElementById("adminDashboardZone");
       if (!b) return;
       if (currentRole === "barista") {
@@ -1008,80 +804,113 @@
     }
 
     function toggleThemeSystem() {
-      const h   = document.documentElement;
+      const h = document.documentElement;
       const btn = document.getElementById("themeToggle");
       if (h.getAttribute("data-theme") === "light") {
-        h.setAttribute("data-theme","dark");
+        h.setAttribute("data-theme", "dark");
         if (btn) btn.textContent = "Mode Clair";
       } else {
-        h.setAttribute("data-theme","light");
+        h.setAttribute("data-theme", "light");
         if (btn) btn.textContent = "Mode Sombre";
       }
     }
 
-    // ── GRILLE CATALOGUE ─────────────────────────────────────────
+    // RENDU DE LA CARTE CLIENT
     function renderGrid() {
       const g = document.getElementById("menuGrid");
       if (!g) return;
       const items = Object.values(catalogData).filter(item => {
-        const matchCat  = activeCat === "all" || item.cat === activeCat;
+        const matchCat = activeCat === "all" || item.cat === activeCat;
         const matchTemp = activeTemp === "all" || item.temp === activeTemp;
-        const matchQ    = !searchQuery || item.title.toLowerCase().includes(searchQuery) || item.description.toLowerCase().includes(searchQuery);
+        const matchQ = !searchQuery || item.title.toLowerCase().includes(searchQuery) || item.description.toLowerCase().includes(searchQuery);
         return matchCat && matchTemp && matchQ;
       });
+
       if (items.length === 0) {
         g.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--text-muted);font-family:var(--font-serif);font-size:1.2rem;">Aucune boisson ne correspond à vos filtres</div>`;
         return;
       }
+
       g.innerHTML = items.map(item => `
         <div class="carte-item">
           <div class="item-media">
-            <span class="item-tag-hot-cold ${item.temp==='chaud'?'tag-hot':'tag-cold'}">${item.temp}</span>
-            <img src="${escapeXSS(item.image)||'https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=500&q=80'}" alt="${escapeXSS(item.title)}" loading="lazy">
+            <span class="item-tag-hot-cold ${item.temp === 'chaud' ? 'tag-hot' : 'tag-cold'}">${item.temp}</span>
+            <img src="${escapeXSS(item.image) || 'https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=500&q=80'}" alt="${escapeXSS(item.title)}" loading="lazy" />
           </div>
           <div class="item-header">
             <h4 class="item-title">${escapeXSS(item.title)}</h4>
             <div class="item-line-dots"></div>
             <span class="item-price">${escapeXSS(item.price)}€</span>
           </div>
-          ${getCatTag(item.cat)}
           <p class="item-description">${escapeXSS(item.description)}</p>
-          <div class="actions-dual-row">
-            <button type="button" class="btn-action-split btn-split-discover" onclick="window.openProductModal('${item.id}','desc')">Découvrir</button>
-            <button type="button" class="btn-action-split btn-split-order"    onclick="window.openProductModal('${item.id}','order')">Commander</button>
+          <div>
+            <span class="item-family-tag tag-${item.cat}">${item.cat.toUpperCase()}</span>
           </div>
+          <button type="button" class="btn-luxe" style="margin-top:auto;padding:10px;font-size:0.68rem;" onclick="window.openProductModal('${item.id}', 'desc')">Consulter & Commander</button>
         </div>
       `).join("");
     }
 
     function renderAdminCatalog() {
-      const container = document.getElementById("adminCatalogGrid");
-      if (!container) return;
-      const list = Object.values(catalogData);
-      if (list.length === 0) {
-        container.innerHTML = `<p style="color:var(--text-muted);">Aucune recette configurée.</p>`;
+      const grid = document.getElementById("adminCatalogGrid");
+      if (!grid) return;
+      const items = Object.values(catalogData);
+      if (items.length === 0) {
+        grid.innerHTML = `<p style="grid-column:1/-1;color:var(--text-muted);font-size:0.85rem;">Aucun élixir sur la carte.</p>`;
         return;
       }
-      container.innerHTML = list.map(item => `
+      grid.innerHTML = items.map(item => `
         <div class="admin-catalog-card">
-          <span>${escapeXSS(item.title)} (${escapeXSS(item.price)}€)</span>
-          <div class="admin-actions-row">
-            <button type="button" class="btn-single-action" onclick="window.openRecipeAdminModal('${item.id}')">Éditer</button>
-            <button type="button" class="btn-single-action btn-action-delete" onclick="window.deleteRecipeAdmin('${item.id}')">Suppr.</button>
+          <div style="display:flex;align-items:center;gap:10px;overflow:hidden;">
+            <img src="${escapeXSS(item.image)}" style="width:36px;height:36px;object-fit:cover;border-radius:4px;" />
+            <span style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:500;">${escapeXSS(item.title)}</span>
+          </div>
+          <div style="display:flex;gap:4px;flex-shrink:0;">
+            <button type="button" class="btn-single-action" style="padding:4px 8px;font-size:0.6rem;" onclick="window.openRecipeAdminModal('${item.id}')">Éditer</button>
+            <button type="button" class="btn-single-action btn-action-delete" style="padding:4px 8px;font-size:0.6rem;" onclick="window.deleteRecipeAdmin('${item.id}')">×</button>
           </div>
         </div>
       `).join("");
     }
 
-    // ── MODALE PRODUIT ───────────────────────────────────────────
+    function attachFilterDOMEvents() {
+      document.querySelectorAll("[data-filter-cat]").forEach(btn => {
+        btn.addEventListener("click", e => {
+          document.querySelectorAll("[data-filter-cat]").forEach(b => b.classList.remove("active"));
+          e.target.classList.add("active");
+          activeCat = e.target.dataset.filter-cat;
+          renderGrid();
+        });
+      });
+      document.querySelectorAll("[data-filter-temp]").forEach(btn => {
+        btn.addEventListener("click", e => {
+          document.querySelectorAll("[data-filter-temp]").forEach(b => b.classList.remove("active"));
+          e.target.classList.add("active");
+          activeTemp = e.target.dataset.filter-temp;
+          renderGrid();
+        });
+      });
+      document.getElementById("searchInput")?.addEventListener("input", e => {
+        searchQuery = e.target.value.toLowerCase().trim();
+        renderGrid();
+      });
+    }
+
+    // MODALE PRODUIT INDIVIDUEL
     function openProductModal(id, initialTab = 'desc') {
-      const p = catalogData[id];
-      if (!p) { console.warn("Produit introuvable:", id); return; }
-      selectedProduct = p;
-      document.getElementById("modalProductTitle").textContent   = p.title;
-      document.getElementById("modalProductBadge").textContent   = `${p.temp} — ${p.cat}`;
-      document.getElementById("modalProductDescription").textContent = p.description;
-      document.getElementById("modalProductRecipe").textContent  = p.recipeInfo || "Recette standard calibrée.";
+      if (!catalogData[id]) return;
+      selectedProduct = catalogData[id];
+
+      const badge = document.getElementById("modalProductCategoryBadge");
+      const title = document.getElementById("modalProductTitle");
+      const desc = document.getElementById("modalProductDescription");
+      const rec = document.getElementById("modalProductRecipe");
+
+      if (badge) badge.textContent = `${selectedProduct.cat.toUpperCase()} — ${selectedProduct.temp.toUpperCase()}`;
+      if (title) title.textContent = selectedProduct.title;
+      if (desc) desc.textContent = selectedProduct.description;
+      if (rec) rec.textContent = selectedProduct.recipeInfo || "Recette standard calibrée.";
+
       populateCustomizationSelects();
       const modal = document.getElementById("productModal");
       if (modal) modal.classList.add("active");
@@ -1095,23 +924,29 @@
     }
 
     function switchProductTab(tab) {
-      const lDesc  = document.getElementById("tabLinkDesc");
+      const lDesc = document.getElementById("tabLinkDesc");
       const lOrder = document.getElementById("tabLinkOrder");
-      const pDesc  = document.getElementById("tabPaneDesc");
+      const pDesc = document.getElementById("tabPaneDesc");
       const pOrder = document.getElementById("tabPaneOrder");
+
       if (tab === 'desc') {
-        lDesc?.classList.add("active");    lOrder?.classList.remove("active");
-        pDesc?.classList.add("active");    pOrder?.classList.remove("active");
+        lDesc?.classList.add("active");
+        lOrder?.classList.remove("active");
+        pDesc?.classList.add("active");
+        pOrder?.classList.remove("active");
       } else {
-        lDesc?.classList.remove("active"); lOrder?.classList.add("active");
-        pDesc?.classList.remove("active"); pOrder?.classList.add("active");
+        lDesc?.classList.remove("active");
+        lOrder?.classList.add("active");
+        pDesc?.classList.remove("active");
+        pOrder?.classList.add("active");
       }
     }
 
-    // ── COMMANDE ─────────────────────────────────────────────────
+    // SYSTEME DE COMMANDE VERS VRAI FIREBASE CLOUD
     function submitOrderToFirebase() {
       const gInput = document.getElementById("orderGuestNameInput");
-      const name   = gInput ? gInput.value.trim() : "";
+      const name = gInput ? gInput.value.trim() : "";
+
       if (!name) {
         alert("Saisissez votre prénom ou le nom de votre table avant de lancer la commande.");
         return;
@@ -1122,98 +957,103 @@
       }
 
       const btn = document.getElementById("btnLaunchOrderPreparation");
-      if (btn) { btn.disabled = true; btn.textContent = "Envoi en cours..."; }
+      if (btn) {
+        btn.disabled = true;
+        btn.textContent = "Envoi en cours...";
+      }
 
-      const sugarOpt     = document.getElementById("orderSugarSelect")?.value || "Standard";
-      const milkOpt      = document.getElementById("orderMilkSelect")?.value  || "Sans Lait";
-      const foamOpt      = document.getElementById("orderFoamSelect")?.value  || "Sans Mousse";
-      const scheduledTime= document.getElementById("orderScheduleInput")?.value || "";
+      const sugarOpt = document.getElementById("orderSugarSelect")?.value || "Standard";
+      const milkOpt = document.getElementById("orderMilkSelect")?.value || "Sans Lait";
+      const foamOpt = document.getElementById("orderFoamSelect")?.value || "Sans Mousse";
+      const scheduledTime = document.getElementById("orderScheduleInput")?.value || "";
       const textualNotes = document.getElementById("orderCustomsInput")?.value.trim() || "";
 
       let finalSpecs = `[${sugarOpt}] — [${milkOpt}] — [${foamOpt}]`;
-      if (scheduledTime)  finalSpecs += `\n[⏰ Retrait : ${scheduledTime}]`;
-      if (textualNotes)   finalSpecs += `\nNote : ${escapeXSS(textualNotes)}`;
+      if (scheduledTime) finalSpecs += `\n[⏰ Retrait : ${scheduledTime}]`;
+      if (textualNotes) finalSpecs += `\nNote : ${escapeXSS(textualNotes)}`;
 
       const newTicketRef = push(ref(db, "orders"));
-      const ticketId     = newTicketRef.key;
+      const ticketId = newTicketRef.key;
 
       const orderPayload = {
-        id:         ticketId,
-        drinkId:    selectedProduct.id,
+        id: ticketId,
+        drinkId: selectedProduct.id,
         drinkTitle: selectedProduct.title,
-        guestName:  name,
-        customs:    finalSpecs,
-        status:     "pending",
-        timestamp:  Date.now()
+        guestName: name,
+        customs: finalSpecs,
+        status: "pending",
+        timestamp: Date.now()
       };
 
       set(newTicketRef, orderPayload)
         .then(() => {
           myActiveOrderId = ticketId;
           storage.set("s_my_order_id", ticketId);
-          notifyLocal(`orders/${ticketId}`);
           closeProductModal();
-          showNotification(`✓ Commande de ${name} transmise au barista !`);
-          if (gInput) gInput.value = "";
-          const notesEl = document.getElementById("orderCustomsInput");
-          if (notesEl) notesEl.value = "";
+          showNotification("Votre commande est arrivée au bar !");
         })
         .catch(err => {
           console.error("Firebase error:", err);
-          alert("Erreur de connexion Firebase. Vérifiez votre réseau et réessayez.");
+          alert("Erreur de liaison réseau Cloud.");
         })
         .finally(() => {
-          if (btn) { btn.disabled = false; btn.textContent = "Lancer la préparation"; }
+          if (btn) {
+            btn.disabled = false;
+            btn.textContent = "Envoyer le ticket au comptoir";
+          }
         });
     }
 
-    // ── ACTIONS BARISTA ──────────────────────────────────────────
     function updateOrderStatus(id, newStatus) {
-      update(ref(db, `orders/${id}`), { status: newStatus })
+      if (!id) return;
+      set(ref(db, `orders/${id}/status`), newStatus)
         .then(() => showNotification(`Ticket mis à jour : ${newStatus}`))
         .catch(e => console.error(e));
     }
 
     function deleteOrderSingle(id) {
+      if (!id) return;
       remove(ref(db, `orders/${id}`))
-        .then(() => {
-          if (myActiveOrderId === id) {
-            myActiveOrderId = "";
-            storage.remove("s_my_order_id");
-          }
-          showNotification("Ticket archivé");
-        })
+        .then(() => showNotification("Ticket archivé"))
         .catch(e => console.error(e));
     }
 
     function clearAllOrders() {
-      if (confirm("Archiver toutes les commandes affichées ?")) {
-        set(ref(db, "orders"), null)
-          .then(() => {
-            myActiveOrderId = "";
-            storage.remove("s_my_order_id");
-            showNotification("Toutes les commandes ont été archivées");
-          });
+      if (confirm("Supprimer l'intégralité des commandes archivées ou prêtes du service ?")) {
+        const finishedIds = Object.values(allOrdersData)
+          .filter(o => o.status === "ready")
+          .map(o => o.id);
+
+        if (finishedIds.length === 0) {
+          showNotification("Aucun ticket à archiver");
+          return;
+        }
+
+        const promises = finishedIds.map(id => remove(ref(db, `orders/${id}`)));
+        Promise.all(promises).then(() => {
+          showNotification("Toutes les commandes terminées ont été archivées");
+        });
       }
     }
 
-    // ── ADMIN RECETTES ───────────────────────────────────────────
+    // AJOUT / MODIFICATION DE BOISSONS (ADMIN RECETTES)
     function openRecipeAdminModal(id = '') {
-      const m    = document.getElementById("recipeAdminModal");
+      const m = document.getElementById("recipeAdminModal");
       const form = document.getElementById("recipeAdminForm");
       if (!m || !form) return;
       form.reset();
+
       if (id && catalogData[id]) {
         const item = catalogData[id];
         document.getElementById("recipeAdminTitle").textContent = "Éditer l'élixir";
-        document.getElementById("adminRecipeId").value    = item.id;
-        document.getElementById("adminTitle").value       = item.title;
-        document.getElementById("adminCat").value         = item.cat;
-        document.getElementById("adminTemp").value        = item.temp;
-        document.getElementById("adminPrice").value       = item.price;
-        document.getElementById("adminImage").value       = item.image || "";
+        document.getElementById("adminRecipeId").value = item.id;
+        document.getElementById("adminTitle").value = item.title;
+        document.getElementById("adminCat").value = item.cat;
+        document.getElementById("adminTemp").value = item.temp;
+        document.getElementById("adminPrice").value = item.price;
+        document.getElementById("adminImage").value = item.image || "";
         document.getElementById("adminDescription").value = item.description;
-        document.getElementById("adminRecipeInfo").value  = item.recipeInfo || "";
+        document.getElementById("adminRecipeInfo").value = item.recipeInfo || "";
       } else {
         document.getElementById("recipeAdminTitle").textContent = "Ajouter une création";
         document.getElementById("adminRecipeId").value = "";
@@ -1230,28 +1070,32 @@
       const id = document.getElementById("adminRecipeId").value || 'rec_' + Date.now();
       const payload = {
         id,
-        title:       document.getElementById("adminTitle").value.trim(),
-        cat:         document.getElementById("adminCat").value,
-        temp:        document.getElementById("adminTemp").value,
-        price:       document.getElementById("adminPrice").value.trim(),
-        image:       document.getElementById("adminImage").value.trim(),
+        title: document.getElementById("adminTitle").value.trim(),
+        cat: document.getElementById("adminCat").value,
+        temp: document.getElementById("adminTemp").value,
+        price: document.getElementById("adminPrice").value.trim(),
+        image: document.getElementById("adminImage").value.trim(),
         description: document.getElementById("adminDescription").value.trim(),
-        recipeInfo:  document.getElementById("adminRecipeInfo").value.trim()
+        recipeInfo: document.getElementById("adminRecipeInfo").value.trim()
       };
+
       set(ref(db, `recipes/${id}`), payload)
-        .then(() => { closeRecipeAdminModal(); showNotification("Carte mise à jour"); })
+        .then(() => {
+          closeRecipeAdminModal();
+          showNotification("Carte mise à jour");
+        })
         .catch(() => alert("Erreur d'enregistrement"));
     }
 
     function deleteRecipeAdmin(id) {
-      if (confirm("Retirer cet élixir définitivement ?")) {
+      if (confirm("Retirer cet élixir définitivement de l'établissement ?")) {
         remove(ref(db, `recipes/${id}`))
           .then(() => showNotification("Élixir retiré de la carte"))
           .catch(e => console.error(e));
       }
     }
 
-    // ── FIREBASE LISTENERS ───────────────────────────────────────
+    // LISTENERS CLOUD FIREBASE SYNCHRONISÉS ET TEMPS RÉEL
     onValue(ref(db, "recipes"), snapshot => {
       const data = snapshot.val();
       if (!data) {
@@ -1266,43 +1110,47 @@
 
     onValue(ref(db, "customization"), snapshot => {
       const data = snapshot.val();
-      if (!data) {
-        customizationData = normalizeCustomization(defaultCustomization);
-        set(ref(db, "customization"), customizationData).catch(e => console.warn(e));
-      } else {
-        customizationData = normalizeCustomization(data);
-      }
+      customizationData = data || {};
       populateCustomizationSelects();
       renderCustomizationAdmin();
     });
 
     onValue(ref(db, "orders"), snapshot => {
-      const data   = snapshot.val();
-      const orders = data ? Object.values(data) : [];
-      orders.sort((x, y) => (x.timestamp || 0) - (y.timestamp || 0));
+      const data = snapshot.val() || {};
+      allOrdersData = data;
+      const orders = Object.values(data).sort((a, b) => b.timestamp - a.timestamp);
 
-      // Tracker client
+      // Traitement Tracker Client
       const clientZone = document.getElementById("clientTrackerZone");
-      if (currentRole === "family" && myActiveOrderId && data && data[myActiveOrderId]) {
-        const myOrd = data[myActiveOrderId];
+      if (myActiveOrderId && data[myActiveOrderId]) {
+        const myOrder = data[myActiveOrderId];
         if (clientZone) clientZone.style.display = "block";
-        document.getElementById("trackerDrinkName").textContent = myOrd.drinkTitle;
-        document.getElementById("trackerGuestName").textContent = `Pour ${myOrd.guestName}`;
-        const badge = document.getElementById("trackerStatusBadge");
-        const bar   = document.getElementById("trackerProgressBar");
-        document.querySelectorAll(".tracker-step").forEach(s => s.classList.remove("active","done"));
-        if (myOrd.status === "pending") {
-          if (badge) badge.textContent = "En attente";
-          if (bar)   bar.style.width   = "15%";
+
+        document.getElementById("trackerDrinkName").textContent = myOrder.drinkTitle;
+        document.getElementById("trackerSpecs").innerHTML = myOrder.customs.replace(/\n/g, "<br>");
+
+        document.getElementById("step-pending").classList.remove("active", "done");
+        document.getElementById("step-preparing").classList.remove("active", "done");
+        document.getElementById("step-ready").classList.remove("active", "done");
+
+        const lbl = document.getElementById("trackerStatusLabel");
+        const bar = document.getElementById("trackerProgressBar");
+
+        if (myOrder.status === "pending") {
+          lbl.textContent = "Reçue par le barista";
+          lbl.className = "tracker-status-badge badge-pending";
+          bar.style.width = "15%";
           document.getElementById("step-pending").classList.add("active");
-        } else if (myOrd.status === "preparing") {
-          if (badge) badge.textContent = "En préparation";
-          if (bar)   bar.style.width   = "55%";
+        } else if (myOrder.status === "preparing") {
+          lbl.textContent = "Extraction & Préparation";
+          lbl.className = "tracker-status-badge badge-preparing";
+          bar.style.width = "55%";
           document.getElementById("step-pending").classList.add("done");
           document.getElementById("step-preparing").classList.add("active");
-        } else if (myOrd.status === "ready") {
-          if (badge) badge.textContent = "Prête à déguster !";
-          if (bar)   bar.style.width   = "100%";
+        } else if (myOrder.status === "ready") {
+          lbl.textContent = "Élixir Prêt au Comptoir !";
+          lbl.className = "tracker-status-badge badge-ready";
+          bar.style.width = "100%";
           document.getElementById("step-pending").classList.add("done");
           document.getElementById("step-preparing").classList.add("done");
           document.getElementById("step-ready").classList.add("active");
@@ -1311,107 +1159,67 @@
         if (clientZone) clientZone.style.display = "none";
       }
 
-      // Table Barista
+      // Rendu du tableau Barista (Dashboard Admin)
       const tbody = document.getElementById("ordersTableBody");
       if (!tbody) return;
       if (orders.length === 0) {
         tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;color:var(--text-muted);padding:30px;">Aucun ticket en cuisine actuellement</td></tr>`;
         return;
       }
+
       tbody.innerHTML = orders.map(o => {
         let stClass = "badge-pending", stText = "En attente";
         if (o.status === "preparing") { stClass = "badge-preparing"; stText = "Extraction"; }
-        if (o.status === "ready")     { stClass = "badge-ready";     stText = "Prêt";       }
+        if (o.status === "ready") { stClass = "badge-ready"; stText = "Prêt"; }
+
         let actionBtn = "";
-        if (o.status === "pending")
+        if (o.status === "pending") {
           actionBtn = `<button type="button" class="btn-single-action btn-action-next" onclick="window.updateOrderStatus('${o.id}','preparing')">Préparer</button>`;
-        else if (o.status === "preparing")
-          actionBtn = `<button type="button" class="btn-single-action btn-action-next" style="background:#a8c99b;color:#110a05;" onclick="window.updateOrderStatus('${o.id}','ready')">Prêt !</button>`;
+        } else if (o.status === "preparing") {
+          actionBtn = `<button type="button" class="btn-single-action btn-action-next" onclick="window.updateOrderStatus('${o.id}','ready')">Prêt</button>`;
+        } else if (o.status === "ready") {
+          actionBtn = `<button type="button" class="btn-single-action btn-action-delete" onclick="window.deleteOrderSingle('${o.id}')">Archiver</button>`;
+        }
+
         return `
           <tr>
-            <td class="ticket-guest-name">${escapeXSS(o.guestName)||"Anonyme"}</td>
+            <td><span class="ticket-guest-name">${escapeXSS(o.guestName)}</span></td>
             <td><strong style="color:var(--gold);">${escapeXSS(o.drinkTitle)}</strong></td>
-            <td><div class="table-customs-spec">${escapeXSS(o.customs)||"Aucune spécification"}</div></td>
+            <td><div class="table-customs-spec">${escapeXSS(o.customs)}</div></td>
             <td><span class="badge-status-table ${stClass}">${stText}</span></td>
-            <td>
-              <div class="admin-actions-row">
-                ${actionBtn}
-                <button type="button" class="btn-single-action btn-action-delete" onclick="window.deleteOrderSingle('${o.id}')">✕</button>
-              </div>
-            </td>
-          </tr>`;
+            <td><div class="admin-actions-row">${actionBtn}</div></td>
+          </tr>
+        `;
       }).join("");
     });
 
-    // ── INITIALISATION ───────────────────────────────────────────
-    function initializeAppSystem() {
-      const pass    = storage.get("s_gate_passed");
-      const gate    = document.getElementById("authGate");
-      const wrapper = document.getElementById("appWrapper");
-
-      if (pass !== "true") {
-        gate?.classList.remove("hidden");
-        wrapper?.classList.remove("active");
-        return;
-      }
-
-      gate?.classList.add("hidden");
-      wrapper?.classList.add("active");
-      applyRoleUI();
-
-      document.getElementById("searchInput")?.addEventListener("input", e => {
-        searchQuery = e.target.value.toLowerCase().trim();
-        renderGrid();
-      });
-
-      document.querySelectorAll(".filter-btn-luxe").forEach(btn => {
-        btn.addEventListener("click", () => {
-          document.querySelectorAll(".filter-btn-luxe").forEach(p => p.classList.remove("active"));
-          btn.classList.add("active");
-          activeCat = btn.dataset.cat;
-          renderGrid();
-        });
-      });
-
-      document.querySelectorAll(".temp-btn-luxe").forEach(btn => {
-        btn.addEventListener("click", () => {
-          document.querySelectorAll(".temp-btn-luxe").forEach(p => p.classList.remove("active"));
-          btn.classList.add("active");
-          activeTemp = btn.dataset.temp;
-          renderGrid();
-        });
-      });
-
-
-      document.addEventListener("keydown", event => {
-        if (event.key !== "Escape") return;
-        closeProductModal();
-        closeRecipeAdminModal();
-      });
-
-      renderCustomizationAdmin();
-      populateCustomizationSelects();
-      renderGrid();
+    function showNotification(msg) {
+      const toast = document.getElementById("toastBox");
+      if (!toast) return;
+      toast.textContent = msg;
+      toast.classList.add("show");
+      setTimeout(() => toast.classList.remove("show"), 3500);
     }
 
-    // ── EXPOSITION GLOBALE (après déclarations) ──────────────────
-    window.validateGatewayLogin    = validateGatewayLogin;
-    window.toggleThemeSystem       = toggleThemeSystem;
-    window.triggerAdminAccessSecret= triggerAdminAccessSecret;
-    window.logout                  = logout;
-    window.submitOrderToFirebase   = submitOrderToFirebase;
-    window.updateOrderStatus       = updateOrderStatus;
-    window.deleteOrderSingle       = deleteOrderSingle;
-    window.openProductModal        = openProductModal;
-    window.closeProductModal       = closeProductModal;
-    window.switchProductTab        = switchProductTab;
-    window.openRecipeAdminModal    = openRecipeAdminModal;
-    window.closeRecipeAdminModal   = closeRecipeAdminModal;
-    window.saveRecipeAdmin         = saveRecipeAdmin;
-    window.deleteRecipeAdmin       = deleteRecipeAdmin;
-    window.clearAllOrders          = clearAllOrders;
+    // EXPOSITION GLOBALE DES MÉTHODES
+    window.validateGatewayLogin     = validateGatewayLogin;
+    window.toggleThemeSystem        = toggleThemeSystem;
+    window.triggerAdminAccessSecret = triggerAdminAccessSecret;
+    window.logout                   = logout;
+    window.submitOrderToFirebase    = submitOrderToFirebase;
+    window.updateOrderStatus        = updateOrderStatus;
+    window.deleteOrderSingle        = deleteOrderSingle;
+    window.openProductModal         = openProductModal;
+    window.closeProductModal        = closeProductModal;
+    window.switchProductTab         = switchProductTab;
+    window.openRecipeAdminModal     = openRecipeAdminModal;
+    window.closeRecipeAdminModal    = closeRecipeAdminModal;
+    window.saveRecipeAdmin          = saveRecipeAdmin;
+    window.deleteRecipeAdmin        = deleteRecipeAdmin;
+    window.clearAllOrders           = clearAllOrders;
+    window.saveCustomizationAdmin   = saveCustomizationAdmin;
+    window.resetCustomizationAdmin  = resetCustomizationAdmin;
 
-    // Démarrage
     if (document.readyState === "complete" || document.readyState === "interactive") {
       initializeAppSystem();
     } else {
