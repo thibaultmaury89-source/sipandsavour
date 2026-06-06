@@ -1087,26 +1087,35 @@
       document.getElementById("recipeAdminModal")?.classList.remove("active");
     }
 
+ // 🔥 FONCTION DE SAUVEGARDE CORRIGÉE ET ENRICHIE
     function saveRecipeAdmin(e) {
-      e.preventDefault();
+      if (e && typeof e.preventDefault === 'function') {
+        e.preventDefault(); // Bloque le rechargement parasite de la page
+      }
+      
       const id = document.getElementById("adminRecipeId").value || 'rec_' + Date.now();
+      
       const payload = {
         id,
         title: document.getElementById("adminTitle").value.trim(),
         cat: document.getElementById("adminCat").value,
         temp: document.getElementById("adminTemp").value,
         price: document.getElementById("adminPrice").value.trim(),
-        image: document.getElementById("adminImage").value.trim(),
+        image: document.getElementById("adminImage").value.trim() || "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=500&q=80",
         description: document.getElementById("adminDescription").value.trim(),
-        recipeInfo: document.getElementById("adminRecipeInfo").value.trim()
+        recipeInfo: document.getElementById("adminRecipeInfo").value.trim() || "Recette standard calibrée."
       };
 
+      // Envoi sécurisé vers Firebase
       set(ref(db, `recipes/${id}`), payload)
         .then(() => {
           closeRecipeAdminModal();
-          showNotification("Carte mise à jour");
+          showNotification("Élixir enregistré sur le Cloud avec succès !");
         })
-        .catch(() => alert("Erreur d'enregistrement"));
+        .catch((err) => {
+          console.error(err);
+          alert("Erreur d'enregistrement sur Firebase : " + err.message);
+        });
     }
 
     function deleteRecipeAdmin(id) {
