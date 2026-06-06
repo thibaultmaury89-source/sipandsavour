@@ -815,14 +815,17 @@
       }
     }
 
-    // RENDU DE LA CARTE CLIENT
+   // RENDU DE LA CARTE CLIENT (Corrigé pour afficher les boissons à la famille)
     function renderGrid() {
       const g = document.getElementById("menuGrid");
       if (!g) return;
+      
       const items = Object.values(catalogData).filter(item => {
         const matchCat = activeCat === "all" || item.cat === activeCat;
         const matchTemp = activeTemp === "all" || item.temp === activeTemp;
         const matchQ = !searchQuery || item.title.toLowerCase().includes(searchQuery) || item.description.toLowerCase().includes(searchQuery);
+        
+        // Suppression du filtre restrictif item.role pour que tout le monde (Famille et Admin) voie les boissons
         return matchCat && matchTemp && matchQ;
       });
 
@@ -831,6 +834,25 @@
         return;
       }
 
+      g.innerHTML = items.map(item => `
+        <div class="carte-item">
+          <div class="item-media">
+            <span class="item-tag-hot-cold ${item.temp === 'chaud' ? 'tag-hot' : 'tag-cold'}">${item.temp}</span>
+            <img src="${escapeXSS(item.image) || 'https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=500&q=80'}" alt="${escapeXSS(item.title)}" loading="lazy" />
+          </div>
+          <div class="item-header">
+            <h4 class="item-title">${escapeXSS(item.title)}</h4>
+            <div class="item-line-dots"></div>
+            <span class="item-price">${escapeXSS(item.price)}€</span>
+          </div>
+          <p class="item-description">${escapeXSS(item.description)}</p>
+          <div>
+            <span class="item-family-tag tag-${item.cat}">${item.cat.toUpperCase()}</span>
+          </div>
+          <button type="button" class="btn-luxe" style="margin-top:auto;padding:10px;font-size:0.68rem;" onclick="window.openProductModal('${item.id}', 'desc')">Consulter & Commander</button>
+        </div>
+      `).join("");
+    }
       g.innerHTML = items.map(item => `
         <div class="carte-item">
           <div class="item-media">
