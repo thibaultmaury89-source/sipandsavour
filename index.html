@@ -242,6 +242,14 @@
     .modal-backdrop-luxe.active { display: flex; }
     .modal-box-luxe { background: var(--panel-bg); border: 1px solid var(--gold); padding: 30px; max-width: 520px; width: 100%; border-top: 4px solid var(--gold); box-shadow: var(--shadow-luxe); border-radius: 8px; max-height: 95vh; overflow-y: auto; }
     .modal-title-luxe { font-family: var(--font-serif); font-size: 1.6rem; color: var(--gold); font-weight: 400; margin-bottom: 15px; }
+    .modal-box-luxe { position: relative; }
+    .modal-close-luxe {
+      position: absolute; top: 10px; right: 10px; width: 34px; height: 34px;
+      border: 1px solid var(--border-fine); background: transparent; color: var(--gold);
+      border-radius: 4px; font-size: 1.35rem; line-height: 1; cursor: pointer; transition: all 0.2s ease;
+    }
+    .modal-close-luxe:hover { background: rgba(197,168,128,0.12); color: var(--text-light); }
+
     .modal-form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 25px; }
     .span-full { grid-column: 1 / -1; }
 
@@ -275,7 +283,7 @@
     }
   </style>
 </head>
-<body>
+<body id="top">
   <div class="ambiance-glow glow-1"></div>
   <div class="ambiance-glow glow-2"></div>
 
@@ -297,7 +305,7 @@
   <!-- APP WRAPPER -->
   <div class="wrapper" id="appWrapper">
     <header id="mainHeader">
-      <a href="#" class="brand-signature">
+      <a href="#top" class="brand-signature" onclick="window.scrollTo({top:0,behavior:'smooth'})">
         Sip & Savour
         <span>Salon Privé & Haute Torréfaction</span>
       </a>
@@ -419,17 +427,17 @@
         </div>
         <div class="curation-tabs-row">
           <div class="filter-group-luxe">
-            <button class="filter-btn-luxe active" data-cat="all">Tous</button>
-            <button class="filter-btn-luxe" data-cat="cafe">Cafés</button>
-            <button class="filter-btn-luxe" data-cat="the">Thés</button>
-            <button class="filter-btn-luxe" data-cat="infusion">Infusions</button>
-            <button class="filter-btn-luxe" data-cat="signature">Signatures</button>
-            <button class="filter-btn-luxe" data-cat="classique">Classiques</button>
+            <button type="button" class="filter-btn-luxe active" data-cat="all">Tous</button>
+            <button type="button" class="filter-btn-luxe" data-cat="cafe">Cafés</button>
+            <button type="button" class="filter-btn-luxe" data-cat="the">Thés</button>
+            <button type="button" class="filter-btn-luxe" data-cat="infusion">Infusions</button>
+            <button type="button" class="filter-btn-luxe" data-cat="signature">Signatures</button>
+            <button type="button" class="filter-btn-luxe" data-cat="classique">Classiques</button>
           </div>
           <div class="temp-selector-luxe">
-            <button class="temp-btn-luxe active" data-temp="all">Tous</button>
-            <button class="temp-btn-luxe" data-temp="chaud">Chaud</button>
-            <button class="temp-btn-luxe" data-temp="glacé">Glacé</button>
+            <button type="button" class="temp-btn-luxe active" data-temp="all">Tous</button>
+            <button type="button" class="temp-btn-luxe" data-temp="chaud">Chaud</button>
+            <button type="button" class="temp-btn-luxe" data-temp="glacé">Glacé</button>
           </div>
         </div>
       </section>
@@ -446,8 +454,8 @@
       <h3 class="modal-title-luxe" id="modalProductTitle">Élixir</h3>
       <span class="product-meta-badge" id="modalProductBadge">Chaud — Signature</span>
       <div class="tabs-nav-product">
-        <button class="tab-link-product active" id="tabLinkDesc" onclick="window.switchProductTab('desc')">Notes de Dégustation</button>
-        <button class="tab-link-product" id="tabLinkOrder" onclick="window.switchProductTab('order')">Ajuster ma Recette</button>
+        <button type="button" class="tab-link-product active" id="tabLinkDesc" onclick="window.switchProductTab('desc')">Notes de Dégustation</button>
+        <button type="button" class="tab-link-product" id="tabLinkOrder" onclick="window.switchProductTab('order')">Ajuster ma Recette</button>
       </div>
       <div class="tab-content-product">
         <div class="tab-pane-product active" id="tabPaneDesc">
@@ -560,16 +568,91 @@
     <p>© 2026 Sip & Savour — Excellence Connectée</p>
   </footer>
 
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-    import { getDatabase, ref, set, onValue, push, update, remove } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+  <script>
+    // -- DONNEES LOCALES ROBUSTES ------------------------------------------
+    // Cette couche garde le fichier utilisable directement dans le navigateur,
+    // meme si les imports Firebase ou le reseau ne sont pas disponibles.
+    const db = { mode: "local" };
+    const LOCAL_DB_KEY = "sip_savour_local_database";
+    const localListeners = new Map();
 
-    // ── CONFIG FIREBASE ──────────────────────────────────────────
-    const firebaseConfig = { databaseURL: "https://sipandsavour-b78f4-default-rtdb.firebaseio.com/" };
-    const app = initializeApp(firebaseConfig);
-    const db  = getDatabase(app);
+    function cleanPath(path = "") {
+      return String(path).replace(/^\/+|\/+$/g, "");
+    }
 
-    // ── STOCKAGE LOCAL ───────────────────────────────────────────
+    function readLocalDatabase() {
+      try { return JSON.parse(localStorage.getItem(LOCAL_DB_KEY)) || {}; }
+      catch (e) { return {}; }
+    }
+
+    function writeLocalDatabase(data) {
+      try { localStorage.setItem(LOCAL_DB_KEY, JSON.stringify(data)); }
+      catch (e) { console.warn("Stockage local indisponible", e); }
+    }
+
+    function getAtPath(data, path) {
+      const parts = cleanPath(path).split("/").filter(Boolean);
+      let node = data;
+      for (const part of parts) {
+        if (!node || typeof node !== "object" || !(part in node)) return null;
+        node = node[part];
+      }
+      return node ?? null;
+    }
+
+    function setAtPath(data, path, value) {
+      const parts = cleanPath(path).split("/").filter(Boolean);
+      if (parts.length === 0) return value || {};
+      let node = data;
+      for (let i = 0; i < parts.length - 1; i += 1) {
+        const part = parts[i];
+        if (!node[part] || typeof node[part] !== "object") node[part] = {};
+        node = node[part];
+      }
+      const last = parts[parts.length - 1];
+      if (value === null) delete node[last];
+      else node[last] = value;
+      return data;
+    }
+
+    function notifyLocal(path) {
+      const data = readLocalDatabase();
+      const clean = cleanPath(path);
+      const paths = new Set([clean]);
+      const parent = clean.split("/").slice(0, -1).join("/");
+      if (parent) paths.add(parent);
+      paths.forEach(p => {
+        const listeners = localListeners.get(p);
+        if (!listeners) return;
+        const snapshot = { val: () => getAtPath(data, p) };
+        listeners.forEach(callback => callback(snapshot));
+      });
+    }
+
+    function ref(_db, path) { return { path: cleanPath(path) }; }
+    function push(reference) {
+      const key = `ticket_${Date.now().toString(36)}_${Math.random().toString(36).slice(2, 7)}`;
+      return { path: cleanPath(`${reference.path}/${key}`), key };
+    }
+    function set(reference, value) {
+      const data = setAtPath(readLocalDatabase(), reference.path, value);
+      writeLocalDatabase(data);
+      notifyLocal(reference.path);
+      return Promise.resolve();
+    }
+    function update(reference, patch) {
+      const current = getAtPath(readLocalDatabase(), reference.path) || {};
+      return set(reference, { ...current, ...patch });
+    }
+    function remove(reference) { return set(reference, null); }
+    function onValue(reference, callback) {
+      const path = cleanPath(reference.path);
+      if (!localListeners.has(path)) localListeners.set(path, new Set());
+      localListeners.get(path).add(callback);
+      setTimeout(() => callback({ val: () => getAtPath(readLocalDatabase(), path) }), 0);
+      return () => localListeners.get(path)?.delete(callback);
+    }
+// ── STOCKAGE LOCAL ───────────────────────────────────────────
     const storage = {
       get:    k     => { try { return localStorage.getItem(k); } catch(e){ return null; } },
       set:    (k,v) => { try { localStorage.setItem(k, v); } catch(e){} },
@@ -872,8 +955,8 @@
         <div class="admin-catalog-card">
           <span>${escapeXSS(item.title)} (${escapeXSS(item.price)}€)</span>
           <div class="admin-actions-row">
-            <button class="btn-single-action" onclick="window.openRecipeAdminModal('${item.id}')">Éditer</button>
-            <button class="btn-single-action btn-action-delete" onclick="window.deleteRecipeAdmin('${item.id}')">Suppr.</button>
+            <button type="button" class="btn-single-action" onclick="window.openRecipeAdminModal('${item.id}')">Éditer</button>
+            <button type="button" class="btn-single-action btn-action-delete" onclick="window.deleteRecipeAdmin('${item.id}')">Suppr.</button>
           </div>
         </div>
       `).join("");
@@ -956,6 +1039,7 @@
         .then(() => {
           myActiveOrderId = ticketId;
           storage.set("s_my_order_id", ticketId);
+          notifyLocal(`orders/${ticketId}`);
           closeProductModal();
           showNotification(`✓ Commande de ${name} transmise au barista !`);
           if (gInput) gInput.value = "";
@@ -1116,9 +1200,9 @@
         if (o.status === "ready")     { stClass = "badge-ready";     stText = "Prêt";       }
         let actionBtn = "";
         if (o.status === "pending")
-          actionBtn = `<button class="btn-single-action btn-action-next" onclick="window.updateOrderStatus('${o.id}','preparing')">Préparer</button>`;
+          actionBtn = `<button type="button" class="btn-single-action btn-action-next" onclick="window.updateOrderStatus('${o.id}','preparing')">Préparer</button>`;
         else if (o.status === "preparing")
-          actionBtn = `<button class="btn-single-action btn-action-next" style="background:#a8c99b;color:#110a05;" onclick="window.updateOrderStatus('${o.id}','ready')">Prêt !</button>`;
+          actionBtn = `<button type="button" class="btn-single-action btn-action-next" style="background:#a8c99b;color:#110a05;" onclick="window.updateOrderStatus('${o.id}','ready')">Prêt !</button>`;
         return `
           <tr>
             <td class="ticket-guest-name">${escapeXSS(o.guestName)||"Anonyme"}</td>
@@ -1128,7 +1212,7 @@
             <td>
               <div class="admin-actions-row">
                 ${actionBtn}
-                <button class="btn-single-action btn-action-delete" onclick="window.deleteOrderSingle('${o.id}')">✕</button>
+                <button type="button" class="btn-single-action btn-action-delete" onclick="window.deleteOrderSingle('${o.id}')">✕</button>
               </div>
             </td>
           </tr>`;
@@ -1172,6 +1256,13 @@
           activeTemp = btn.dataset.temp;
           renderGrid();
         });
+      });
+
+
+      document.addEventListener("keydown", event => {
+        if (event.key !== "Escape") return;
+        closeProductModal();
+        closeRecipeAdminModal();
       });
 
       renderGrid();
