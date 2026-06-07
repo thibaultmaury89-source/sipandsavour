@@ -267,7 +267,10 @@
     .modal-form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 25px; }
     .span-full { grid-column: 1 / -1; }
 
-    .toast-luxe { position: fixed; bottom: 25px; right: 25px; z-index: 10001; background: var(--panel-bg); border: 1px solid var(--gold); padding: 15px 20px; box-shadow: var(--shadow-luxe); border-radius: 6px; transform: translateY(100px); opacity: 0; transition: all 0.4s ease; pointer-events: none; }
+    .firebase-banner { position: fixed; bottom: 0; left: 0; right: 0; z-index: 9998; padding: 8px 20px; font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; text-align: center; display: none; }
+    .firebase-banner.warn  { background: rgba(214,107,83,0.92); color: #fff; display: block; }
+    .firebase-banner.ok    { background: rgba(100,170,90,0.85); color: #fff; display: block; }
+    .toast-luxe { position: fixed; bottom: 55px; right: 25px; z-index: 10001; background: var(--panel-bg); border: 1px solid var(--gold); padding: 15px 20px; box-shadow: var(--shadow-luxe); border-radius: 6px; transform: translateY(100px); opacity: 0; transition: all 0.4s ease; pointer-events: none; }
     .toast-luxe.show { transform: translateY(0); opacity: 1; }
 
     footer { border-top: 1px solid var(--border-fine); padding: 30px; text-align: center; max-width: 1300px; margin: 0 auto; }
@@ -490,7 +493,7 @@
   <!-- MODALE PRODUIT -->
   <div class="modal-backdrop-luxe" id="productModal" onclick="if(event.target===this) window.closeProductModal()">
     <div class="modal-box-luxe">
-      <button type="button" class="modal-close-luxe" aria-label="Fermer" onclick="window.closeProductModal()">?</button>
+      <button type="button" class="modal-close-luxe" aria-label="Fermer" onclick="window.closeProductModal()">&#x2715;</button>
       <h3 class="modal-title-luxe" id="modalProductTitle">Élixir</h3>
       <span class="product-meta-badge" id="modalProductBadge">Chaud — Signature</span>
       <div class="tabs-nav-product">
@@ -554,7 +557,7 @@
   <!-- MODALE ADMIN RECETTE -->
   <div class="modal-backdrop-luxe" id="recipeAdminModal" onclick="if(event.target===this) window.closeRecipeAdminModal()">
     <div class="modal-box-luxe">
-      <button type="button" class="modal-close-luxe" aria-label="Fermer" onclick="window.closeRecipeAdminModal()">?</button>
+      <button type="button" class="modal-close-luxe" aria-label="Fermer" onclick="window.closeRecipeAdminModal()">&#x2715;</button>
       <h3 class="modal-title-luxe" id="recipeAdminTitle">Ajouter une création</h3>
       <form id="recipeAdminForm" onsubmit="window.saveRecipeAdmin(event)">
         <input type="hidden" id="adminRecipeId">
@@ -603,17 +606,50 @@
     </div>
   </div>
 
+  <div class="firebase-banner" id="firebaseBanner"></div>
   <div class="toast-luxe" id="globalToast">Action réalisée avec succès</div>
 
   <footer>
     <p>© 2026 Sip & Savour — Excellence Connectée</p>
   </footer>
 
+  <!-- SDK Firebase (compat) chargé avant le script principal -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
+
   <script>
-    // -- DONNEES LOCALES ROBUSTES ------------------------------------------
-    // Cette couche garde le fichier utilisable directement dans le navigateur,
-    // meme si les imports Firebase ou le reseau ne sont pas disponibles.
-    const db = { mode: "local" };
+    // ── CONFIGURATION FIREBASE ───────────────────────────────────
+    // 🔧 REMPLACEZ ces valeurs par celles de votre projet Firebase :
+    //    Firebase Console → Paramètres du projet → Vos applications → SDK snippet
+   const firebaseConfig = {
+  apiKey: "AIzaSyAZiw4PTPzWiaCRE3rT06iCS012ZzoywOE",
+  authDomain: "sipandsavour-672f8.firebaseapp.com",
+  databaseURL: "https://sipandsavour-672f8-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId: "sipandsavour-672f8",
+  storageBucket: "sipandsavour-672f8.firebasestorage.app",
+  messagingSenderId: "373444217712",
+  appId: "1:373444217712:web:8cd90d43a413a2781e1db5"
+};
+
+    // ── INITIALISATION FIREBASE ──────────────────────────────────
+    let firebaseApp, db, firebaseReady = false;
+
+    try {
+      firebaseApp = firebase.initializeApp(FIREBASE_CONFIG);
+      db = firebase.database();
+      // Test de connexion rapide
+      db.ref(".info/connected").on("value", snap => {
+        firebaseReady = snap.val() === true;
+        console.log(firebaseReady ? "✅ Firebase connecté" : "⚠️ Firebase hors-ligne");
+      });
+    } catch (e) {
+      console.warn("Firebase init échoué, passage en mode local :", e);
+    }
+
+    // ── COUCHE D'ABSTRACTION DB ──────────────────────────────────
+    // Si Firebase est disponible → on l'utilise (données partagées entre appareils).
+    // Sinon → fallback localStorage (fonctionne hors-ligne sur un seul appareil).
+
     const LOCAL_DB_KEY = "sip_savour_local_database";
     const localListeners = new Map();
 
@@ -621,16 +657,19 @@
       return String(path).replace(/^\/+|\/+$/g, "");
     }
 
+    function isFirebaseAvailable() {
+      return !!(db && FIREBASE_CONFIG.apiKey !== "VOTRE_API_KEY");
+    }
+
+    /* ---- localStorage helpers (fallback) ---- */
     function readLocalDatabase() {
       try { return JSON.parse(localStorage.getItem(LOCAL_DB_KEY)) || {}; }
       catch (e) { return {}; }
     }
-
     function writeLocalDatabase(data) {
       try { localStorage.setItem(LOCAL_DB_KEY, JSON.stringify(data)); }
       catch (e) { console.warn("Stockage local indisponible", e); }
     }
-
     function getAtPath(data, path) {
       const parts = cleanPath(path).split("/").filter(Boolean);
       let node = data;
@@ -640,22 +679,19 @@
       }
       return node ?? null;
     }
-
     function setAtPath(data, path, value) {
       const parts = cleanPath(path).split("/").filter(Boolean);
       if (parts.length === 0) return value || {};
       let node = data;
-      for (let i = 0; i < parts.length - 1; i += 1) {
-        const part = parts[i];
-        if (!node[part] || typeof node[part] !== "object") node[part] = {};
-        node = node[part];
+      for (let i = 0; i < parts.length - 1; i++) {
+        if (!node[parts[i]] || typeof node[parts[i]] !== "object") node[parts[i]] = {};
+        node = node[parts[i]];
       }
       const last = parts[parts.length - 1];
       if (value === null) delete node[last];
       else node[last] = value;
       return data;
     }
-
     function notifyLocal(path) {
       const data = readLocalDatabase();
       const clean = cleanPath(path);
@@ -666,27 +702,60 @@
         const listeners = localListeners.get(p);
         if (!listeners) return;
         const snapshot = { val: () => getAtPath(data, p) };
-        listeners.forEach(callback => callback(snapshot));
+        listeners.forEach(cb => cb(snapshot));
       });
     }
 
-    function ref(_db, path) { return { path: cleanPath(path) }; }
-    function push(reference) {
-      const key = `ticket_${Date.now().toString(36)}_${Math.random().toString(36).slice(2, 7)}`;
-      return { path: cleanPath(`${reference.path}/${key}`), key };
+    /* ---- API unifiée ref / push / set / update / remove / onValue ---- */
+
+    function ref(_db, path) {
+      const cleanedPath = cleanPath(path);
+      if (isFirebaseAvailable()) {
+        return db.ref(cleanedPath);          // objet Firebase ref natif
+      }
+      return { path: cleanedPath, _local: true };
     }
+
+    function push(reference) {
+      if (isFirebaseAvailable()) {
+        return reference.push();             // Firebase push() renvoie un ref avec .key
+      }
+      const key = `ticket_${Date.now().toString(36)}_${Math.random().toString(36).slice(2, 7)}`;
+      return { path: cleanPath(`${reference.path}/${key}`), key, _local: true };
+    }
+
     function set(reference, value) {
+      if (isFirebaseAvailable()) {
+        return reference.set(value);
+      }
       const data = setAtPath(readLocalDatabase(), reference.path, value);
       writeLocalDatabase(data);
       notifyLocal(reference.path);
       return Promise.resolve();
     }
+
     function update(reference, patch) {
+      if (isFirebaseAvailable()) {
+        return reference.update(patch);
+      }
       const current = getAtPath(readLocalDatabase(), reference.path) || {};
       return set(reference, { ...current, ...patch });
     }
-    function remove(reference) { return set(reference, null); }
+
+    function remove(reference) {
+      if (isFirebaseAvailable()) {
+        return reference.remove();
+      }
+      return set(reference, null);
+    }
+
     function onValue(reference, callback) {
+      if (isFirebaseAvailable()) {
+        // Firebase écoute en temps réel → mise à jour automatique sur tous les appareils
+        reference.on("value", snapshot => callback(snapshot));
+        return () => reference.off("value");
+      }
+      // Fallback local
       const path = cleanPath(reference.path);
       if (!localListeners.has(path)) localListeners.set(path, new Set());
       localListeners.get(path).add(callback);
@@ -986,7 +1055,10 @@
     }
 
     function logout() {
-      storage.clear();
+      // On efface uniquement les clés de session, pas la base de données locale complète
+      storage.remove("s_gate_passed");
+      storage.remove("s_role");
+      storage.remove("s_my_order_id");
       location.reload();
     }
 
@@ -1134,7 +1206,9 @@
       if (scheduledTime)  finalSpecs += `\n[⏰ Retrait : ${scheduledTime}]`;
       if (textualNotes)   finalSpecs += `\nNote : ${escapeXSS(textualNotes)}`;
 
-      const newTicketRef = push(ref(db, "orders"));
+      const ordersRef    = ref(db, "orders");
+      const newTicketRef = push(ordersRef);
+      // Firebase push() renvoie un ref dont .key est accessible directement
       const ticketId     = newTicketRef.key;
 
       const orderPayload = {
@@ -1151,7 +1225,6 @@
         .then(() => {
           myActiveOrderId = ticketId;
           storage.set("s_my_order_id", ticketId);
-          notifyLocal(`orders/${ticketId}`);
           closeProductModal();
           showNotification(`✓ Commande de ${name} transmise au barista !`);
           if (gInput) gInput.value = "";
@@ -1345,6 +1418,18 @@
 
     // ── INITIALISATION ───────────────────────────────────────────
     function initializeAppSystem() {
+      // Indicateur Firebase
+      const banner = document.getElementById("firebaseBanner");
+      if (banner) {
+        if (isFirebaseAvailable()) {
+          banner.textContent = "🔥 Firebase actif — données synchronisées en temps réel entre tous les appareils";
+          banner.className = "firebase-banner ok";
+          setTimeout(() => { banner.className = "firebase-banner"; }, 5000);
+        } else {
+          banner.textContent = "⚠️ Mode local uniquement — configurez Firebase (voir FIREBASE_CONFIG) pour synchroniser les commandes entre appareils";
+          banner.className = "firebase-banner warn";
+        }
+      }
       const pass    = storage.get("s_gate_passed");
       const gate    = document.getElementById("authGate");
       const wrapper = document.getElementById("appWrapper");
@@ -1410,6 +1495,8 @@
     window.saveRecipeAdmin         = saveRecipeAdmin;
     window.deleteRecipeAdmin       = deleteRecipeAdmin;
     window.clearAllOrders          = clearAllOrders;
+    window.saveCustomizationAdmin  = saveCustomizationAdmin;
+    window.resetCustomizationAdmin = resetCustomizationAdmin;
 
     // Démarrage
     if (document.readyState === "complete" || document.readyState === "interactive") {
