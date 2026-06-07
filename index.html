@@ -299,11 +299,138 @@
       .modal-box-luxe { padding: 20px; }
       .modal-form-grid { grid-template-columns: 1fr; }
     }
+    /* ==========================================================================
+       ACCESSIBILITÉ : MODE ADAPTÉ, CONTRASTE ÉLEVÉ, MODE SIMPLIFIÉ, ZOOM
+       ========================================================================== */
+    :root { --base-font-size: 16px; }
+
+    body.accessibility-mode {
+      --base-font-size: 22px !important;
+    }
+    body.accessibility-mode .carte-item,
+    body.accessibility-mode .form-input,
+    body.accessibility-mode select,
+    body.accessibility-mode textarea,
+    body.accessibility-mode .btn-luxe,
+    body.accessibility-mode .btn-single-action,
+    body.accessibility-mode .btn-action-split,
+    body.accessibility-mode .access-ctrl-btn {
+      padding: 18px 24px !important;
+      margin: 10px 0 !important;
+      min-height: 52px !important;
+    }
+    body.accessibility-mode .item-description { font-size: 1rem !important; }
+
+    [data-theme="high-contrast"] {
+      --bg-salon: #000000 !important; --panel-bg: #000000 !important;
+      --gold: #ffffff !important; --gold-dim: #ffffff !important;
+      --cream: #ffffff !important; --text-light: #ffffff !important;
+      --text-muted: #ffffff !important; --border-fine: #ffffff !important;
+      --blur: 0px !important; --shadow-luxe: none !important;
+    }
+    [data-theme="high-contrast"] *,
+    [data-theme="high-contrast"] .carte-item,
+    [data-theme="high-contrast"] header,
+    [data-theme="high-contrast"] .form-input,
+    [data-theme="high-contrast"] select,
+    [data-theme="high-contrast"] textarea {
+      border: 2px solid #ffffff !important;
+      background-color: #000000 !important;
+      color: #ffffff !important;
+      text-shadow: none !important;
+      box-shadow: none !important;
+    }
+    [data-theme="high-contrast"] .btn-luxe,
+    [data-theme="high-contrast"] .btn-split-order,
+    [data-theme="high-contrast"] .btn-action-next {
+      background-color: #ffffff !important;
+      color: #000000 !important;
+      font-weight: bold !important;
+      border: 2px solid #ffffff !important;
+    }
+    *:focus-visible {
+      outline: 4px solid #c5a880 !important;
+      outline-offset: 4px !important;
+      box-shadow: 0 0 15px #c5a880 !important;
+    }
+    [data-theme="high-contrast"] *:focus-visible {
+      outline: 4px solid #ffffff !important;
+      outline-offset: 4px !important;
+    }
+    body.simplified-mode .item-media,
+    body.simplified-mode .hero-cinematic div:last-child,
+    body.simplified-mode .barista-choice-media,
+    body.simplified-mode .ambiance-glow,
+    body.simplified-mode::before { display: none !important; }
+    body.simplified-mode .menu-grid-luxe { grid-template-columns: 1fr !important; gap: 15px !important; }
+    body.simplified-mode .carte-item { flex-direction: row !important; align-items: center; justify-content: space-between; flex-wrap: wrap; }
+
+    /* BARRE ACCESSIBILITÉ */
+    .accessibility-toolbar {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 10001;
+      background: rgba(10,6,3,0.97); border-bottom: 1px solid var(--border-fine);
+      display: flex; align-items: center; flex-wrap: wrap; gap: 6px; padding: 6px 20px;
+    }
+    .access-ctrl-btn {
+      background: rgba(197,168,128,0.1); border: 1px solid var(--border-fine);
+      color: var(--gold); padding: 5px 10px; font-family: var(--font-sans);
+      font-size: 0.62rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px;
+      cursor: pointer; border-radius: 4px; transition: all 0.2s; white-space: nowrap;
+    }
+    .access-ctrl-btn:hover { background: rgba(197,168,128,0.2); }
+    .access-ctrl-btn[aria-pressed="true"] { background: var(--gold); color: #110a05; }
+
+    /* BOUTONS FLOTTANTS ASSISTANT VOCAL */
+    .assistant-floating-container {
+      position: fixed; bottom: 80px; left: 25px; z-index: 999; display: flex; flex-direction: column; gap: 10px;
+    }
+    .btn-assistant-float {
+      background: #110a05; border: 2px solid var(--gold); color: var(--gold);
+      width: 56px; height: 56px; border-radius: 50%; box-shadow: var(--shadow-luxe);
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+      font-weight: bold; font-size: 1.1rem; transition: transform 0.2s;
+    }
+    .btn-assistant-float:hover { transform: scale(1.08); }
+
+    /* Décalage header + contenu pour accommoder la toolbar accessibilité */
+    header { top: 38px !important; }
+    .main-body-content { padding-top: 148px; }
+
+    @media (max-width: 850px) {
+      .accessibility-toolbar { padding: 5px 10px; gap: 4px; }
+      header { top: 52px !important; }
+      .main-body-content { padding-top: 220px; }
+    }
+
   </style>
 </head>
 <body id="top">
   <div class="ambiance-glow glow-1"></div>
   <div class="ambiance-glow glow-2"></div>
+
+  <!-- RÉGION ARIA LIVE pour lecteurs d'écran -->
+  <div id="ariaLiveRegion" style="position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);border:0;" aria-live="assertive" aria-atomic="true"></div>
+
+  <!-- BARRE D'ACCESSIBILITÉ -->
+  <nav class="accessibility-toolbar" aria-label="Outils d'accessibilité visuelle et vocale">
+    <button type="button" class="access-ctrl-btn" id="toggleAccessMode" onclick="window.toggleAccessibilityMode()" aria-pressed="false">👁️ Mode Adapté</button>
+    <button type="button" class="access-ctrl-btn" id="toggleHighContrast" onclick="window.toggleHighContrastTheme()" aria-pressed="false">⚫ Contraste Élevé</button>
+    <button type="button" class="access-ctrl-btn" id="toggleSimplified" onclick="window.toggleSimplifiedMode()" aria-pressed="false">📋 Mode Simplifié</button>
+    <button type="button" class="access-ctrl-btn" onclick="window.adjustLocalZoom(2)" aria-label="Agrandir le texte">➕ Agrandir</button>
+    <button type="button" class="access-ctrl-btn" onclick="window.adjustLocalZoom(-2)" aria-label="Réduire le texte">➖ Réduire</button>
+    <button type="button" class="access-ctrl-btn" onclick="window.resetLocalZoom()" aria-label="Réinitialiser la taille du texte">🔄 Reset</button>
+    <span style="border-left:1px solid var(--border-fine);padding-left:6px;display:flex;gap:5px;">
+      <button type="button" class="access-ctrl-btn" style="background:#80c59e;color:#110a05;" onclick="window.readWholeCarte()" aria-label="Lire la carte vocalement">📖 Lire la Carte</button>
+      <button type="button" class="access-ctrl-btn" onclick="window.pauseSpeech()">⏸️ Pause</button>
+      <button type="button" class="access-ctrl-btn" onclick="window.stopSpeech()">⏹️ Stop</button>
+    </span>
+  </nav>
+
+  <!-- ASSISTANT VOCAL FLOTTANT -->
+  <div class="assistant-floating-container">
+    <button type="button" class="btn-assistant-float" id="btnBaristaAssistant" onclick="window.triggerBaristaAssistantVoice()" aria-label="Assistant vocal Barista">❓</button>
+    <button type="button" class="btn-assistant-float" style="background:#902020;border-color:#ff8080;" id="btnVoiceCommandInput" onclick="window.toggleVoiceRecognitionCommands()" aria-label="Commande vocale">🎙️</button>
+  </div>
 
   <!-- AUTH GATE -->
   <div class="auth-screen" id="authGate">
@@ -619,15 +746,15 @@
 
   <script>
     // ── CONFIGURATION FIREBASE ───────────────────────────────────
- const firebaseConfig = {
-  apiKey: "AIzaSyAZiw4PTPzWiaCRE3rT06iCS012ZzoywOE",
-  authDomain: "sipandsavour-672f8.firebaseapp.com",
-  databaseURL: "https://sipandsavour-672f8-default-rtdb.europe-west1.firebasedatabase.app",
-  projectId: "sipandsavour-672f8",
-  storageBucket: "sipandsavour-672f8.firebasestorage.app",
-  messagingSenderId: "373444217712",
-  appId: "1:373444217712:web:8cd90d43a413a2781e1db5"
-};
+    const FIREBASE_CONFIG = {
+      apiKey: "AIzaSyAZiw4PTPzWiaCRE3rT06iCS012ZzoywOE",
+      authDomain: "sipandsavour-672f8.firebaseapp.com",
+      databaseURL: "https://sipandsavour-672f8-default-rtdb.europe-west1.firebasedatabase.app",
+      projectId: "sipandsavour-672f8",
+      storageBucket: "sipandsavour-672f8.firebasestorage.app",
+      messagingSenderId: "373444217712",
+      appId: "1:373444217712:web:8cd90d43a413a2781e1db5"
+    };
 
     // ── INITIALISATION FIREBASE ──────────────────────────────────
     let firebaseApp, db, firebaseReady = false;
@@ -760,6 +887,116 @@
       setTimeout(() => callback({ val: () => getAtPath(readLocalDatabase(), path) }), 0);
       return () => localListeners.get(path)?.delete(callback);
     }
+// ── ACCESSIBILITÉ : SYNTHÈSE & RECONNAISSANCE VOCALE ────────
+    let synth = window.speechSynthesis;
+    let currentUtterance = null;
+    let cartePlaylist = [];
+    let playlistIndex = 0;
+    let SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    let voiceRecognizer = null;
+    let isVoiceCommandActive = false;
+
+    function speakText(text, onEndCallback = null) {
+      if (!synth) return;
+      synth.cancel();
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = "fr-FR";
+      utterance.rate = 0.95;
+      if (onEndCallback) utterance.onend = onEndCallback;
+      currentUtterance = utterance;
+      synth.speak(utterance);
+      const lr = document.getElementById("ariaLiveRegion");
+      if (lr) lr.textContent = text;
+    }
+
+    function pauseSpeech()  { if (synth && synth.speaking) synth.pause(); }
+    function resumeSpeech() { if (synth && synth.paused)   synth.resume(); }
+    function stopSpeech()   { if (synth) synth.cancel(); playlistIndex = cartePlaylist.length; }
+
+    window.readWholeCarte = function() {
+      const activeItems = Object.values(catalogData).filter(item => {
+        const matchCat  = activeCat  === "all" || item.cat  === activeCat;
+        const matchTemp = activeTemp === "all" || item.temp === activeTemp;
+        return matchCat && matchTemp;
+      });
+      if (activeItems.length === 0) { speakText("La carte sélectionnée est vide."); return; }
+      cartePlaylist = activeItems; playlistIndex = 0;
+      speakText("Démarrage de la lecture de la carte.");
+      function readNext() {
+        if (playlistIndex >= cartePlaylist.length) { speakText("Fin de la lecture."); return; }
+        const cur = cartePlaylist[playlistIndex++];
+        speakText(`${cur.title}, catégorie ${cur.cat}, ${cur.temp}, prix ${cur.price} euros. ${cur.description}`, readNext);
+      }
+      setTimeout(readNext, 1000);
+    };
+
+    window.triggerBaristaAssistantVoice = function() {
+      speakText("Je suis votre assistant Barista. Vous pouvez me demander par exemple quels sont les thés disponibles, ou quelle est la boisson du moment.");
+      showNotification("Assistant Barista à l'écoute...");
+    };
+
+    window.pauseSpeech  = pauseSpeech;
+    window.resumeSpeech = resumeSpeech;
+    window.stopSpeech   = stopSpeech;
+
+    window.toggleVoiceRecognitionCommands = function() {
+      if (!SpeechRecognition) { alert("Reconnaissance vocale non supportée sur ce navigateur."); return; }
+      if (isVoiceCommandActive) { if (voiceRecognizer) voiceRecognizer.stop(); return; }
+      voiceRecognizer = new SpeechRecognition();
+      voiceRecognizer.lang = "fr-FR"; voiceRecognizer.continuous = false; voiceRecognizer.interimResults = false;
+      voiceRecognizer.onstart = () => { isVoiceCommandActive = true; document.getElementById("btnVoiceCommandInput").style.background = "#209040"; showNotification("Microphone actif..."); };
+      voiceRecognizer.onerror = voiceRecognizer.onend = () => { isVoiceCommandActive = false; const b = document.getElementById("btnVoiceCommandInput"); if (b) b.style.background = "#902020"; };
+      voiceRecognizer.onresult = (e) => {
+        const cmd = e.results[0][0].transcript.toLowerCase().trim();
+        showNotification(`Commande : "${cmd}"`);
+        // Filtres
+        if (cmd.includes("thés") || cmd.includes("thé")) { activeCat = "the"; renderGrid(); speakText("Filtrage : thés affichés."); return; }
+        if (cmd.includes("cafés") || cmd.includes("café")) { activeCat = "cafe"; renderGrid(); speakText("Filtrage : cafés affichés."); return; }
+        if (cmd.includes("infusion")) { activeCat = "infusion"; renderGrid(); speakText("Filtrage : infusions affichées."); return; }
+        if (cmd.includes("froid") || cmd.includes("glacé")) { activeTemp = "glacé"; renderGrid(); speakText("Filtrage : boissons glacées."); return; }
+        if (cmd.includes("chaud")) { activeTemp = "chaud"; renderGrid(); speakText("Filtrage : boissons chaudes."); return; }
+        if (cmd.includes("tout") || cmd.includes("tous")) { activeCat = "all"; activeTemp = "all"; renderGrid(); speakText("Tous les élixirs affichés."); return; }
+        if (cmd.includes("commander")) {
+          const match = Object.values(catalogData).find(i => cmd.includes(i.title.toLowerCase()));
+          if (match) { openProductModal(match.id); speakText(`Ouverture de la commande pour ${match.title}.`); }
+          else speakText("Boisson non trouvée dans le catalogue.");
+          return;
+        }
+        speakText("Commande non reconnue. Dites par exemple : afficher les thés, ou commander Espresso.");
+      };
+      voiceRecognizer.start();
+    };
+
+    window.adjustLocalZoom = function(amount) {
+      const el = document.documentElement;
+      let cur = parseFloat(window.getComputedStyle(el).getPropertyValue('--base-font-size')) || 16;
+      let next = Math.min(40, Math.max(12, cur + amount));
+      el.style.setProperty('--base-font-size', next + 'px');
+      showNotification(`Taille de texte : ${next}px`);
+    };
+    window.resetLocalZoom = function() {
+      document.documentElement.style.setProperty('--base-font-size', '16px');
+      showNotification("Taille réinitialisée");
+    };
+    window.toggleAccessibilityMode = function() {
+      const on = document.body.classList.toggle("accessibility-mode");
+      document.getElementById("toggleAccessMode").setAttribute("aria-pressed", on);
+      speakText(on ? "Mode Accessibilité activé." : "Mode Accessibilité désactivé.");
+    };
+    window.toggleHighContrastTheme = function() {
+      const h = document.documentElement;
+      const isHC = h.getAttribute("data-theme") === "high-contrast";
+      h.setAttribute("data-theme", isHC ? "dark" : "high-contrast");
+      document.getElementById("toggleHighContrast").setAttribute("aria-pressed", !isHC);
+      speakText(isHC ? "Thème standard rétabli." : "Contraste élevé activé.");
+    };
+    window.toggleSimplifiedMode = function() {
+      const on = document.body.classList.toggle("simplified-mode");
+      document.getElementById("toggleSimplified").setAttribute("aria-pressed", on);
+      renderGrid();
+      speakText(on ? "Mode simplifié activé." : "Mode standard rétabli.");
+    };
+
 // ── STOCKAGE LOCAL ───────────────────────────────────────────
     const storage = {
       get:    k     => { try { return localStorage.getItem(k); } catch(e){ return null; } },
@@ -1156,12 +1393,15 @@
       const modal = document.getElementById("productModal");
       if (modal) modal.classList.add("active");
       switchProductTab(initialTab);
+      // Lecture vocale automatique de la fiche
+      speakText(`${p.title}. ${p.cat}, ${p.temp}. ${p.price} euros. ${p.description}`);
     }
 
     function closeProductModal() {
       const modal = document.getElementById("productModal");
       if (modal) modal.classList.remove("active");
       selectedProduct = null;
+      stopSpeech();
     }
 
     function switchProductTab(tab) {
@@ -1495,6 +1735,18 @@
     window.clearAllOrders          = clearAllOrders;
     window.saveCustomizationAdmin  = saveCustomizationAdmin;
     window.resetCustomizationAdmin = resetCustomizationAdmin;
+    // Accessibilité
+    window.toggleAccessibilityMode    = window.toggleAccessibilityMode;
+    window.toggleHighContrastTheme    = window.toggleHighContrastTheme;
+    window.toggleSimplifiedMode       = window.toggleSimplifiedMode;
+    window.adjustLocalZoom            = window.adjustLocalZoom;
+    window.resetLocalZoom             = window.resetLocalZoom;
+    window.readWholeCarte             = window.readWholeCarte;
+    window.pauseSpeech                = window.pauseSpeech;
+    window.resumeSpeech               = window.resumeSpeech;
+    window.stopSpeech                 = window.stopSpeech;
+    window.triggerBaristaAssistantVoice       = window.triggerBaristaAssistantVoice;
+    window.toggleVoiceRecognitionCommands     = window.toggleVoiceRecognitionCommands;
 
     // Démarrage
     if (document.readyState === "complete" || document.readyState === "interactive") {
