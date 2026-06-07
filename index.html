@@ -913,6 +913,57 @@
     function resumeSpeech() { if (synth && synth.paused)   synth.resume(); }
     function stopSpeech()   { if (synth) synth.cancel(); playlistIndex = cartePlaylist.length; }
 
+    // ── NOTIFICATIONS PUSH + TTS STATUT COMMANDE ─────────────────
+    // Messages exacts selon le cahier des charges
+    const ORDER_STATUS_MESSAGES = {
+      preparing: (drinkTitle) => `Votre ${drinkTitle} est en préparation`,
+      ready:     (drinkTitle) => `Votre ${drinkTitle} est prêt à être dégusté`,
+    };
+
+    // Demande la permission de notification au navigateur (appelé au login)
+    function requestNotificationPermission() {
+      if (!("Notification" in window)) return; // navigateur ne supporte pas
+      if (Notification.permission === "default") {
+        Notification.requestPermission().then(perm => {
+          if (perm === "granted") {
+            showNotification("🔔 Notifications activées — vous serez averti quand votre boisson sera prête");
+          }
+        });
+      }
+    }
+
+    // Envoie une notification push native + lit le texte à voix haute
+    function notifyStatusChange(drinkTitle, newStatus) {
+      const msgFn = ORDER_STATUS_MESSAGES[newStatus];
+      if (!msgFn) return; // "pending" ou statut inconnu → rien
+      const message = msgFn(drinkTitle);
+
+      // 1. TTS — lecture vocale immédiate via Web Speech API
+      speakText(message);
+
+      // 2. Notification push native du navigateur (fonctionne même en arrière-plan)
+      if ("Notification" in window && Notification.permission === "granted") {
+        const icons = {
+          preparing: "☕",
+          ready:     "✨",
+        };
+        try {
+          new Notification("Sip & Savour", {
+            body: message,
+            icon: "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=64&q=80",
+            badge: "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=32&q=80",
+            tag: "order-status",      // remplace la précédente au lieu d'empiler
+            renotify: true,
+          });
+        } catch (e) {
+          console.warn("Notification push échouée :", e);
+        }
+      }
+
+      // 3. Toast dans l'app (toujours visible même sans permission)
+      showNotification(`🔔 ${message}`);
+    }
+
     window.readWholeCarte = function() {
       const activeItems = Object.values(catalogData).filter(item => {
         const matchCat  = activeCat  === "all" || item.cat  === activeCat;
@@ -1006,14 +1057,17 @@
     };
 
     // ── ÉTAT GLOBAL ──────────────────────────────────────────────
-    let catalogData      = {};
-    let myActiveOrderId  = storage.get("s_my_order_id") || "";
-    let currentRole      = storage.get("s_role") || "family";
-    let activeCat        = "all";
-    let activeTemp       = "all";
-    let searchQuery      = "";
-    let selectedProduct  = null;
-    let customizationData = {};
+    let catalogData        = {};
+    let myActiveOrderId    = storage.get("s_my_order_id") || "";
+    let currentRole        = storage.get("s_role") || "family";
+    let activeCat          = "all";
+    let activeTemp         = "all";
+    let searchQuery        = "";
+    let selectedProduct    = null;
+    let customizationData  = {};
+    // Mémorise le dernier statut connu de MA commande pour ne déclencher
+    // la notification qu'au vrai changement (pas au rechargement de page)
+    let lastKnownOrderStatus = storage.get("s_last_order_status") || null;
 
     // ── CATALOGUE INITIAL ENRICHI ────────────────────────────────
     const initialCatalog = {
@@ -1294,6 +1348,7 @@
       storage.remove("s_gate_passed");
       storage.remove("s_role");
       storage.remove("s_my_order_id");
+      storage.remove("s_last_order_status");
       location.reload();
     }
 
@@ -1463,6 +1518,9 @@
         .then(() => {
           myActiveOrderId = ticketId;
           storage.set("s_my_order_id", ticketId);
+          // Réinitialiser le suivi de statut pour cette nouvelle commande
+          lastKnownOrderStatus = "pending";
+          storage.set("s_last_order_status", "pending");
           closeProductModal();
           showNotification(`✓ Commande de ${name} transmise au barista !`);
           if (gInput) gInput.value = "";
@@ -1491,6 +1549,8 @@
           if (myActiveOrderId === id) {
             myActiveOrderId = "";
             storage.remove("s_my_order_id");
+            lastKnownOrderStatus = null;
+            storage.remove("s_last_order_status");
           }
           showNotification("Ticket archivé");
         })
@@ -1503,6 +1563,8 @@
           .then(() => {
             myActiveOrderId = "";
             storage.remove("s_my_order_id");
+            lastKnownOrderStatus = null;
+            storage.remove("s_last_order_status");
             showNotification("Toutes les commandes ont été archivées");
           });
       }
@@ -1596,6 +1658,18 @@
       const clientZone = document.getElementById("clientTrackerZone");
       if (currentRole === "family" && myActiveOrderId && data && data[myActiveOrderId]) {
         const myOrd = data[myActiveOrderId];
+
+        // ── DÉTECTION DE CHANGEMENT DE STATUT → notification ─────
+        // On compare avec le dernier statut mémorisé pour ne déclencher
+        // qu'au vrai changement, pas à chaque rechargement de page.
+        if (myOrd.status !== lastKnownOrderStatus && lastKnownOrderStatus !== null) {
+          notifyStatusChange(myOrd.drinkTitle, myOrd.status);
+        }
+        // Mémoriser le statut courant (persisté pour survivre à un reload)
+        if (myOrd.status !== lastKnownOrderStatus) {
+          lastKnownOrderStatus = myOrd.status;
+          storage.set("s_last_order_status", myOrd.status);
+        }
         if (clientZone) clientZone.style.display = "block";
         document.getElementById("trackerDrinkName").textContent = myOrd.drinkTitle;
         document.getElementById("trackerGuestName").textContent = `Pour ${myOrd.guestName}`;
@@ -1681,6 +1755,12 @@
       gate?.classList.add("hidden");
       wrapper?.classList.add("active");
       applyRoleUI();
+
+      // Demande la permission de notification push pour les clients famille
+      // (le barista n'en a pas besoin — il voit le tableau en direct)
+      if (currentRole === "family") {
+        requestNotificationPermission();
+      }
 
       document.getElementById("searchInput")?.addEventListener("input", e => {
         searchQuery = e.target.value.toLowerCase().trim();
