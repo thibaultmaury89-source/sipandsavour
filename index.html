@@ -250,7 +250,7 @@
     .tab-link-product.active { color: var(--gold); }
     .tab-link-product.active::after { content: ''; position: absolute; bottom: -1px; left: 0; right: 0; height: 2px; background: var(--gold); }
     .tab-pane-product { display: none; font-size: 0.85rem; color: var(--text-light); line-height: 1.6; white-space: pre-line; min-height: 120px; }
-    .tab-pane-product.active { block: block; }
+    .tab-pane-product.active { display: block; }
     .product-meta-badge { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 1px; color: var(--gold); background: rgba(197,168,128,0.1); padding: 4px 8px; border-radius: 4px; display: inline-block; margin-bottom: 15px; border: 1px solid var(--border-fine); }
     .modal-backdrop-luxe { position: fixed; inset: 0; z-index: 200; background: rgba(17,10,5,0.85); backdrop-filter: blur(8px); display: none; align-items: center; justify-content: center; padding: 15px; }
     .modal-backdrop-luxe.active { display: flex; }
@@ -339,56 +339,86 @@
       flex-wrap: wrap;
     }
 
-    /* BARRE ACCESSIBILITÉ */
+    /* BARRE ACCESSIBILITÉ (Corrigée pour être masquée par défaut lors de la visite) */
     .accessibility-toolbar {
       position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
+      top: 0; left: 0; right: 0;
       z-index: 10001;
       background: rgba(10,6,3,0.97);
-      border-bottom: 1px solid var(--border-fine);
+      border-bottom: 2px solid var(--gold);
+      padding: 12px 25px;
       display: flex;
+      justify-content: space-between;
       align-items: center;
-      flex-wrap: wrap;
-      gap: 6px;
-      padding: 6px 20px;
-      transition: opacity 0.3s ease, transform 0.3s ease, height 0.3s ease;
-      transform-origin: top;
+      gap: 15px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+      /* Masqué initialement au chargement de la page */
+      opacity: 0;
+      transform: translateY(-100%);
+      pointer-events: none;
+      transition: opacity 0.4s ease, transform 0.4s ease;
+    }
+    .accessibility-toolbar.active-mode-visuel {
+      border-bottom-color: #7dab60 !important;
     }
     .access-ctrl-btn {
-      background: rgba(197,168,128,0.1);
+      background: rgba(197,168,128,0.08);
       border: 1px solid var(--border-fine);
-      color: var(--gold);
-      padding: 5px 10px;
+      color: var(--cream);
+      padding: 8px 14px;
       font-family: var(--font-sans);
-      font-size: 0.62rem;
+      font-size: 0.65rem;
       font-weight: 600;
       text-transform: uppercase;
       letter-spacing: 1px;
       cursor: pointer;
-      border-radius: 4px;
       transition: all 0.2s;
-      white-space: nowrap;
+      border-radius: 4px;
     }
-    .access-ctrl-btn:hover { background: rgba(197,168,128,0.2); }
-    .access-ctrl-btn[aria-pressed="true"] { background: var(--gold); color: #110a05; }
+    .access-ctrl-btn:hover {
+      background: var(--gold);
+      color: #110a05;
+      border-color: var(--gold);
+    }
+    .access-ctrl-btn[aria-pressed="true"] {
+      background: var(--gold);
+      color: #110a05;
+      border-color: var(--gold);
+      box-shadow: 0 0 10px rgba(197,168,128,0.3);
+    }
+    .voice-feedback-pill {
+      font-size: 0.65rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #7dab60;
+      background: rgba(114,150,105,0.1);
+      padding: 5px 12px;
+      border-radius: 20px;
+      border: 1px solid rgba(114,150,105,0.25);
+      display: none;
+    }
 
-    /* BOUTONS FLOTTANTS ASSISTANT VOCAL */
-    .assistant-floating-container { position: fixed; bottom: 80px; left: 25px; z-index: 999; display: flex; flex-direction: column; gap: 10px; }
-    .btn-assistant-float { background: #110a05; border: 2px solid var(--gold); color: var(--gold); width: 56px; height: 56px; border-radius: 50%; box-shadow: var(--shadow-luxe); cursor: pointer; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 1.1rem; transition: transform 0.2s; }
-    .btn-assistant-float:hover { transform: scale(1.08); }
+    /* MODALE ADMIN RECETTES */
+    #recipeAdminModal .form-group { margin-bottom: 15px; }
 
-    /* Décalage header + contenu si la barre d'accessibilité est présente */
-    body.has-accessibility-bar header { top: 41px; }
-    body.has-accessibility-bar .main-body-content { padding-top: 151px; }
-
-    /* RESPONSIVE */
+    /* RESPONSIVE DESIGN */
     @media (max-width: 900px) {
-      header { padding: 15px 20px; flex-direction: column; gap: 15px; position: fixed; }
-      .main-body-content { padding-top: 160px; }
-      body.has-accessibility-bar header { top: 76px; }
-      body.has-accessibility-bar .main-body-content { padding-top: 220px; }
+      header { padding: 15px 25px; }
+      .hero-cinematic { grid-template-columns: 1fr; gap: 30px; text-align: center; }
+      .barista-choice-card { grid-template-columns: 1fr; gap: 30px; }
+      .accessibility-toolbar { flex-wrap: wrap; justify-content: center; padding: 15px; }
+    }
+    @media (max-width: 600px) {
+      header {
+        flex-direction: column; gap: 15px; padding: 15px; text-align: center; position: relative;
+      }
+      body.has-accessibility-bar header {
+        padding-top: 76px;
+      }
+      body.has-accessibility-bar .main-body-content {
+        padding-top: 220px;
+      }
       .nav-controls { width: 100%; justify-content: center; flex-wrap: wrap; gap: 12px; }
       .hero-cinematic { grid-template-columns: 1fr; padding: 25px 20px; gap: 25px; text-align: center; }
       .hero-title-luxe { font-size: 2rem; }
@@ -418,44 +448,41 @@
     <button type="button" class="access-ctrl-btn" id="btn-toggle-accessibility" aria-pressed="false" onclick="window.toggleAccessibilityMode()">Spécificités Visuelles</button>
     <button type="button" class="access-ctrl-btn" id="btn-toggle-contrast" aria-pressed="false" onclick="window.toggleHighContrastTheme()">Contraste Élevé</button>
     <button type="button" class="access-ctrl-btn" id="btn-toggle-simplified" aria-pressed="false" onclick="window.toggleSimplifiedMode()">Mode Épuré</button>
-    <button type="button" class="access-ctrl-btn" onclick="window.adjustLocalZoom(0.1)">Agrandir +</button>
-    <button type="button" class="access-ctrl-btn" onclick="window.adjustLocalZoom(-0.1)">Réduire -</button>
-    <button type="button" class="access-ctrl-btn" onclick="window.resetLocalZoom()">Taille Normale</button>
-    <button type="button" class="access-ctrl-btn" style="border-color:#7dab60;color:#7dab60;" onclick="window.readWholeCarte()">🎙️ Lire la Carte</button>
-    <button type="button" class="access-ctrl-btn" style="border-color:#e57c67;color:#e57c67;display:none;" id="btn-speech-pause" onclick="window.pauseSpeech()">Pause</button>
-    <button type="button" class="access-ctrl-btn" style="border-color:#7dab60;color:#7dab60;display:none;" id="btn-speech-resume" onclick="window.resumeSpeech()">Reprendre</button>
-    <button type="button" class="access-ctrl-btn" style="border-color:#d66b53;color:#d66b53;display:none;" id="btn-speech-stop" onclick="window.stopSpeech()">Arrêter</button>
-  </div>
-
-  <div class="assistant-floating-container">
-    <button type="button" class="btn-assistant-float" id="btnAssistantVoiceToggle" onclick="window.triggerBaristaAssistantVoice()" title="Parler à l'assistant intelligent">☕</button>
-    <button type="button" class="btn-assistant-float" id="btnVoiceCommandsToggle" onclick="window.toggleVoiceRecognitionCommands()" style="border-color:#7dab60;color:#7dab60;font-size:0.9rem;" title="Activer les commandes vocales globales (Ex: 'Afficher les thés')">🎙️ Off</button>
+    <button type="button" class="access-ctrl-btn" id="btn-zoom-local" onclick="window.adjustLocalZoom()">Texte +</button>
+    <button type="button" class="access-ctrl-btn" id="btn-zoom-reset" onclick="window.resetLocalZoom()">Normal</button>
+    <button type="button" class="access-ctrl-btn" onclick="window.readWholeCarte()">🎙️ Lire Carte</button>
+    <button type="button" class="access-ctrl-btn" id="btn-speech-pause" style="display:none;" onclick="window.pauseSpeech()">⏸️ Pause</button>
+    <button type="button" class="access-ctrl-btn" id="btn-speech-resume" style="display:none;" onclick="window.resumeSpeech()">▶️ Reprendre</button>
+    <button type="button" class="access-ctrl-btn" id="btn-speech-stop" style="display:none;" onclick="window.stopSpeech()">⏹️ Stop</button>
+    <button type="button" class="access-ctrl-btn" id="btnVoiceCommandsToggle" onclick="window.toggleVoiceRecognitionCommands()">🎙️ Off</button>
+    <div class="voice-feedback-pill" id="voiceFeedbackPill">Écoute active...</div>
   </div>
 
   <div class="toast-notification-zone" id="toastZone"></div>
 
   <div class="auth-screen" id="gatewayScreen">
     <div class="auth-card">
-      <div class="auth-logo">Sip & Savour</div>
-      <div class="auth-subtitle">Maison Privée de Torréfaction</div>
+      <h1 class="auth-logo">Sip & Savour</h1>
+      <p class="auth-subtitle">Salon Privé & Torréfaction</p>
       <div class="form-group">
-        <label for="gateway-password-input">Clé du Salon Privé</label>
-        <input type="password" id="gateway-password-input" class="form-input" placeholder="Entrez la clé famille..." onkeydown="if(event.key==='Enter') window.validateGatewayLogin()">
+        <label for="gateSecretCode">Code Signature du Salon</label>
+        <input type="password" id="gateSecretCode" class="form-input" placeholder="••••••••" onkeydown="if(event.key==='Enter') window.verifyGateSecretCode()" />
       </div>
-      <button type="button" class="btn-luxe" onclick="window.validateGatewayLogin()">Entrer dans la Famille</button>
-      <div class="auth-error" id="gateway-global-error">Code incorrect. Veuillez vérifier avec le barista.</div>
+      <button type="button" class="btn-luxe" id="btnSubmitGate" onclick="window.verifyGateSecretCode()">Franchir le Seuil</button>
+      <p class="auth-error" id="gateErrorText">Code d'accès non reconnu</p>
     </div>
   </div>
 
   <div class="wrapper" id="appWrapper">
-    <header id="mainHeader">
-      <a href="#top" class="brand-signature" onclick="window.scrollTo({top:0,behavior:'smooth'})">
-        Sip & Savour <span>Salon Privé & Haute Torréfaction</span>
+    <header>
+      <a href="#" class="brand-signature">
+        Sip & Savour
+        <span>Maison de Torréfaction</span>
       </a>
       <div class="nav-controls">
         <div class="search-luxe">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-          <input type="text" id="searchInput" placeholder="Rechercher un élixir..." />
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+          <input type="text" id="searchInput" placeholder="Rechercher..." oninput="window.handleSearchInput(event)" />
         </div>
         <button type="button" class="theme-toggle-btn" id="themeToggle" onclick="window.toggleThemeSystem()">Mode Clair</button>
         <div class="club-badge" id="roleBadge" onclick="window.triggerAdminAccessSecret()">Salon Famille</div>
@@ -540,30 +567,32 @@
           </div>
           <div class="admin-customization-actions">
             <button type="button" class="btn-single-action btn-action-next" onclick="window.saveCustomizationAdmin()">Enregistrer les options</button>
-            <button type="button" class="btn-single-action btn-action-delete" onclick="window.resetCustomizationAdmin()">Réinitialiser par défaut</button>
+            <button type="button" class="btn-single-action" onclick="window.resetCustomizationAdmin()">Réinitialiser</button>
           </div>
         </div>
 
         <div class="dashboard-container">
           <div class="dashboard-header">
-            <h3 class="dashboard-title">Curation du Catalogue Privé</h3>
-            <button type="button" class="btn-single-action btn-action-next" onclick="window.openRecipeAdminModal()">+ Ajouter une création</button>
+            <h3 class="dashboard-title">Catalogue des Créations</h3>
+            <button type="button" class="btn-single-action btn-action-next" onclick="window.openRecipeAdminModal()">Créer un nouvel Élixir</button>
           </div>
           <div class="admin-catalog-grid" id="adminCatalogGrid"></div>
         </div>
       </section>
 
-      <section class="hero-cinematic" id="top">
+      <section class="hero-cinematic">
         <div>
-          <span class="hero-tagline">Maison de Torréfaction & Salon d'Exception</span>
-          <h1 class="hero-title-luxe">Prenez le temps de savourer des créations <em>rares</em> et intemporelles.</h1>
-          <p class="hero-manifesto">Un espace confidentiel où chaque grain de café et chaque feuille de thé racontent une histoire d'artisanat et d'exigence.</p>
+          <span class="hero-tagline">Maison fondée pour les esthètes</span>
+          <h2 class="hero-title-luxe">L'art secret de la torréfaction & des extractions <em>rares</em>.</h2>
+          <p class="hero-manifesto">"Chaque grain possède une histoire, chaque infusion dévoile une nuance invisible à l'œil pressé."</p>
         </div>
-        <div class="frame-artisan">
-          <img src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=600&q=80" alt="Café de Spécialité" />
-          <div class="frame-caption">
-            <h4>Torréfaction Maison</h4>
-            <p>Cafés, Thés & Infusions</p>
+        <div style="position:relative;">
+          <div class="frame-artisan">
+            <img src="https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?w=500&q=80" alt="Café de spécialité" />
+            <div class="frame-caption">
+              <h4>Origines Uniques</h4>
+              <p>Sélections Éthiques</p>
+            </div>
           </div>
         </div>
       </section>
@@ -571,15 +600,14 @@
       <section class="barista-choice-section">
         <div class="barista-choice-card">
           <div class="barista-choice-media">
-            <img src="https://images.unsplash.com/photo-1544787219-7f47ccb76574?w=600&q=80" alt="Boisson du Moment">
+            <img src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=600&q=80" alt="Comptoir Barista" />
           </div>
           <div class="barista-choice-content">
-            <span class="barista-choice-label">Boisson du moment — Choix du barista</span>
-            <h3 class="barista-choice-title">Élixir d'Or (Golden Milk)</h3>
-            <p class="barista-choice-text">Une création unique intensément réconfortante à base de curcuma frais moulu, de miel de fleurs bio et d'un assortiment délicat d'épices de Ceylan secrètement dosées.</p>
+            <span class="barista-choice-label">Assistant Intelligent</span>
+            <h3 class="barista-choice-title">Votre Compagnon Vocal de Dégustation</h3>
+            <p class="barista-choice-text">Activez notre intelligence barista exclusive. Elle saura vous guider à la voix à travers notre univers aromatique, répondre à vos questions sur les grains et prendre vos commandes de manière fluide.</p>
             <div class="actions-dual-row">
-              <button type="button" class="btn-action-split btn-split-discover" onclick="window.openProductModal('rec_3','desc')">Découvrir</button>
-              <button type="button" class="btn-action-split btn-split-order" onclick="window.openProductModal('rec_3','order')">Commander</button>
+              <button type="button" class="btn-action-split btn-split-discover" id="btnAssistantVoiceToggle" onclick="window.triggerBaristaAssistantVoice()">🎙️ Échanger avec le Barista</button>
             </div>
           </div>
         </div>
@@ -613,47 +641,50 @@
 
   <div class="modal-backdrop-luxe" id="productModal" onclick="if(event.target===this) window.closeProductModal()">
     <div class="modal-box-luxe">
-      <button type="button" class="modal-close-luxe" aria-label="Fermer" onclick="window.closeProductModal()">&#x2715;</button>
-      <h3 class="modal-title-luxe" id="modalDrinkTitle">Chargement...</h3>
-      <nav class="tabs-nav-product">
-        <button type="button" class="tab-link-product active" id="tabLinkDesc" onclick="window.switchProductTab('desc')">Recette & Origines</button>
-        <button type="button" class="tab-link-product" id="tabLinkOrder" onclick="window.switchProductTab('order')">Commander cet Élixir</button>
-      </nav>
+      <button type="button" class="modal-close-luxe" aria-label="Fermer" onclick="window.closeProductModal()">✕</button>
+      <span class="product-meta-badge" id="modalDrinkBadge">FAMILLE</span>
+      <h3 class="modal-title-luxe" id="modalDrinkTitle">Nom de la boisson</h3>
+      
+      <div class="tabs-nav-product">
+        <button type="button" class="tab-link-product active" id="tabLinkDesc" onclick="window.switchProductTab('desc')">Notes & Histoire</button>
+        <button type="button" class="tab-link-product" id="tabLinkOrder" onclick="window.switchProductTab('order')">Ordonner la Préparation</button>
+      </div>
 
       <div class="tab-pane-product active" id="tabPaneDesc">
-        <span class="product-meta-badge" id="modalDrinkBadge">Catégorie</span>
-        <p id="modalDrinkDescription" style="margin-bottom:15px; color:var(--text-light);"></p>
-        <h4 style="font-family:var(--font-serif); font-size:1.1rem; color:var(--gold); margin-bottom:6px; font-weight:400;">Notes du Barista</h4>
-        <p id="modalDrinkRecipeInfo" style="font-size:0.8rem; color:var(--text-muted); font-style:italic;"></p>
+        <p id="modalDrinkDescription" style="color:var(--text-muted); margin-bottom:15px;"></p>
+        <h4 style="font-family:var(--font-serif); color:var(--gold); font-size:1.1rem; margin-bottom:5px;">Recette & Extraction</h4>
+        <p id="modalDrinkRecipe" style="font-style:italic; font-size:0.8rem;"></p>
       </div>
 
       <div class="tab-pane-product" id="tabPaneOrder">
         <div class="modal-form-grid">
           <div class="form-group span-full">
-            <label for="orderGuestNameInput">Votre Prénom ou N° de Table</label>
-            <input type="text" id="orderGuestNameInput" class="form-input" placeholder="Ex: Alexandre / Table N°4">
+            <label for="orderGuestNameInput">Votre Prénom ou Numéro de Table</label>
+            <input type="text" id="orderGuestNameInput" class="form-input" placeholder="Ex: Jean - Table 4" />
           </div>
           <div class="form-group">
             <label for="orderSugarSelect">Douceur (Sucre)</label>
             <select id="orderSugarSelect"></select>
           </div>
           <div class="form-group">
-            <label for="orderMilkSelect">Sélection de Lait</label>
+            <label for="orderMilkSelect">Onctuosité (Lait)</label>
             <select id="orderMilkSelect"></select>
           </div>
           <div class="form-group">
-            <label for="orderFoamSelect">Onctuosité (Mousse)</label>
+            <label for="orderFoamSelect">Structure (Mousse)</label>
             <select id="orderFoamSelect"></select>
           </div>
           <div class="form-group">
-            <label for="orderScheduleInput">Heure de retrait souhaitée (Optionnel)</label>
-            <input type="text" id="orderScheduleInput" class="form-input" placeholder="Ex: À emporter à 14h30">
+            <label for="orderScheduleInput">Heure de service souhaitée</label>
+            <input type="text" id="orderScheduleInput" class="form-input" placeholder="Immédiat ou Ex: 16:30" />
           </div>
           <div class="form-group span-full">
-            <label for="orderCustomsInput">Notes de personnalisation ou allergies</label>
-            <textarea id="orderCustomsInput" rows="2" placeholder="Ex: Un peu plus chaud, lait d'avoine bien frappé..."></textarea>
+            <label for="orderNotesTextarea">Exigences ou demandes particulières</label>
+            <textarea id="orderNotesTextarea" rows="2" placeholder="Ex: extra chaud, sans paille..."></textarea>
           </div>
-          <button type="button" class="btn-luxe span-full" id="btnLaunchOrderPreparation" style="margin-top:10px;" onclick="window.submitOrderToFirebase()">Lancer la préparation</button>
+          <div class="form-group span-full" style="margin-top:10px;">
+            <button type="button" class="btn-luxe" id="btnLaunchOrderPreparation" onclick="window.submitOrderToFirebase()">Lancer la préparation sur-mesure</button>
+          </div>
         </div>
       </div>
     </div>
@@ -661,17 +692,17 @@
 
   <div class="modal-backdrop-luxe" id="recipeAdminModal" onclick="if(event.target===this) window.closeRecipeAdminModal()">
     <div class="modal-box-luxe">
-      <button type="button" class="modal-close-luxe" aria-label="Fermer" onclick="window.closeRecipeAdminModal()">&#x2715;</button>
+      <button type="button" class="modal-close-luxe" onclick="window.closeRecipeAdminModal()">✕</button>
       <h3 class="modal-title-luxe" id="recipeAdminTitle">Ajouter une création</h3>
       <form id="recipeAdminForm" onsubmit="window.saveRecipeAdmin(event)">
-        <input type="hidden" id="adminRecipeId">
-        <div class="modal-form-grid">
-          <div class="form-group span-full">
-            <label>Nom de la boisson</label>
-            <input type="text" id="adminTitle" class="form-input" required>
-          </div>
+        <input type="hidden" id="adminRecipeId" />
+        <div class="form-group">
+          <label for="adminTitle">Nom de l'Élixir</label>
+          <input type="text" id="adminTitle" class="form-input" required />
+        </div>
+        <div class="modal-form-grid" style="margin-top:0; margin-bottom:15px;">
           <div class="form-group">
-            <label>Catégorie</label>
+            <label for="adminCat">Catégorie</label>
             <select id="adminCat">
               <option value="cafe">Café</option>
               <option value="the">Thé</option>
@@ -679,29 +710,34 @@
             </select>
           </div>
           <div class="form-group">
-            <label>Température</label>
+            <label for="adminTemp">Température</label>
             <select id="adminTemp">
               <option value="chaud">Chaud</option>
               <option value="glacé">Glacé</option>
             </select>
           </div>
+        </div>
+        <div class="modal-form-grid" style="margin-top:0; margin-bottom:15px;">
           <div class="form-group">
-            <label>Prix (€)</label>
-            <input type="text" id="adminPrice" class="form-input" placeholder="Ex: 4.50" required>
+            <label for="adminPrice">Prix (€)</label>
+            <input type="text" id="adminPrice" class="form-input" placeholder="4.50" required />
           </div>
           <div class="form-group">
-            <label>URL de l'image (Optionnel)</label>
-            <input type="url" id="adminImage" class="form-input" placeholder="https://...">
+            <label for="adminImage">URL de l'image (Unsplash)</label>
+            <input type="url" id="adminImage" class="form-input" placeholder="https://..." />
           </div>
-          <div class="form-group span-full">
-            <label>Description publique</label>
-            <textarea id="adminDescription" rows="2" required></textarea>
-          </div>
-          <div class="form-group span-full">
-            <label>Notes du Barista / Origines (Détails cachés de la recette)</label>
-            <textarea id="adminRecipeInfo" rows="2" placeholder="Détaillez les ingrédients exacts pour le barista..."></textarea>
-          </div>
-          <button type="submit" class="btn-luxe span-full" style="margin-top:10px;">Valider et Enregistrer</button>
+        </div>
+        <div class="form-group">
+          <label for="adminDescription">Description Aromatique (Carte)</label>
+          <textarea id="adminDescription" rows="2" required></textarea>
+        </div>
+        <div class="form-group">
+          <label for="adminRecipeInfo">Guide & Températures d'infusion (Fiche)</label>
+          <textarea id="adminRecipeInfo" rows="2"></textarea>
+        </div>
+        <div style="margin-top:20px; display:flex; gap:10px;">
+          <button type="submit" class="btn-luxe" style="flex:1;">Sauvegarder l'Élixir</button>
+          <button type="button" class="btn-single-action btn-action-delete" id="btnDeleteRecipeAdmin" style="display:none;" onclick="window.deleteRecipeAdmin()">Supprimer</button>
         </div>
       </form>
     </div>
@@ -711,46 +747,41 @@
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
     import { getDatabase, ref, set, onValue, push } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
+    // CONFIGURATION DE LA BASE DE DONNÉES EN LIGNE
     const firebaseConfig = {
-      databaseURL: "https://sipandsavourv2-default-rtdb.europe-west1.firebasedatabase.app/"
+      databaseURL: "https://sipsavour-a681d-default-rtdb.europe-west1.firebasedatabase.app/"
     };
 
     const app = initializeApp(firebaseConfig);
     const db = getDatabase(app);
 
-    // ── CONFIGURATION & FALLBACKS ──────────────────────────────
-    const defaultCustomization = {
-      sugar: ["Standard", "Sans Sucre", "Léger (Demi-sucre)", "Intense (Double Sucre)", "Miel de Fleurs Bio"],
-      milk: ["Sans Lait", "Lait Entier Micro-filtré", "Lait d'Avoine Barista", "Lait d'Amande Grillée", "Lait de Soja Crémeux"],
-      foam: ["Sans Mousse", "Mousse Légère & Fine", "Mousse Onctueuse & Dense", "Nuage de Crème Fouettée"]
+    // ── CONFIGURATIONS PAR DÉFAUT DU SALON ───────────────────────
+    const defaultCatalog = {
+      "rec_c1": { id: "rec_c1", cat: "cafe", temp: "chaud", price: "3.50", title: "Espresso Speculoos", description: "Un espresso serré de terroir éthiopien, surmonté d'une émulsion crémeuse aux épices de spéculoos et éclats biscuités.", recipeInfo: "Extraction 25ml, 18g de café moulu fin, eau à 93°C. Émulsion de lait 65°C infusée aux brisures de spéculoos.", image: "https://images.unsplash.com/photo-1510972527409-cef190317417?w=500&q=80" },
+      "rec_c2": { id: "rec_c2", cat: "cafe", temp: "chaud", price: "4.50", title: "Latte Macchiato Vanille", description: "Lait entier texturé à la vapeur, escorté d'un double ristretto de Colombie et d'un coulis de vanille de Madagascar.", recipeInfo: "150ml de lait soyeux micro-mousse, double ristretto versé délicatement au centre pour former les trois strates.", image: "https://images.unsplash.com/photo-1541167760496-1628856ab772?w=500&q=80" },
+      "rec_c3": { id: "rec_c3", cat: "cafe", temp: "glacé", price: "5.00", title: "Cold Brew Orange Givrée", description: "Café infusé à froid pendant 16 heures, marié à un nectar d'orange pressée, servi sur lit de glaçons cristallins.", recipeInfo: "Extraction lente à froid, 70g/litre. 20ml de réduction d'orange fait maison, shaker vigoureux.", image: "https://images.unsplash.com/photo-1513530534585-c7b1394c6d51?w=500&q=80" },
+      "rec_t1": { id: "rec_t1", cat: "the", temp: "chaud", price: "4.00", title: "Thé Vert Sencha d'Uji", description: "Un thé vert japonais d'une grande noblesse, offrant des notes marines et végétales intenses, récolté à Uji.", recipeInfo: "4g de Sencha grand cru, eau filtrée à 75°C, temps d'infusion précis de 2 minutes.", image: "https://images.unsplash.com/photo-1576092768241-dec231879fc3?w=500&q=80" },
+      "rec_t2": { id: "rec_t2", cat: "the", temp: "chaud", price: "4.20", title: "Earl Grey Fleurs de Bleuets", description: "Mélange raffiné de thé noir d'Assam parfumé à l'essence pure de bergamote de Calabre et parsemé de pétales de bleuets.", recipeInfo: "3g thé noir bergamote, eau à 95°C, infusion 4 minutes dans une théière en fonte.", image: "https://images.unsplash.com/photo-1594631252845-29fc4cc8cde9?w=500&q=80" },
+      "rec_t3": { id: "rec_t3", cat: "the", temp: "glacé", price: "4.50", title: "Matcha Latte Glacé Fraise", description: "Poudre fine de thé vert de cérémonie fouettée, déposée sur un lait glacé onctueux et une purée de fraises fraîches.", recipeInfo: "2g Matcha Premium fouetté au Chasen avec 40ml d'eau à 70°C. Versé sur lit de glaçons, lait et coulis.", image: "https://images.unsplash.com/photo-1536256263959-770b48d82b0a?w=500&q=80" },
+      "rec_i1": { id: "rec_i1", cat: "infusion", temp: "chaud", price: "3.80", title: "Infusion Secrète Verveine Menthe", description: "Feuilles entières de verveine odorante associées à la puissance de la menthe poivrée poêlée. Apaisante et digestive.", recipeInfo: "Mélange maison proportion 50/50, eau à 90°C, infusion sous cloche durant 5 minutes.", image: "https://images.unsplash.com/photo-1576092768273-04907a4a2592?w=500&q=80" },
+      "rec_i2": { id: "rec_i2", cat: "infusion", temp: "glacé", price: "4.20", title: "Hibiscus Rouge aux Fruits des Bois", description: "Fleurs de Karkadeh égyptien infusées à froid avec des fruits rouges séchés. Rouge grenat, acidité fruitée naturelle.", recipeInfo: "5g fleurs d'hibiscus + fruits rouges, eau froide 8h au réfrigérateur. Servir sur glace, avec ou sans paille.", image: "https://images.unsplash.com/photo-1497534446932-c925b458314e?w=500&q=80" }
     };
 
-    const defaultCatalog = {
-      "rec_1": { id: "rec_1", cat: "cafe", temp: "chaud", price: "3.80", title: "Espresso Speculoos", description: "Un espresso d'une grande distinction, sublimé par un soupçon de sirop d'épices fait maison et un éclat de biscuit traditionnel.", recipeInfo: "1 shot espresso éthiopien, 7ml sirop speculoos artisanal, brisures fines de spéculoos sur la crème.", image: "https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?w=500&q=80" },
-      "rec_2": { id: "rec_2", cat: "cafe", temp: "chaud", price: "4.50", title: "Latte Macchiato Vanille Bourbon", description: "Un lit de lait entier chaud texturé à la perfection, délicatement parfumé à la gousse de vanille de Madagascar, traversé par un espresso intense.", recipeInfo: "180ml lait entier texturé, 1 shot espresso, 10ml extrait pur de Vanille Bourbon.", image: "https://images.unsplash.com/photo-1541167760496-1628856ab772?w=500&q=80" },
-      "rec_3": { id: "rec_3", cat: "cafe", temp: "chaud", price: "4.80", title: "Élixir d'Or (Golden Milk)", description: "Une création unique intensément réconfortante à base de curcuma frais moulu, de miel de fleurs bio et d'un assortiment délicat d'épices de Ceylan.", recipeInfo: "200ml lait d'avoine chaud, 3g curcuma bio, 1g cannelle de Ceylan, 1 cuillère de miel de montagne, une pincée de poivre noir.", image: "https://images.unsplash.com/photo-1544787219-7f47ccb76574?w=500&q=80" },
-      "rec_4": { id: "rec_4", cat: "cafe", temp: "glacé", price: "4.90", title: "Iced Latte Caramel Salé", description: "Espresso premium secoué sur glace, versé sur un lait frappé onctueux et nappe d'un caramel d'Isigny au sel de Guérande.", recipeInfo: "Glaçons, 120ml lait au choix, 1 shot espresso frappé, 15ml coulis caramel au beurre salé.", image: "https://images.unsplash.com/photo-1517701604599-bb29b565090c?w=500&q=80" },
-      "rec_5": { id: "rec_5", cat: "cafe", temp: "glacé", price: "5.20", title: "Cold Brew Tonic Signature", description: "Café extrait à froid pendant 16 heures, marié à un tonic premium artisanal et une fine tranche d'orange séchée.", recipeInfo: "90ml Cold Brew maison, 120ml Tonic Fever-Tree, glaçons cristallins, 1 rondelle d'orange déshydratée.", image: "https://images.unsplash.com/photo-1513530534585-c7b1394c6d51?w=500&q=80" },
-      "rec_t1": { id: "rec_t1", cat: "the", temp: "chaud", price: "4.00", title: "Thé Vert Sencha d'Uji", description: "Un thé vert japonais d'une grande noblesse, offrant des notes marines et végétales intenses, récolté dans la prestigieuse région d'Uji.", recipeInfo: "4g de Sencha grand cru, eau filtrée à 75°C, temps d'infusion précis de 2 minutes.", image: "https://images.unsplash.com/photo-1576092768241-dec231879fc3?w=500&q=80" },
-      "rec_t2": { id: "rec_t2", cat: "the", temp: "chaud", price: "4.20", title: "Earl Grey Fleurs de Bleuets", description: "Mélange raffiné de thé noir d'Assam parfumé à l'essence pure de bergamote de Calabre et parsemé de pétales de bleuets.", recipeInfo: "3g thé noir bergamote, eau à 95°C, infusion 4 minutes dans une théière en fonte.", image: "https://images.unsplash.com/photo-1594631252845-29fc4cc8cde9?w=500&q=80" },
-      "rec_t3": { id: "rec_t3", cat: "the", temp: "glacé", price: "4.50", title: "Thé Glacé Pêche & Jasmin", description: "Thé vert au jasmin infusé lentement à froid, associé à une purée fine de pêches blanches de vigne et feuilles de menthe.", recipeInfo: "Infusion à froid 6h de thé jasmin, 20ml coulis pêche blanche bio, feuilles de menthe froissées.", image: "https://images.unsplash.com/photo-1556679343-c7306c1976bc?w=500&q=80" },
-      "rec_i1": { id: "rec_i1", cat: "infusion", temp: "chaud", price: "3.90", title: "Rooibos Vanille & Amande", description: "Infusion d'Afrique du Sud naturellement sans théine, mariant la rondeur enveloppante de la vanille à la douceur de l'amande amère.", recipeInfo: "4g de Rooibos rouge premium, eau à 90°C, infusion longue de 5 à 7 minutes.", image: "https://images.unsplash.com/photo-1563822249548-9a72b6353cd1?w=500&q=80" },
-      "rec_i2": { id: "rec_i2", cat: "infusion", temp: "chaud", price: "4.00", title: "Infusion Verveine Menthe Gingembre", description: "Tisane vivifiante de verveine citronnelle, gingembre frais râpé et une pointe de miel de montagne.", recipeInfo: "Feuilles de verveine fraîches, rondelles de gingembre frais, eau à 98°C, infusion 6 minutes.", image: "https://images.unsplash.com/photo-1597481499750-3e6b22637536?w=500&q=80" },
-      "rec_i3": { id: "rec_i3", cat: "infusion", temp: "chaud", price: "4.20", title: "Camomille & Fleurs de Lavande", description: "Infusion apaisante de camomille romaine et fleurs de lavande de Provence. Un moment de sérénité absolue.", recipeInfo: "Mélange de camomille bio et lavande séchée, eau à 95°C, infusion 5 min. Ajouter une touche de miel d'acacia.", image: "https://images.unsplash.com/photo-1585846888147-29e2ee1c9949?w=500&q=80" },
-      "rec_i4": { id: "rec_i4", cat: "infusion", temp: "glacé", price: "4.50", title: "Cold Brew Hibiscus & Fruits Rouges", description: "Hibiscus fleurs entières infusées à froid avec des fruits rouges séchés. Rouge grenat, acidité fruitée naturelle.", recipeInfo: "5g fleurs d'hibiscus + fruits rouges, eau froide 8h au réfrigérateur. Servir sur glace, avec ou sans paille de canne.", image: "https://images.unsplash.com/photo-1497534446932-c925b458314e?w=500&q=80" }
+    const defaultCustomization = {
+      sugar: ["Sans Sucre", "Léger (1/2 sucre)", "Standard", "Gourmand (2 sucres)", "Miel de Lavande"],
+      milk: ["Sans Lait", "Lait Entier", "Lait d'Avoine Barista", "Lait d'Amande", "Lait de Soja Vanillé"],
+      foam: ["Sans Mousse", "Mousse Légère", "Mousse Onctueuse (Standard)", "Double Émulsion dense", "Chantilly Maison"]
     };
 
     // ── ÉTAT DE L'APPLICATION (VARIABLES LOCALES) ───────────────
-    let currentRole = "guest"; 
+    let currentRole = "guest";
     let activeCat = "all";
     let activeTemp = "all";
     let searchQuery = "";
-
     let ordersData = {};
     let catalogData = { ...defaultCatalog };
     let customizationData = { ...defaultCustomization };
-
-    let selectedProduct = null; 
+    let selectedProduct = null;
 
     // Accessibilité / Voix
     let synth = window.speechSynthesis;
@@ -786,162 +817,54 @@
       t.className = "toast-luxe";
       t.innerHTML = `<span>${escapeXSS(message)}</span><span style="cursor:pointer;font-size:0.65rem;margin-left:10px;color:var(--gold);" onclick="this.parentElement.remove()">✕</span>`;
       zone.appendChild(t);
-      setTimeout(() => { if(t) t.remove(); }, 5000);
+      setTimeout(() => { if (t && t.parentElement) t.remove(); }, 5000);
     }
 
-    function speakText(txt) {
+    function speakText(text) {
       if (!synth) return;
-      synth.cancel();
-      const u = new SpeechSynthesisUtterance(txt);
-      u.lang = "fr-FR";
-      u.rate = 1.0;
-      u.pitch = 1.05;
-
-      const v = synth.getVoices();
-      const frV = v.find(voice => voice.lang.startsWith("fr") && voice.name.toLowerCase().includes("google"));
-      if (frV) u.voice = frV;
-
-      u.onstart = () => {
-        document.getElementById("btn-speech-pause").style.display = "inline-block";
-        document.getElementById("btn-speech-stop").style.display = "inline-block";
+      if (synth.speaking) synth.cancel();
+      currentUtterance = new SpeechSynthesisUtterance(text);
+      currentUtterance.lang = "fr-FR";
+      currentUtterance.rate = 0.95;
+      currentUtterance.onend = () => {
+        if (cartePlaylist.length > 0) readNextCarteItem();
       };
-      u.onend = () => {
-        document.getElementById("btn-speech-pause").style.display = "none";
-        document.getElementById("btn-speech-resume").style.display = "none";
-        document.getElementById("btn-speech-stop").style.display = "none";
-        if (cartePlaylist.length > 0 && playlistIndex < cartePlaylist.length) {
-          setTimeout(readNextCarteItem, 800);
-        }
-      };
-      currentUtterance = u;
-      synth.speak(u);
+      synth.speak(currentUtterance);
     }
 
-    function triggerVoiceAlertAndPush(message) {
-      speakText(message);
-      if ("Notification" in window && Notification.permission === "granted") {
-        try {
-          new Notification("Sip & Savour", {
-            body: message,
-            icon: "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=64&q=80",
-            badge: "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=32&q=80",
-            tag: "order-status",
-            renotify: true,
-          });
-        } catch (e) {
-          console.warn("Notification push échouée :", e);
-        }
-      }
-      showNotification(`🔔 ${message}`);
+    function triggerVoiceAlertAndPush(txt) {
+      showNotification(txt);
+      speakText(txt);
     }
 
-    window.readWholeCarte = function() {
-      const activeItems = Object.values(catalogData).filter(item => {
-        const matchCat = activeCat === "all" || item.cat === activeCat;
-        const matchTemp = activeTemp === "all" || item.temp === activeTemp;
-        return matchCat && matchTemp;
-      });
-      if (activeItems.length === 0) {
-        speakText("La carte sélectionnée est vide.");
-        return;
-      }
-      cartePlaylist = activeItems;
-      playlistIndex = 0;
-      speakText("Démarrage de la lecture de la carte.");
-    };
-
-    function readNextCarteItem() {
-      if (playlistIndex >= cartePlaylist.length) {
-        speakText("Fin de la lecture de la carte.");
-        cartePlaylist = [];
-        playlistIndex = 0;
-        return;
-      }
-      const cur = cartePlaylist[playlistIndex++];
-      const catLabel = cur.cat === "cafe" ? "Café" : cur.cat === "the" ? "Thé" : "Infusion";
-      speakText(`${cur.title}. C'est un ${catLabel} au prix de ${cur.price} euros. Description : ${cur.description}`);
-    }
-
-    window.pauseSpeech = function() { if (synth && synth.speaking && !synth.paused) { synth.pause(); document.getElementById("btn-speech-pause").style.display="none"; document.getElementById("btn-speech-resume").style.display="inline-block"; } };
-    window.resumeSpeech = function() { if (synth && synth.paused) { synth.resume(); document.getElementById("btn-speech-pause").style.display="inline-block"; document.getElementById("btn-speech-resume").style.display="none"; } };
-    window.stopSpeech = function() { if (synth) { cartePlaylist = []; playlistIndex = 0; synth.cancel(); document.getElementById("btn-speech-pause").style.display="none"; document.getElementById("btn-speech-resume").style.display="none"; document.getElementById("btn-speech-stop").style.display="none"; } };
-
-    // ── ACCESSIBILITÉ GRAPHIQUE VISUELLE ───────────────────────
-    window.toggleAccessibilityMode = function() {
-      const b = document.body;
-      const active = b.classList.toggle("accessibility-mode");
-      document.getElementById("btn-toggle-accessibility").setAttribute("aria-pressed", active);
-      document.getElementById("accessibilityMenu").classList.toggle("active-mode-visuel", active);
-    };
-
-    window.toggleHighContrastTheme = function() {
-      const b = document.body;
-      const active = b.classList.toggle("high-contrast-mode");
-      document.getElementById("btn-toggle-contrast").setAttribute("aria-pressed", active);
-    };
-
-    window.toggleSimplifiedMode = function() {
-      const b = document.body;
-      const active = b.classList.toggle("simplified-mode");
-      document.getElementById("btn-toggle-simplified").setAttribute("aria-pressed", active);
-    };
-
-    window.adjustLocalZoom = function(amount) {
-      const el = document.documentElement;
-      let cur = parseFloat(window.getComputedStyle(el).fontSize);
-      el.style.fontSize = (cur + amount * 2) + "px";
-    };
-
-    window.resetLocalZoom = function() {
-      document.documentElement.style.fontSize = "";
-    };
-
-    // ── AUTENTICATION & SECURE PORTAL ─────────────────────────
-    window.validateGatewayLogin = function() {
-      const input = document.getElementById("gateway-password-input");
-      const err = document.getElementById("gateway-global-error");
+    // ── LE SEUIL D'ENTRÉE (GATE) ─────────────────────────────────
+    window.verifyGateSecretCode = function() {
+      const input = document.getElementById("gateSecretCode");
       if (!input) return;
-      const pass = input.value.trim();
-
-      if (pass === "1804") {
-        currentRole = "guest";
+      const val = input.value.trim();
+      if (val === "1924" || val === "barista") {
+        document.getElementById("gateErrorText").style.display = "none";
         storage.set("s_gate_passed", "true");
-        storage.set("s_role", "guest");
-        err.style.display = "none";
+        if (val === "barista") {
+          currentRole = "barista";
+          storage.set("s_role", "barista");
+        } else {
+          currentRole = "guest";
+          storage.set("s_role", "guest");
+        }
         document.getElementById("gatewayScreen").classList.add("hidden");
         document.getElementById("appWrapper").classList.add("active");
         applyRoleUI();
-        triggerPushPermissionRequest();
-      } else if (pass === "barista2026") {
-        currentRole = "barista";
-        storage.set("s_gate_passed", "true");
-        storage.set("s_role", "barista");
-        err.style.display = "none";
-        document.getElementById("gatewayScreen").classList.add("hidden");
-        document.getElementById("appWrapper").classList.add("active");
-        applyRoleUI();
-        triggerPushPermissionRequest();
+        showNotification("Bienvenue au cœur du Salon Sip & Savour.");
       } else {
-        err.style.display = "block";
+        document.getElementById("gateErrorText").style.display = "block";
       }
     };
-
-    function triggerPushPermissionRequest() {
-      if ("Notification" in window && Notification.permission === "default") {
-        Notification.requestPermission();
-      }
-    }
 
     window.triggerAdminAccessSecret = function() {
-      if (currentRole === "barista") {
-        currentRole = "guest";
-        storage.set("s_role", "guest");
-        showNotification("Retour au mode client standard");
-        applyRoleUI();
-        return;
-      }
-      const p = prompt("Entrez le mot de passe secret de torréfaction :");
-      if (p === "barista2026") {
+      if (currentRole === "barista") return;
+      const p = prompt("Saisissez le code secret du comptoir des Baristas :");
+      if (p === "barista") {
         currentRole = "barista";
         storage.set("s_role", "barista");
         showNotification("Accès Barista activé");
@@ -1004,49 +927,60 @@
         return;
       }
 
-      g.innerHTML = items.map(item => {
-        const safeId = escapeXSS(item.id);
-        const safeTitle = escapeXSS(item.title);
-        const safePrice = escapeXSS(item.price);
-        const safeDesc = escapeXSS(item.description);
-        const imgUrl = item.image ? escapeXSS(item.image) : "https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?w=500&q=80";
-        const tempClass = item.temp === "chaud" ? "tag-hot" : "tag-cold";
-        const tempText = item.temp === "chaud" ? "Chaud" : "Glacé";
-        const catClass = item.cat === "cafe" ? "tag-cafe" : item.cat === "the" ? "tag-the" : "tag-infusion";
-        const catText = item.cat === "cafe" ? "Café" : item.cat === "the" ? "Thé" : "Infusion";
-
-        return `
-          <article class="carte-item" data-id="${safeId}">
-            <div class="item-media">
-              <span class="item-tag-hot-cold ${tempClass}">${tempText}</span>
-              <img src="${imgUrl}" alt="${safeTitle}" loading="lazy" />
-            </div>
-            <div class="item-header">
-              <h4 class="item-title">${safeTitle}</h4>
-              <div class="item-line-dots"></div>
-              <span class="item-price">${safePrice}€</span>
-            </div>
-            <p class="item-description">${safeDesc}</p>
-            <div>
-              <span class="item-family-tag ${catClass}">${catText}</span>
-            </div>
-            <div class="actions-dual-row" style="margin-top:auto;">
-              <button type="button" class="btn-action-split btn-split-discover" onclick="window.openProductModal('${safeId}','desc')">Recette</button>
-              <button type="button" class="btn-action-split btn-split-order" onclick="window.openProductModal('${safeId}','order')">Commander</button>
-            </div>
-          </article>
-        `;
-      }).join("");
+      g.innerHTML = items.map(item => `
+        <article class="carte-item" data-id="${item.id}">
+          <div class="item-media">
+            <span class="item-tag-hot-cold ${item.temp === 'chaud' ? 'tag-hot' : 'tag-cold'}">${item.temp}</span>
+            <img src="${item.image || 'https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?w=500&q=80'}" alt="${escapeXSS(item.title)}" loading="lazy" />
+          </div>
+          <div class="item-header">
+            <h4 class="item-title">${escapeXSS(item.title)}</h4>
+            <div class="item-line-dots"></div>
+            <span class="item-price">${parseFloat(item.price).toFixed(2)}€</span>
+          </div>
+          <p class="item-description">${escapeXSS(item.description)}</p>
+          <div>
+            <span class="item-family-tag tag-${item.cat}">${item.cat === 'cafe' ? 'Café' : item.cat === 'the' ? 'Thé' : 'Infusion'}</span>
+          </div>
+          <div class="actions-dual-row" style="margin-top:auto;">
+            <button type="button" class="btn-action-split btn-split-discover" onclick="window.openProductModal('${item.id}', 'desc')">Notes</button>
+            <button type="button" class="btn-action-split btn-split-order" onclick="window.openProductModal('${item.id}', 'order')">Commander</button>
+          </div>
+        </article>
+      `).join('');
     }
 
-    // ── MODALE GESTION DU PRODUIT ──────────────────────────────
+    window.handleSearchInput = function(e) {
+      searchQuery = e.target.value.toLowerCase().trim();
+      renderGrid();
+    };
+
+    // Filtres boutons dynamiques
+    document.addEventListener("click", e => {
+      if (e.target.classList.contains("filter-btn-luxe")) {
+        const parent = e.target.parentElement;
+        parent.querySelectorAll(".filter-btn-luxe").forEach(b => b.classList.remove("active"));
+        e.target.classList.add("active");
+        activeCat = e.target.getAttribute("data-cat");
+        renderGrid();
+      }
+      if (e.target.classList.contains("temp-btn-luxe")) {
+        const parent = e.target.parentElement;
+        parent.querySelectorAll(".temp-btn-luxe").forEach(b => b.classList.remove("active"));
+        e.target.classList.add("active");
+        activeTemp = e.target.getAttribute("data-cat");
+        renderGrid();
+      }
+    });
+
+    // ── MODALE FICHE / COMMANDE PRODUIT ─────────────────────────
     window.openProductModal = function(id, initialTab = 'desc') {
       if (!catalogData[id]) return;
       selectedProduct = catalogData[id];
 
       document.getElementById("modalDrinkTitle").textContent = selectedProduct.title;
       document.getElementById("modalDrinkDescription").textContent = selectedProduct.description;
-      document.getElementById("modalDrinkRecipeInfo").textContent = selectedProduct.recipeInfo || "Composition secrète jalousement gardée par la maison.";
+      document.getElementById("modalDrinkRecipe").textContent = selectedProduct.recipeInfo || "Infusion soignée secrète préservée par la maison.";
 
       const b = document.getElementById("modalDrinkBadge");
       if (b) {
@@ -1056,10 +990,8 @@
 
       const modal = document.getElementById("productModal");
       if (modal) modal.classList.add("active");
-
       window.switchProductTab(initialTab);
 
-      // Si l'accessibilité ou la lecture vocale globale est active, on énonce le produit
       if (document.body.classList.contains("accessibility-mode")) {
         speakText(`Fiche de la boisson : ${selectedProduct.title}. Description : ${selectedProduct.description}`);
       }
@@ -1077,13 +1009,13 @@
       const lOrder = document.getElementById("tabLinkOrder");
       const pDesc = document.getElementById("tabPaneDesc");
       const pOrder = document.getElementById("tabPaneOrder");
-
       if (tab === 'desc') {
         lDesc?.classList.add("active");
         lOrder?.classList.remove("active");
         pDesc?.classList.add("active");
         pOrder?.classList.remove("active");
       } else {
+        lDesc?.classList.remove("remove");
         lDesc?.classList.remove("active");
         lOrder?.classList.add("active");
         pDesc?.classList.remove("active");
@@ -1114,48 +1046,103 @@
       const milkOpt = document.getElementById("orderMilkSelect")?.value || "Sans Lait";
       const foamOpt = document.getElementById("orderFoamSelect")?.value || "Sans Mousse";
       const scheduledTime = document.getElementById("orderScheduleInput")?.value || "";
-      const textualNotes = document.getElementById("orderCustomsInput")?.value.trim() || "";
+      const textualNotes = document.getElementById("orderNotesTextarea")?.value || "";
 
-      let finalSpecs = `[${sugarOpt}] — [${milkOpt}] — [${foamOpt}]`;
-      if (scheduledTime) finalSpecs += `\n[⏰ Retrait : ${scheduledTime}]`;
-      if (textualNotes) finalSpecs += `\nNote : ${escapeXSS(textualNotes)}`;
+      const orderRef = ref(db, "orders");
+      const newOrderRef = push(orderRef);
+      const orderId = newOrderRef.key;
 
-      const orderPayload = {
+      const payload = {
+        id: orderId,
+        drinkId: selectedProduct.id,
         drinkTitle: selectedProduct.title,
         guestName: name,
-        specs: finalSpecs,
-        status: "pending", 
+        sugar: sugarOpt,
+        milk: milkOpt,
+        foam: foamOpt,
+        schedule: scheduledTime,
+        notes: textualNotes,
+        status: "pending",
         timestamp: Date.now()
       };
 
-      const ordersRef = ref(db, "orders");
-      push(ordersRef, orderPayload)
-        .then((newRef) => {
-          myActiveOrderId = newRef.key;
-          storage.set("s_my_order_id", myActiveOrderId);
+      set(newOrderRef, payload)
+        .then(() => {
+          myActiveOrderId = orderId;
+          storage.set("s_my_order_id", orderId);
           lastKnownOrderStatus = "pending";
           storage.set("s_last_order_status", "pending");
 
-          showNotification("Votre demande d'élixir est en cuisine !");
+          showNotification("Votre demande d'élixir a été transmise au barista.");
           window.closeProductModal();
+          // Reset form fields
+          if (gInput) gInput.value = "";
+          const nt = document.getElementById("orderNotesTextarea"); if (nt) nt.value = "";
+          const sc = document.getElementById("orderScheduleInput"); if (sc) sc.value = "";
         })
-        .catch((err) => {
+        .catch(err => {
           console.error(err);
-          alert("Une erreur technique empêche la transmission de votre commande.");
+          alert("Erreur réseau lors de la commande.");
         })
         .finally(() => {
           if (btn) {
             btn.disabled = false;
-            btn.textContent = "Lancer la préparation";
+            btn.textContent = "Lancer la préparation sur-mesure";
           }
         });
     };
 
-    // ── GESTION DASHBOARD BARISTA (BACKOFFICE ADMIN) ───────────
-    window.updateOrderStatus = function(id, nextStatus) {
+    // ── BACKOFFICE BARISTA COMMANDES ─────────────────────────────
+    function renderOrdersTable() {
+      const tbody = document.getElementById("ordersTableBody");
+      if (!tbody) return;
+      const orders = Object.values(ordersData);
+      if (orders.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;padding:30px;color:var(--text-muted);">Aucun ticket de préparation en cours...</td></tr>`;
+        return;
+      }
+
+      orders.sort((a,b) => (a.timestamp || 0) - (b.timestamp || 0));
+
+      tbody.innerHTML = orders.map(ord => {
+        let statusBadge = `<span class="badge-status-table badge-pending">En attente</span>`;
+        let actionBtn = `<button type="button" class="btn-single-action btn-action-next" onclick="window.updateOrderStatus('${ord.id}', 'preparing')">Infuser</button>`;
+        
+        if (ord.status === "preparing") {
+          statusBadge = `<span class="badge-status-table badge-preparing">En Infusion</span>`;
+          actionBtn = `<button type="button" class="btn-single-action btn-action-next" style="background:#a8c99b;border-color:#a8c99b;color:#110a05;" onclick="window.updateOrderStatus('${ord.id}', 'ready')">Prêt</button>`;
+        } else if (ord.status === "ready") {
+          statusBadge = `<span class="badge-status-table badge-ready">Servi</span>`;
+          actionBtn = `<button type="button" class="btn-single-action" onclick="window.deleteOrderSingle('${ord.id}')">Archiver</button>`;
+        }
+
+        const specLine = `Sucre: ${escapeXSS(ord.sugar)} | Lait: ${escapeXSS(ord.milk)} | Mousse: ${escapeXSS(ord.foam)}${ord.schedule ? ' | Horaire: ' + escapeXSS(ord.schedule) : ''}`;
+        const notesBlock = ord.notes ? `<div style="font-size:0.7rem;margin-top:4px;color:#e57c67;">Note: ${escapeXSS(ord.notes)}</div>` : '';
+
+        return `
+          <tr>
+            <td class="ticket-guest-name">${escapeXSS(ord.guestName)}</td>
+            <td style="font-weight:500;">${escapeXSS(ord.drinkTitle)}</td>
+            <td>
+              <div class="table-customs-spec">${specLine}</div>
+              ${notesBlock}
+            </td>
+            <td>${statusBadge}</td>
+            <td>
+              <div class="admin-actions-row">
+                ${actionBtn}
+                <button type="button" class="btn-single-action btn-action-delete" onclick="window.deleteOrderSingle('${ord.id}')">✕</button>
+              </div>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    window.updateOrderStatus = function(id, newStatus) {
       if (!id) return;
-      set(ref(db, `orders/${id}/status`), nextStatus)
-        .then(() => showNotification(`Ticket mis à jour vers : ${nextStatus}`))
+      set(ref(db, `orders/${id}/status`), newStatus)
+        .then(() => showNotification("Statut du ticket mis à jour"))
         .catch(err => console.error(err));
     };
 
@@ -1197,9 +1184,11 @@
         document.getElementById("adminImage").value = item.image || "";
         document.getElementById("adminDescription").value = item.description;
         document.getElementById("adminRecipeInfo").value = item.recipeInfo || "";
+        document.getElementById("btnDeleteRecipeAdmin").style.display = "inline-block";
       } else {
         document.getElementById("recipeAdminTitle").textContent = "Ajouter une création";
         document.getElementById("adminRecipeId").value = "";
+        document.getElementById("btnDeleteRecipeAdmin").style.display = "none";
       }
       m.classList.add("active");
     };
@@ -1224,63 +1213,50 @@
 
       set(ref(db, `recipes/${id}`), payload)
         .then(() => {
-          closeRecipeAdminModal();
-          showNotification("Catalogue synchronisé avec succès");
+          showNotification("Création enregistrée");
+          window.closeRecipeAdminModal();
         })
-        .catch(() => alert("Erreur d'écriture de la recette."));
+        .catch(err => alert("Erreur de sauvegarde de l'Élixir"));
     };
 
-    window.deleteRecipeAdmin = function(id) {
+    window.deleteRecipeAdmin = function() {
+      const id = document.getElementById("adminRecipeId").value;
       if (!id) return;
-      if (confirm("Retirer cet élixir du catalogue définitivement ?")) {
+      if (confirm("Supprimer définitivement cet élixir du catalogue ?")) {
         set(ref(db, `recipes/${id}`), null)
-          .then(() => showNotification("Élixir retiré"));
+          .then(() => {
+            showNotification("Création effacée");
+            window.closeRecipeAdminModal();
+          });
       }
     };
 
-    // ── CONFIGURATION POP-UP SUR MESURE (OPTIONS) ─────────────────
-    function normalizeCustomization(data) {
-      const normalized = {};
-      Object.keys(defaultCustomization).forEach(key => {
-        const values = data && data[key] ? data[key] : defaultCustomization[key];
-        normalized[key] = values.map(v => String(v).trim()).filter(Boolean);
-        if (normalized[key].length === 0) normalized[key] = [...defaultCustomization[key]];
-      });
-      return normalized;
+    function renderAdminCatalogList() {
+      const g = document.getElementById("adminCatalogGrid");
+      if (!g) return;
+      g.innerHTML = Object.values(catalogData).map(item => `
+        <div class="admin-catalog-card">
+          <span>${escapeXSS(item.title)} <small style="color:var(--gold); font-size:0.75rem;">(${parseFloat(item.price).toFixed(2)}€)</small></span>
+          <button type="button" class="btn-single-action" onclick="window.openRecipeAdminModal('${item.id}')">Éditer</button>
+        </div>
+      `).join('');
     }
 
-    function fillSelectFromOptions(selectId, options) {
-      const select = document.getElementById(selectId);
-      if (!select) return;
-      const previousValue = select.value;
-      select.innerHTML = options.map((label, index) => {
-        const safe = escapeXSS(label);
-        return `<option value="${safe}"${index === 0 ? " selected" : ""}>${safe}</option>`;
-      }).join("");
-      if (options.includes(previousValue)) select.value = previousValue;
-    }
-
-    function populateCustomizationSelects() {
-      const config = normalizeCustomization(customizationData);
-      fillSelectFromOptions("orderSugarSelect", config.sugar);
-      fillSelectFromOptions("orderMilkSelect", config.milk);
-      fillSelectFromOptions("orderFoamSelect", config.foam);
-    }
-
-    function renderCustomizationAdmin() {
-      const config = normalizeCustomization(customizationData);
-      const sugar = document.getElementById("adminSugarOptions");
-      const milk = document.getElementById("adminMilkOptions");
-      const foam = document.getElementById("adminFoamOptions");
-      if (sugar) sugar.value = config.sugar.join("\n");
-      if (milk) milk.value = config.milk.join("\n");
-      if (foam) foam.value = config.foam.join("\n");
-    }
-
-    function textareaOptions(id, fallback) {
-      const raw = document.getElementById(id)?.value || "";
+    // ── GESTION DE LA PERSONNALISATION ET DE LA SAUVEGARDE POP-UP ──
+    function textareaOptions(elementId, fallback) {
+      const el = document.getElementById(elementId);
+      if (!el) return [...fallback];
+      const raw = el.value.trim();
       const values = raw.split(/\r?\n/).map(v => v.trim()).filter(Boolean);
       return values.length ? values : [...fallback];
+    }
+
+    function normalizeCustomization(data) {
+      return {
+        sugar: Array.isArray(data?.sugar) ? data.sugar : [...defaultCustomization.sugar],
+        milk: Array.isArray(data?.milk) ? data.milk : [...defaultCustomization.milk],
+        foam: Array.isArray(data?.foam) ? data.foam : [...defaultCustomization.foam]
+      };
     }
 
     window.saveCustomizationAdmin = function() {
@@ -1292,11 +1268,11 @@
 
       set(ref(db, "customization"), payload)
         .then(() => {
-          showNotification("Options du pop-up mises à jour");
+          showNotification("Options du pop-up mises à jour dans le salon.");
         })
         .catch((err) => {
           console.error(err);
-          alert("Erreur d'enregistrement des options");
+          alert("Erreur lors de la mise à jour des options.");
         });
     };
 
@@ -1306,6 +1282,26 @@
           .then(() => showNotification("Valeurs réinitialisées"));
       }
     };
+
+    function populateCustomizationSelects() {
+      const sugarSel = document.getElementById("orderSugarSelect");
+      const milkSel = document.getElementById("orderMilkSelect");
+      const foamSel = document.getElementById("orderFoamSelect");
+
+      if (sugarSel) sugarSel.innerHTML = customizationData.sugar.map(v => `<option value="${escapeXSS(v)}">${escapeXSS(v)}</option>`).join('');
+      if (milkSel) milkSel.innerHTML = customizationData.milk.map(v => `<option value="${escapeXSS(v)}">${escapeXSS(v)}</option>`).join('');
+      if (foamSel) foamSel.innerHTML = customizationData.foam.map(v => `<option value="${escapeXSS(v)}">${escapeXSS(v)}</option>`).join('');
+    }
+
+    function renderCustomizationAdmin() {
+      const sugarTa = document.getElementById("adminSugarOptions");
+      const milkTa = document.getElementById("adminMilkOptions");
+      const foamTa = document.getElementById("adminFoamOptions");
+
+      if (sugarTa && document.activeElement !== sugarTa) sugarTa.value = customizationData.sugar.join('\n');
+      if (milkTa && document.activeElement !== milkTa) milkTa.value = customizationData.milk.join('\n');
+      if (foamTa && document.activeElement !== foamTa) foamTa.value = customizationData.foam.join('\n');
+    }
 
     // ── ENGINE ASSISTANT INTELLIGENT (IA BARISTA) ───────────────
     window.triggerBaristaAssistantVoice = function() {
@@ -1317,8 +1313,7 @@
       }
       baristaAssistantActive = true;
       document.getElementById("btnAssistantVoiceToggle").style.borderColor = "#7dab60";
-
-      const introText = "Bienvenue au comptoir vocal de Sip & Savour. Je suis votre assistant barista. Que puis-je préparer pour vous aujourd'hui ? Vous pouvez me demander un Espresso Speculoos ou me poser des questions sur notre Collection du Moment.";
+      const introText = "Bienvenue au comptoir vocal de Sip & Savour. Je suis votre assistant barista. Que puis-je préparer pour vous aujourd'hui ?";
       speakText(introText);
     };
 
@@ -1328,77 +1323,62 @@
         alert("La reconnaissance vocale continue n'est pas supportée sur votre navigateur.");
         return;
       }
-
       const btn = document.getElementById("btnVoiceCommandsToggle");
       if (voiceRecognizer) {
         voiceRecognizer.stop();
         voiceRecognizer = null;
-        if (btn) { btn.textContent = "🎙️ Off"; btn.style.borderColor = "#e57c67"; btn.style.color = "#e57c67"; }
-        speakText("Commandes vocales désactivées.");
+        if (btn) {
+          btn.textContent = "🎙️ Off";
+          btn.style.borderColor = "#e57c67";
+          btn.style.color = "#e57c67";
+        }
+        document.getElementById("voiceFeedbackPill").style.display = "none";
         return;
       }
 
       voiceRecognizer = new SpeechRecognition();
-      voiceRecognizer.lang = 'fr-FR';
       voiceRecognizer.continuous = true;
       voiceRecognizer.interimResults = false;
+      voiceRecognizer.lang = "fr-FR";
 
-      if (btn) { btn.textContent = "🎙️ On"; btn.style.borderColor = "#7dab60"; btn.style.color = "#7dab60"; }
-      speakText("Reconnaissance continue enclenchée. Dites par exemple 'afficher les thés' ou 'mode clair'.");
-
-      voiceRecognizer.onresult = event => {
-        const result = event.results[event.results.length - 1];
-        const cmd = result[0].transcript.toLowerCase().trim();
-        showNotification(`Commande entendue : "${cmd}"`);
-
-        if (cmd.includes("clair") || cmd.includes("lumière")) {
-          document.documentElement.setAttribute("data-theme", "light");
-          document.getElementById("themeToggle").textContent = "Mode Sombre";
-          speakText("Changement pour le mode lumineux.");
-          return;
+      voiceRecognizer.onstart = () => {
+        if (btn) {
+          btn.textContent = "🎙️ On";
+          btn.style.borderColor = "#7dab60";
+          btn.style.color = "#7dab60";
         }
-        if (cmd.includes("sombre") || cmd.includes("nuit")) {
-          document.documentElement.setAttribute("data-theme", "dark");
-          document.getElementById("themeToggle").textContent = "Mode Clair";
-          speakText("Changement pour le mode sombre.");
-          return;
-        }
+        document.getElementById("voiceFeedbackPill").style.display = "block";
+      };
+
+      voiceRecognizer.onerror = () => {
+        document.getElementById("voiceFeedbackPill").style.display = "none";
+      };
+
+      voiceRecognizer.onend = () => {
+        document.getElementById("voiceFeedbackPill").style.display = "none";
+      };
+
+      voiceRecognizer.onresult = (event) => {
+        const lastIndex = event.results.length - 1;
+        const cmd = event.results[lastIndex][0].transcript.toLowerCase();
+        
         if (cmd.includes("café")) {
-          activeCat = "cafe";
-          renderGrid();
-          speakText("Filtrage de la carte : affichage de nos cafés fins.");
-          return;
+          activeCat = "cafe"; renderGrid(); speakText("Filtrage appliqué : cafés d'origines."); return;
         }
         if (cmd.includes("thé")) {
-          activeCat = "the";
-          renderGrid();
-          speakText("Filtrage de la carte : affichage de nos thés d'origine.");
-          return;
+          activeCat = "the"; renderGrid(); speakText("Filtrage appliqué : thés fins."); return;
         }
         if (cmd.includes("infusion")) {
-          activeCat = "infusion";
-          renderGrid();
-          speakText("Filtrage de la carte : affichage de nos infusions.");
-          return;
+          activeCat = "infusion"; renderGrid(); speakText("Filtrage appliqué : infusions naturelles."); return;
         }
         if (cmd.includes("glacé") || cmd.includes("froid")) {
-          activeTemp = "glacé";
-          renderGrid();
-          speakText("Filtrage : boissons glacées.");
-          return;
+          activeTemp = "glacé"; renderGrid(); speakText("Filtrage : boissons glacées."); return;
         }
         if (cmd.includes("chaud")) {
-          activeTemp = "chaud";
-          renderGrid();
-          speakText("Filtrage : boissons chaudes.");
-          return;
+          activeTemp = "chaud"; renderGrid(); speakText("Filtrage : boissons chaudes."); return;
         }
         if (cmd.includes("tout") || cmd.includes("tous")) {
-          activeCat = "all";
-          activeTemp = "all";
-          renderGrid();
-          speakText("Tous les élixirs affichés.");
-          return;
+          activeCat = "all"; activeTemp = "all"; renderGrid(); speakText("Tous les élixirs affichés."); return;
         }
         if (cmd.includes("commander")) {
           const match = Object.values(catalogData).find(i => cmd.includes(i.title.toLowerCase()));
@@ -1408,17 +1388,16 @@
           } else speakText("Boisson non trouvée dans le catalogue.");
           return;
         }
-        speakText("Commande non reconnue. Dites par exemple : afficher les thés, ou commander Espresso.");
+        speakText("Commande non reconnue. Réessayez.");
       };
 
       voiceRecognizer.start();
     };
 
-    // ── INITIALISATION INITIALIZATION SYSTEM ───────────────────
+    // ── INITIALISATION COMPLÈTE DU SYSTÈME ───────────────────
     function initializeAppSystem() {
       const gatePassed = storage.get("s_gate_passed");
       const savedRole = storage.get("s_role");
-
       if (savedRole) currentRole = savedRole;
 
       if (gatePassed === "true") {
@@ -1431,24 +1410,26 @@
       }
 
       // ÉCOUTEUR COMPORTEMENT BARRE ACCESSIBILITÉ FLOTTANTE DYNAMIQUE AU SCROLL
+      // Modifié pour que le menu n'apparaisse JAMAIS immédiatement à l'ouverture, mais uniquement après un scroll.
+      let hasScrolledOnce = false;
       window.addEventListener('scroll', () => {
         const toolbar = document.getElementById('accessibilityMenu');
-        if (toolbar) {
-          if (window.scrollY > 0) {
-            // Efface et masque le menu au défilement
-            toolbar.style.opacity = '0';
-            toolbar.style.transform = 'translateY(-100%)';
-            toolbar.style.pointerEvents = 'none';
-          } else {
-            // Fait réapparaître le menu au tout début de la page
-            toolbar.style.opacity = '1';
-            toolbar.style.transform = 'translateY(0)';
-            toolbar.style.pointerEvents = 'auto';
-          }
+        if (!toolbar) return;
+        
+        if (window.scrollY > 50) {
+          hasScrolledOnce = true;
+          toolbar.style.opacity = '0';
+          toolbar.style.transform = 'translateY(-100%)';
+          toolbar.style.pointerEvents = 'none';
+        } else if (window.scrollY === 0 && hasScrolledOnce) {
+          // N'apparaît que si l'utilisateur est descendu puis est remonté tout en haut
+          toolbar.style.opacity = '1';
+          toolbar.style.transform = 'translateY(0)';
+          toolbar.style.pointerEvents = 'auto';
         }
       });
 
-      // Écoute temps réel Firebase : Configuration des Personnalisations de pop-up
+      // Synchronisation temps réel Firebase des Personnalisations
       onValue(ref(db, "customization"), (snapshot) => {
         const data = snapshot.val();
         if (data) {
@@ -1462,37 +1443,24 @@
         }
       });
 
-      // Écoute temps réel Firebase : Catalogue de recettes
+      // Synchronisation des recettes de la carte
       onValue(ref(db, "recipes"), (snapshot) => {
         const data = snapshot.val();
-        catalogData = data ? { ...defaultCatalog, ...data } : { ...defaultCatalog };
-        renderGrid();
-
-        // Rendu sous-dashboard admin
-        const adminGrid = document.getElementById("adminCatalogGrid");
-        if (adminGrid) {
-          const arr = Object.values(catalogData);
-          if(arr.length === 0) {
-            adminGrid.innerHTML = "<p style='color:var(--text-muted);'>Aucun produit.</p>";
-          } else {
-            adminGrid.innerHTML = arr.map(i => `
-              <div class="admin-catalog-card">
-                <span>${escapeXSS(i.title)} <b style="color:var(--gold); font-size:0.8rem;">(${escapeXSS(i.price)}€)</b></span>
-                <div style="display:flex; gap:5px;">
-                  <button type="button" class="btn-single-action" style="padding:4px 8px; font-size:0.6rem;" onclick="window.openRecipeAdminModal('${escapeXSS(i.id)}')">Éditer</button>
-                  <button type="button" class="btn-single-action btn-action-delete" style="padding:4px 8px; font-size:0.6rem;" onclick="window.deleteRecipeAdmin('${escapeXSS(i.id)}')">✕</button>
-                </div>
-              </div>
-            `).join("");
-          }
+        if (data) {
+          catalogData = data;
+        } else {
+          catalogData = { ...defaultCatalog };
         }
+        renderGrid();
+        renderAdminCatalogList();
       });
 
-      // Écoute temps réel Firebase : Tableau complet des commandes
+      // Synchronisation générale du tableau des commandes
       onValue(ref(db, "orders"), (snapshot) => {
         ordersData = snapshot.val() || {};
+        renderOrdersTable();
 
-        // Suivi personnel du client
+        // Tracker Live en continu pour le client connecté
         const clientZone = document.getElementById("clientTrackerZone");
         if (myActiveOrderId && ordersData[myActiveOrderId]) {
           const myOrd = ordersData[myActiveOrderId];
@@ -1530,114 +1498,110 @@
         } else {
           if (clientZone) clientZone.style.display = "none";
         }
-
-        // Table Barista Dashboard
-        const tbody = document.getElementById("ordersTableBody");
-        if (!tbody) return;
-        if (Object.keys(ordersData).length === 0) {
-          tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;padding:30px;color:var(--text-muted);">Aucun ticket de préparation en cours...</td></tr>`;
-          return;
-        }
-
-        const sorted = Object.entries(ordersData).sort((a,b) => b[1].timestamp - a[1].timestamp);
-        tbody.innerHTML = sorted.map(([id, o]) => {
-          const s = o.status;
-          let badgeHtml = "";
-          let nextActionHtml = "";
-
-          if (s === "pending") {
-            badgeHtml = `<span class="badge-status-table badge-pending">En attente</span>`;
-            nextActionHtml = `<button type="button" class="btn-single-action btn-action-next" onclick="window.updateOrderStatus('${id}','preparing')">Préparer</button>`;
-          } else if (s === "preparing") {
-            badgeHtml = `<span class="badge-status-table badge-preparing">En Infusion</span>`;
-            nextActionHtml = `<button type="button" class="btn-single-action btn-action-next" onclick="window.updateOrderStatus('${id}','ready')">Prêt !</button>`;
-          } else if (s === "ready") {
-            badgeHtml = `<span class="badge-status-table badge-ready">Servi</span>`;
-          }
-
-          return `
-            <tr>
-              <td class="ticket-guest-name">${escapeXSS(o.guestName)}</td>
-              <td style="font-weight:600; color:var(--text-light);">${escapeXSS(o.drinkTitle)}</td>
-              <td><div class="table-customs-spec">${escapeXSS(o.specs)}</div></td>
-              <td>${badgeHtml}</td>
-              <td>
-                <div class="admin-actions-row">
-                  ${nextActionHtml}
-                  <button type="button" class="btn-single-action btn-action-delete" onclick="window.deleteOrderSingle('${id}')">Archiver</button>
-                </div>
-              </td>
-            </tr>
-          `;
-        }).join("");
-      });
-
-      // Événements Liens / Filtres
-      document.getElementById("searchInput")?.addEventListener("input", e => {
-        searchQuery = e.target.value.toLowerCase().trim();
-        renderGrid();
-      });
-
-      document.querySelectorAll(".filter-btn-luxe").forEach(btn => {
-        btn.addEventListener("click", () => {
-          document.querySelectorAll(".filter-btn-luxe").forEach(p => p.classList.remove("active"));
-          btn.classList.add("active");
-          activeCat = btn.dataset.cat;
-          renderGrid();
-        });
-      });
-
-      document.querySelectorAll(".temp-btn-luxe").forEach(btn => {
-        btn.addEventListener("click", () => {
-          document.querySelectorAll(".temp-btn-luxe").forEach(p => p.classList.remove("active"));
-          btn.classList.add("active");
-          activeTemp = btn.dataset.temp;
-          renderGrid();
-        });
-      });
-
-      document.addEventListener("keydown", event => {
-        if (event.key !== "Escape") return;
-        window.closeProductModal();
-        window.closeRecipeAdminModal();
       });
     }
 
-    // ── EXPOSITION GLOBALE SUR L'OBJET WINDOW ──────────────────
-    window.validateGatewayLogin       = validateGatewayLogin;
-    window.toggleThemeSystem        = toggleThemeSystem;
+    // Lancement des fonctions d'accessibilité globale
+    window.toggleAccessibilityMode = function() {
+      const b = document.body;
+      const active = b.classList.toggle("accessibility-mode");
+      document.getElementById("btn-toggle-accessibility").setAttribute("aria-pressed", active);
+      document.getElementById("accessibilityMenu").classList.toggle("active-mode-visuel", active);
+    };
+
+    window.toggleHighContrastTheme = function() {
+      const b = document.body;
+      const active = b.classList.toggle("high-contrast-mode");
+      document.getElementById("btn-toggle-contrast").setAttribute("aria-pressed", active);
+    };
+
+    window.toggleSimplifiedMode = function() {
+      const b = document.body;
+      const active = b.classList.toggle("simplified-mode");
+      document.getElementById("btn-toggle-simplified").setAttribute("aria-pressed", active);
+    };
+
+    window.adjustLocalZoom = function() {
+      const cur = parseFloat(document.body.style.fontSize) || 1.0;
+      document.body.style.fontSize = (cur + 0.1) + "em";
+    };
+
+    window.resetLocalZoom = function() {
+      document.body.style.fontSize = "1.0em";
+    };
+
+    window.readWholeCarte = function() {
+      const activeItems = Object.values(catalogData).filter(item => {
+        const matchCat = activeCat === "all" || item.cat === activeCat;
+        const matchTemp = activeTemp === "all" || item.temp === activeTemp;
+        return matchCat && matchTemp;
+      });
+      if (activeItems.length === 0) {
+        speakText("La carte sélectionnée est vide.");
+        return;
+      }
+      cartePlaylist = activeItems;
+      playlistIndex = 0;
+      speakText("Démarrage de la lecture de la carte.");
+    };
+
+    function readNextCarteItem() {
+      if (playlistIndex >= cartePlaylist.length) {
+        speakText("Fin de la lecture de la carte.");
+        cartePlaylist = [];
+        playlistIndex = 0;
+        return;
+      }
+      const cur = cartePlaylist[playlistIndex++];
+      const catLabel = cur.cat === "cafe" ? "Café" : cur.cat === "the" ? "Thé" : "Infusion";
+      speakText(`${cur.title}. C'est un ${catLabel} au prix de ${cur.price} euros. Description : ${cur.description}`);
+    }
+
+    window.pauseSpeech = function() {
+      if (synth && synth.speaking && !synth.paused) {
+        synth.pause();
+        document.getElementById("btn-speech-pause").style.display="none";
+        document.getElementById("btn-speech-resume").style.display="inline-block";
+      }
+    };
+
+    window.resumeSpeech = function() {
+      if (synth && synth.paused) {
+        synth.resume();
+        document.getElementById("btn-speech-pause").style.display="inline-block";
+        document.getElementById("btn-speech-resume").style.display="none";
+      }
+    };
+
+    window.stopSpeech = function() {
+      if (synth) {
+        cartePlaylist = [];
+        playlistIndex = 0;
+        synth.cancel();
+        document.getElementById("btn-speech-pause").style.display="none";
+        document.getElementById("btn-speech-resume").style.display="none";
+        document.getElementById("btn-speech-stop").style.display="none";
+      }
+    };
+
+    // Exportations globales pour le DOM
+    window.verifyGateSecretCode = verifyGateSecretCode;
     window.triggerAdminAccessSecret = triggerAdminAccessSecret;
-    window.logout                   = logout;
-    window.submitOrderToFirebase    = submitOrderToFirebase;
-    window.updateOrderStatus        = updateOrderStatus;
-    window.deleteOrderSingle        = deleteOrderSingle;
-    window.openProductModal         = openProductModal;
-    window.closeProductModal        = closeProductModal;
-    window.switchProductTab         = switchProductTab;
-    window.openRecipeAdminModal     = openRecipeAdminModal;
-    window.closeRecipeAdminModal    = closeRecipeAdminModal;
-    window.saveRecipeAdmin          = saveRecipeAdmin;
-    window.deleteRecipeAdmin        = deleteRecipeAdmin;
-    window.clearAllOrders           = clearAllOrders;
-    
-    // Administration & Personnalisation (Résout l'erreur au clic)
-    window.saveCustomizationAdmin   = saveCustomizationAdmin;
-    window.resetCustomizationAdmin  = resetCustomizationAdmin;
+    window.logout = logout;
+    window.submitOrderToFirebase = submitOrderToFirebase;
+    window.updateOrderStatus = updateOrderStatus;
+    window.deleteOrderSingle = deleteOrderSingle;
+    window.openProductModal = openProductModal;
+    window.closeProductModal = closeProductModal;
+    window.switchProductTab = switchProductTab;
+    window.openRecipeAdminModal = openRecipeAdminModal;
+    window.closeRecipeAdminModal = closeRecipeAdminModal;
+    window.saveRecipeAdmin = saveRecipeAdmin;
+    window.deleteRecipeAdmin = deleteRecipeAdmin;
+    window.clearAllOrders = clearAllOrders;
+    window.saveCustomizationAdmin = saveCustomizationAdmin;
+    window.resetCustomizationAdmin = resetCustomizationAdmin;
 
-    // Accessibilité Visuelle & Commandes Vocales
-    window.toggleAccessibilityMode         = toggleAccessibilityMode;
-    window.toggleHighContrastTheme         = toggleHighContrastTheme;
-    window.toggleSimplifiedMode            = toggleSimplifiedMode;
-    window.adjustLocalZoom                 = adjustLocalZoom;
-    window.resetLocalZoom                  = resetLocalZoom;
-    window.readWholeCarte                  = readWholeCarte;
-    window.pauseSpeech                     = pauseSpeech;
-    window.resumeSpeech                    = resumeSpeech;
-    window.stopSpeech                      = stopSpeech;
-    window.triggerBaristaAssistantVoice    = triggerBaristaAssistantVoice;
-    window.toggleVoiceRecognitionCommands  = toggleVoiceRecognitionCommands;
-
-    // Démarrage de l'application
     if (document.readyState === "complete" || document.readyState === "interactive") {
       initializeAppSystem();
     } else {
