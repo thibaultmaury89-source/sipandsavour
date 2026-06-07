@@ -932,6 +932,34 @@
       }
     }
 
+    // Déverrouille le contexte audio du navigateur via un son silencieux.
+    // DOIT être appelé depuis un événement utilisateur direct (clic).
+    // Sans ça, Chrome/Safari bloquent tout audio déclenché par Firebase.
+    function unlockAudioContext() {
+      // Méthode 1 : AudioContext (Web Audio API) — déverrouille le moteur audio
+      try {
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        if (AudioContext) {
+          const ctx = new AudioContext();
+          // Jouer un buffer vide d'1 frame — inaudible, mais suffit à débloquer
+          const buffer = ctx.createBuffer(1, 1, 22050);
+          const source = ctx.createBufferSource();
+          source.buffer = buffer;
+          source.connect(ctx.destination);
+          source.start(0);
+          // Reprendre si le contexte était suspendu (politique Chrome)
+          if (ctx.state === "suspended") ctx.resume();
+        }
+      } catch (e) { /* silencieux */ }
+
+      // Méthode 2 : speechSynthesis — un utterance vide pour débloquer la voix
+      if (window.speechSynthesis) {
+        const u = new SpeechSynthesisUtterance("");
+        u.volume = 0;
+        window.speechSynthesis.speak(u);
+      }
+    }
+
     // Envoie une notification push native + lit le texte à voix haute
     function notifyStatusChange(drinkTitle, newStatus) {
       const msgFn = ORDER_STATUS_MESSAGES[newStatus];
@@ -1316,6 +1344,9 @@
       const err   = document.getElementById("gateway-global-error");
       if (!input) return;
       const key = input.value.trim();
+      // Déverrouiller le contexte audio dès ce clic utilisateur
+      // (c'est la seule fenêtre où le navigateur l'autorise sans restriction)
+      unlockAudioContext();
       if (key === "2408") {
         storage.set("s_gate_passed","true");
         storage.set("s_role","family");
