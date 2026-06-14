@@ -597,11 +597,11 @@
       <h3 class="modal-title-luxe" id="mdProductTitle">Breuvage</h3>
       
       <div class="tabs-nav-product">
-        <button class="tab-link-product active" onclick="switchProductTab('origin', this)">Origine & Notes</button>
-        <button class="tab-link-product" onclick="switchProductTab('recipe', this)">Secret de Préparation</button>
+        <button class="tab-link-product" id="tabLinkOrigin" onclick="switchProductTab('origin', this)">Origine & Notes</button>
+        <button class="tab-link-product" id="tabLinkRecipe" onclick="switchProductTab('recipe', this)">Secret de Préparation</button>
       </div>
 
-      <div class="tab-pane-product active" id="tabProductOrigin">Informations sur la provenance...</div>
+      <div class="tab-pane-product" id="tabProductOrigin">Informations sur la provenance...</div>
       <div class="tab-pane-product" id="tabProductRecipe">Détails de l'extraction artisanale...</div>
 
       <hr style="border: none; border-top: 1px solid var(--border-fine); margin: 25px 0 20px 0;" />
@@ -686,7 +686,6 @@
   </div>
 
   <script>
-    // BASE DE DONNÉES LOCALE INITIALE (SIMULANT UN KIOTE DE RESTAURATION PREMIUM AVEC STOCKAGE FIREBASE LOCALISE)
     let localCatalogBoissons = [
       {
         id: "b1",
@@ -741,7 +740,7 @@
         img: "https://images.unsplash.com/photo-1517701550927-30cf4ba1dba5?w=600&q=80",
         desc: "Café infusé à froid pendant 18 heures, clarifié et aromatisé naturellement à la pulpe de cerise de café.",
         origin: "Café Geisha du Panama (Finca Deborah) infusé à froid, assemblé avec une réduction de Cascara bio.\nNotes de dégustation : Fleur d'oranger, cerise noire, bergamote, effervescence naturelle.",
-        recipe: "Infusion lente en immersion totale à 4°C pendant 18 heures avec un ratio de 80g/L.\nDouble filtration sur filtre papier épais.\nAjout de 10% de concentré de Cascara avant mise en bouteille sous atmosphère protectrice."
+        recipe: "Infusion lente en immersion totale à 4°C pendant 18 heures avec un ratio de 80g/L.\nDouble filtration sur filtre papier épais.\nAjout de 10% de commun de Cascara avant mise en bouteille sous atmosphère protectrice."
       }
     ];
 
@@ -753,7 +752,6 @@
     let cartePlaylist = [];
     let playlistIndex = 0;
 
-    // INITIALISATION DU SYSTÈME
     function initializeAppSystem() {
       loadSavedDataFromLocalStorage();
       renderMenuGridItems();
@@ -789,7 +787,6 @@
       localStorage.setItem("sip_savour_orders", JSON.stringify(currentOrdersList));
     }
 
-    // AUTHENTIFICATION
     function verifyGateSecretCode() {
       const code = document.getElementById("gateCodeInput").value;
       if (code === "1234" || code === "0000" || code === "") {
@@ -826,12 +823,10 @@
       }
     }
 
-    // FONCTION POUR OUVRIR DIRECTEMENT LE POP-UP DE COMMANDE POUR LA RECOMMANDATION BARISTA
     function triggerQuickOrderFromBarista() {
       const currentTitle = document.getElementById("baristaViewTitle").textContent;
       const currentDesc = document.getElementById("baristaViewDesc").textContent;
       
-      // Essayer de faire correspondre avec un item du catalogue existant, sinon créer un item temporaire
       let matchItem = localCatalogBoissons.find(b => b.name.toLowerCase() === currentTitle.toLowerCase());
       if (!matchItem) {
         matchItem = {
@@ -842,7 +837,7 @@
           recipe: "Extraction artisanale sur-mesure ajustée selon vos préférences rituelles."
         };
       }
-      openProductModalWithItem(matchItem);
+      openProductModalWithItem(matchItem, 'recipe'); // La recommandation principale s'ouvre par défaut sur la recette/commande
     }
 
     // AFFICHAGE DU MENU DYNAMIQUE
@@ -866,10 +861,10 @@
         const tagLabel = isHot ? "Chaud" : "Glacé";
         const familyClass = "tag-" + item.family;
 
-        // Condition cruciale : Masquer totalement le prix si la boisson est chaude
         const priceDisplayHTML = isHot ? "" : `<span class="item-price">${item.price.toFixed(2)}€</span>`;
         const dotLineHTML = isHot ? "" : `<div class="item-line-dots"></div>`;
 
+        // Modification ici : passage d'un deuxième paramètre 'origin' ou 'recipe' selon le bouton cliqué
         card.innerHTML = `
           <div class="item-media">
             <span class="item-tag-hot-cold ${tagClass}">${tagLabel}</span>
@@ -885,8 +880,8 @@
             <span class="item-family-tag ${familyClass}">${item.family}</span>
           </div>
           <div class="actions-dual-row">
-            <button class="btn-action-split btn-split-discover" onclick="openProductModalById('${item.id}')">Découvrir</button>
-            <button class="btn-action-split btn-split-order" onclick="openProductModalById('${item.id}')">Commander</button>
+            <button class="btn-action-split btn-split-discover" onclick="openProductModalById('${item.id}', 'origin')">Découvrir</button>
+            <button class="btn-action-split btn-split-order" onclick="openProductModalById('${item.id}', 'recipe')">Commander</button>
           </div>
         `;
         container.appendChild(card);
@@ -911,21 +906,24 @@
       renderMenuGridItems();
     }
 
-    // MODALE PRODUIT / COMMANDE
-    function openProductModalById(id) {
+    // MODALE PRODUIT / COMMANDE PILOTÉE PAR L'ONGLET DÉSIRE
+    function openProductModalById(id, targetTab) {
       const item = localCatalogBoissons.find(b => b.id === id);
-      if (item) openProductModalWithItem(item);
+      if (item) openProductModalWithItem(item, targetTab);
     }
 
-    function openProductModalWithItem(item) {
+    function openProductModalWithItem(item, targetTab) {
       activeSelectedProductId = item.id;
       document.getElementById("mdProductTitle").textContent = item.name;
       document.getElementById("tabProductOrigin").textContent = item.origin || "Origine protégée. Notes secrètes de l'artisan.";
       document.getElementById("tabProductRecipe").textContent = item.recipe || "Extraction traditionnelle lente effectuée par votre sommelier.";
       
-      // Sélectionner le premier onglet par défaut
-      const tabs = document.querySelectorAll(".tab-link-product");
-      if(tabs.length > 0) switchProductTab('origin', tabs[0]);
+      // Gérer l'activation ciblée de l'onglet demandé (découvrir -> origine, commander -> préparation)
+      if (targetTab === 'recipe') {
+        switchProductTab('recipe', document.getElementById("tabLinkRecipe"));
+      } else {
+        switchProductTab('origin', document.getElementById("tabLinkOrigin"));
+      }
 
       document.getElementById("productModal").classList.add("active");
     }
@@ -944,7 +942,6 @@
       if (tabName === 'recipe') document.getElementById("tabProductRecipe").classList.add("active");
     }
 
-    // TRANSACTION SOUCHIER / ACTION COMMANDE FIREBASE
     function submitOrderToFirebase() {
       const guestName = document.getElementById("orderGuestName").value.trim();
       const milkChoice = document.getElementById("orderMilkSelect").value;
@@ -972,7 +969,6 @@
       closeProductModal();
       showToastNotification(`L'ordre de préparation de votre ${drinkName} est transmis au Barista.`);
       
-      // Reset form
       document.getElementById("orderGuestName").value = "";
       document.getElementById("orderNotes").value = "";
       document.getElementById("orderMilkSelect").selectedIndex = 0;
@@ -981,7 +977,6 @@
       detectActiveOrderTracker();
     }
 
-    // DETECTER ET METTRE A JOUR LE TRACKER EN TEMPS REEL POUR L'HOTE ACTUEL
     function detectActiveOrderTracker() {
       const trackerSection = document.getElementById("liveOrderTrackerSection");
       if (currentOrdersList.length === 0) {
@@ -990,7 +985,6 @@
       }
 
       trackerSection.style.display = "block";
-      // On prend la dernière commande passée pour l'affichage du tracker en temps réel
       const latestOrder = currentOrdersList[currentOrdersList.length - 1];
       
       const badge = document.getElementById("trackerStatusBadgeText");
@@ -1016,7 +1010,6 @@
       }
     }
 
-    // ADMIN ACTIONS
     function renderAdminOrdersTable() {
       const tbody = document.getElementById("ordersTableBodyAdmin");
       tbody.innerHTML = "";
@@ -1101,7 +1094,6 @@
       });
     }
 
-    // CREATION DE BREUVAGE PAR L'ADMINISTRATEUR SOMMELIER
     function openRecipeAdminModal() {
       document.getElementById("recipeAdminModal").classList.add("active");
     }
@@ -1136,7 +1128,6 @@
       closeRecipeAdminModal();
       showToastNotification(`Le breuvage noble "${name}" est désormais inscrit à la carte.`);
 
-      // Reset
       document.getElementById("admRecName").value = "";
       document.getElementById("admRecPrice").value = "";
       document.getElementById("admRecImg").value = "";
@@ -1153,7 +1144,6 @@
       showToastNotification("Breuvage radié de la carte officielle.");
     }
 
-    // CUSTOMIZATION BACK-OFFICE
     function saveCustomizationAdmin() {
       const title = document.getElementById("cfgBaristaTitle").value;
       const img = document.getElementById("cfgBaristaImg").value;
@@ -1186,7 +1176,6 @@
       document.getElementById("baristaViewDesc").textContent = document.getElementById("cfgBaristaDesc").value;
     }
 
-    // SYSTEME DE THEME ET AMBIANCE VISUELLE
     function toggleThemeSystem() {
       const html = document.documentElement;
       const current = html.getAttribute("data-theme");
@@ -1195,7 +1184,6 @@
       showToastNotification(`Ambiance tamisée basculée en mode : ${next === 'dark' ? 'Nocturne' : 'Diurne'}.`);
     }
 
-    // TOAST NOTIFICATIONS BI-DIRECTIONNELLES
     function showToastNotification(text) {
       const container = document.getElementById("toastContainer");
       const el = document.createElement("div");
@@ -1208,10 +1196,8 @@
       setTimeout(() => { if(el) el.remove(); }, 5000);
     }
 
-    // ACCESSIBILITÉ ET ASSISTANCE VOCALE
     function setupAccessibilityToolbarDetector() {
       window.addEventListener("keydown", (e) => {
-        // Déclencheur secret : Appui prolongé ou touche 'A' combinée à Alt pour faire surgir la barre
         if (e.altKey && (e.key === "a" || e.key === "A" || e.key === "q" || e.key === "Q")) {
           e.preventDefault();
           showAccessibilityToolbar();
@@ -1254,7 +1240,6 @@
       document.getElementById("btn-layout").setAttribute("aria-pressed", active ? "true" : "false");
     }
 
-    // SYNTHÈSE VOCALE INTELLIGENTE ET MODULAIRE
     function toggleSpeechSynthesis() {
       const btn = document.getElementById("btn-speech");
       const pill = document.getElementById("speechStatusPill");
@@ -1277,15 +1262,12 @@
       cartePlaylist = [];
       playlistIndex = 0;
 
-      // Composition de la playlist audio descriptive du salon privé
       cartePlaylist.push("Bienvenue sur l'assistance vocale Sip and Savour. Nous allons vous lire la carte actuelle.");
       
-      // Ajouter la boisson à la une recommandée par le sommelier
       const baristaTitle = document.getElementById("baristaViewTitle").textContent;
       const baristaDesc = document.getElementById("baristaViewDesc").textContent;
       cartePlaylist.push(`En vedette et recommandation de votre barista : ${baristaTitle}. ${baristaDesc}.`);
 
-      // Parcourir le catalogue filtré à haute voix
       localCatalogBoissons.forEach(item => {
         if (currentCategoryFilter !== "tous" && item.family !== currentCategoryFilter) return;
         if (currentTemperatureFilter !== "all" && item.temp !== currentTemperatureFilter) return;
@@ -1313,7 +1295,7 @@
       const textToSpeak = cartePlaylist[playlistIndex];
       const utterance = new SpeechSynthesisUtterance(textToSpeak);
       utterance.lang = "fr-FR";
-      utterance.rate = 0.95; // Un ton calme et premium
+      utterance.rate = 0.95;
       
       utterance.onend = function() {
         playlistIndex++;
@@ -1345,7 +1327,6 @@
       playlistIndex = 0;
     }
 
-    // VÉRIFICATION GLOBALE DU CHARGEMENT DU DOM
     if (document.readyState === "complete" || document.readyState === "interactive") {
       initializeAppSystem();
     } else {
