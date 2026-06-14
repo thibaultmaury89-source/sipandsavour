@@ -244,12 +244,20 @@
     .tag-the     { background: rgba(100,140,80,0.15); color: #7dab60; border: 1px solid rgba(100,140,80,0.3); }
     .tag-infusion{ background: rgba(160,100,180,0.15); color: #c07fd8; border: 1px solid rgba(160,100,180,0.3); }
 
-    /* MODALES */
-    .tabs-nav-product { display: flex; border-bottom: 1px solid var(--border-fine); margin-bottom: 20px; gap: 15px; overflow-x: auto; -webkit-overflow-scrolling: touch; }
-    .tab-link-product { background: none; border: none; font-family: var(--font-serif); font-size: 1.15rem; color: var(--text-muted); padding-bottom: 8px; cursor: pointer; position: relative; white-space: nowrap; }
-    .tab-link-product.active { color: var(--gold); }
-    .tab-link-product.active::after { content: ''; position: absolute; bottom: -1px; left: 0; right: 0; height: 2px; background: var(--gold); }
-    .tab-pane-product { display: none; font-size: 0.85rem; color: var(--text-light); line-height: 1.6; white-space: pre-line; min-height: 120px; }
+    /* MODALES & ONGLETS SEPARES */
+    .tabs-nav-product { display: flex; border-bottom: none; margin-bottom: 25px; gap: 15px; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+    .tab-link-product {
+      background: rgba(17,10,5,0.3); border: 1px solid var(--border-fine);
+      font-family: var(--font-serif); font-size: 1.15rem; color: var(--text-muted);
+      padding: 10px 20px; cursor: pointer; border-radius: 6px; white-space: nowrap;
+      transition: all 0.3s ease;
+    }
+    .tab-link-product:hover { border-color: var(--gold); color: var(--text-light); }
+    .tab-link-product.active {
+      color: #110a05; background: var(--gold); border-color: var(--gold);
+      box-shadow: 0 4px 15px rgba(197, 168, 128, 0.2); font-weight: 500;
+    }
+    .tab-pane-product { display: none; font-size: 0.85rem; color: var(--text-light); line-height: 1.6; white-space: pre-line; min-height: 120px; background: rgba(17,10,5,0.2); border: 1px solid var(--border-fine); padding: 18px; border-radius: 6px; }
     .tab-pane-product.active { display: block; }
     .product-meta-badge { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 1px; color: var(--gold); background: rgba(197,168,128,0.1); padding: 4px 8px; border-radius: 4px; display: inline-block; margin-bottom: 15px; border: 1px solid var(--border-fine); }
     .modal-backdrop-luxe { position: fixed; inset: 0; z-index: 200; background: rgba(17,10,5,0.85); backdrop-filter: blur(8px); display: none; align-items: center; justify-content: center; padding: 15px; }
@@ -367,7 +375,6 @@
       display: none;
     }
 
-    /* MODALE ADMIN RECETTES */
     #recipeAdminModal .form-group { margin-bottom: 15px; }
 
     /* RESPONSIVE DESIGN */
@@ -740,7 +747,7 @@
         img: "https://images.unsplash.com/photo-1517701550927-30cf4ba1dba5?w=600&q=80",
         desc: "Café infusé à froid pendant 18 heures, clarifié et aromatisé naturellement à la pulpe de cerise de café.",
         origin: "Café Geisha du Panama (Finca Deborah) infusé à froid, assemblé avec une réduction de Cascara bio.\nNotes de dégustation : Fleur d'oranger, cerise noire, bergamote, effervescence naturelle.",
-        recipe: "Infusion lente en immersion totale à 4°C pendant 18 heures avec un ratio de 80g/L.\nDouble filtration sur filtre papier épais.\nAjout de 10% de commun de Cascara avant mise en bouteille sous atmosphère protectrice."
+        recipe: "Infusion lente en immersion totale à 4°C pendant 18 heures avec un ratio de 80g/L.\nDouble filtration sur filtre papier épais.\nAjout de 10% de concentré de Cascara avant mise en bouteille sous atmosphère protectrice."
       }
     ];
 
@@ -763,13 +770,9 @@
 
     function loadSavedDataFromLocalStorage() {
       const savedCatalog = localStorage.getItem("sip_savour_catalog");
-      if (savedCatalog) {
-        localCatalogBoissons = JSON.parse(savedCatalog);
-      }
+      if (savedCatalog) { localCatalogBoissons = JSON.parse(savedCatalog); }
       const savedOrders = localStorage.getItem("sip_savour_orders");
-      if (savedOrders) {
-        currentOrdersList = JSON.parse(savedOrders);
-      }
+      if (savedOrders) { currentOrdersList = JSON.parse(savedOrders); }
       const savedBaristaTitle = localStorage.getItem("sip_savour_cfg_title");
       if (savedBaristaTitle) document.getElementById("cfgBaristaTitle").value = savedBaristaTitle;
       const savedBaristaImg = localStorage.getItem("sip_savour_cfg_img");
@@ -780,19 +783,15 @@
       applyCustomizationDOM();
     }
 
-    function syncCatalogToStorage() {
-      localStorage.setItem("sip_savour_catalog", JSON.stringify(localCatalogBoissons));
-    }
-    function syncOrdersToStorage() {
-      localStorage.setItem("sip_savour_orders", JSON.stringify(currentOrdersList));
-    }
+    function syncCatalogToStorage() { localStorage.setItem("sip_savour_catalog", JSON.stringify(localCatalogBoissons)); }
+    function syncOrdersToStorage() { localStorage.setItem("sip_savour_orders", JSON.stringify(currentOrdersList)); }
 
     function verifyGateSecretCode() {
       const code = document.getElementById("gateCodeInput").value;
       if (code === "1234" || code === "0000" || code === "") {
         document.getElementById("authScreen").classList.add("hidden");
         document.getElementById("mainAppWrapper").classList.add("active");
-        showToastNotification("Bienvenue au Salon Sip & Savour. L'expérience commence.");
+        showToastNotification("Bienvenue au Salon Sip & Savour.");
       } else {
         const err = document.getElementById("authErrorMsg");
         err.style.display = "block";
@@ -812,13 +811,9 @@
       if (currentAdminState === "block") {
         document.getElementById("adminDashboardSection").style.display = "none";
         document.getElementById("badgeAdminLabel").textContent = "Membre Privé";
-        document.getElementById("badgeAdminLabel").style.background = "none";
-        document.getElementById("badgeAdminLabel").style.color = "var(--gold)";
       } else {
         document.getElementById("adminDashboardSection").style.display = "block";
         document.getElementById("badgeAdminLabel").textContent = "Console Sommelier";
-        document.getElementById("badgeAdminLabel").style.background = "var(--gold)";
-        document.getElementById("badgeAdminLabel").style.color = "#110a05";
         document.getElementById("adminDashboardSection").scrollIntoView({ behavior: "smooth" });
       }
     }
@@ -833,18 +828,17 @@
           id: "barista_promo",
           name: currentTitle,
           desc: currentDesc,
-          origin: "Sélection spéciale exclusive recommandée par votre barista pour cette session privée.",
+          temp: "hot",
+          origin: "Sélection spéciale exclusive recommandée par votre barista.",
           recipe: "Extraction artisanale sur-mesure ajustée selon vos préférences rituelles."
         };
       }
-      openProductModalWithItem(matchItem, 'recipe'); // La recommandation principale s'ouvre par défaut sur la recette/commande
+      openProductModalByIdAndTab(matchItem.id, 'recipe', matchItem);
     }
 
-    // AFFICHAGE DU MENU DYNAMIQUE
     function renderMenuGridItems() {
       const container = document.getElementById("menuGridItemsContainer");
       container.innerHTML = "";
-
       const query = document.getElementById("luxeSearchInput").value.toLowerCase();
 
       localCatalogBoissons.forEach(item => {
@@ -854,7 +848,6 @@
 
         const card = document.createElement("article");
         card.className = "carte-item";
-        card.setAttribute("data-id", item.id);
 
         const isHot = item.temp === "hot";
         const tagClass = isHot ? "tag-hot" : "tag-cold";
@@ -864,11 +857,10 @@
         const priceDisplayHTML = isHot ? "" : `<span class="item-price">${item.price.toFixed(2)}€</span>`;
         const dotLineHTML = isHot ? "" : `<div class="item-line-dots"></div>`;
 
-        // Modification ici : passage d'un deuxième paramètre 'origin' ou 'recipe' selon le bouton cliqué
         card.innerHTML = `
           <div class="item-media">
             <span class="item-tag-hot-cold ${tagClass}">${tagLabel}</span>
-            <img src="${item.img || 'https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?w=400&q=80'}" alt="${item.name}" />
+            <img src="${item.img || ''}" alt="${item.name}" />
           </div>
           <div class="item-header">
             <h3 class="item-title">${item.name}</h3>
@@ -876,12 +868,10 @@
             ${priceDisplayHTML}
           </div>
           <p class="item-description">${item.desc}</p>
-          <div>
-            <span class="item-family-tag ${familyClass}">${item.family}</span>
-          </div>
+          <div><span class="item-family-tag ${familyClass}">${item.family}</span></div>
           <div class="actions-dual-row">
-            <button class="btn-action-split btn-split-discover" onclick="openProductModalById('${item.id}', 'origin')">Découvrir</button>
-            <button class="btn-action-split btn-split-order" onclick="openProductModalById('${item.id}', 'recipe')">Commander</button>
+            <button class="btn-action-split btn-split-discover" onclick="openProductModalByIdAndTab('${item.id}', 'origin')">Découvrir</button>
+            <button class="btn-action-split btn-split-order" onclick="openProductModalByIdAndTab('${item.id}', 'recipe')">Commander</button>
           </div>
         `;
         container.appendChild(card);
@@ -902,29 +892,25 @@
       renderMenuGridItems();
     }
 
-    function filterCarteDynamic() {
-      renderMenuGridItems();
-    }
+    function filterCarteDynamic() { renderMenuGridItems(); }
 
-    // MODALE PRODUIT / COMMANDE PILOTÉE PAR L'ONGLET DÉSIRE
-    function openProductModalById(id, targetTab) {
-      const item = localCatalogBoissons.find(b => b.id === id);
-      if (item) openProductModalWithItem(item, targetTab);
-    }
+    // FONCTION MODALE ADAPTÉE ET SÉPARÉE SELON LE BOUTON APPUYÉ
+    function openProductModalByIdAndTab(id, defaultTab, directObject = null) {
+      let item = directObject || localCatalogBoissons.find(b => b.id === id);
+      if (!item) return;
 
-    function openProductModalWithItem(item, targetTab) {
       activeSelectedProductId = item.id;
       document.getElementById("mdProductTitle").textContent = item.name;
-      document.getElementById("tabProductOrigin").textContent = item.origin || "Origine protégée. Notes secrètes de l'artisan.";
-      document.getElementById("tabProductRecipe").textContent = item.recipe || "Extraction traditionnelle lente effectuée par votre sommelier.";
+      document.getElementById("tabProductOrigin").textContent = item.origin || "Origine protégée.";
+      document.getElementById("tabProductRecipe").textContent = item.recipe || "Extraction traditionnelle.";
       
-      // Gérer l'activation ciblée de l'onglet demandé (découvrir -> origine, commander -> préparation)
-      if (targetTab === 'recipe') {
-        switchProductTab('recipe', document.getElementById("tabLinkRecipe"));
-      } else {
-        switchProductTab('origin', document.getElementById("tabLinkOrigin"));
+      // Cibler le bon bouton d'onglet à activer selon le parcours choisi
+      let targetTabBtn = document.getElementById("tabLinkOrigin");
+      if (defaultTab === 'recipe') {
+        targetTabBtn = document.getElementById("tabLinkRecipe");
       }
 
+      switchProductTab(defaultTab, targetTabBtn);
       document.getElementById("productModal").classList.add("active");
     }
 
@@ -937,7 +923,7 @@
       document.querySelectorAll(".tab-link-product").forEach(b => b.classList.remove("active"));
       document.querySelectorAll(".tab-pane-product").forEach(p => p.classList.remove("active"));
       
-      btn.classList.add("active");
+      if (btn) btn.classList.add("active");
       if (tabName === 'origin') document.getElementById("tabProductOrigin").classList.add("active");
       if (tabName === 'recipe') document.getElementById("tabProductRecipe").classList.add("active");
     }
@@ -948,7 +934,7 @@
       const specialNotes = document.getElementById("orderNotes").value.trim();
 
       if (!guestName) {
-        showToastNotification("Veuillez indiquer votre nom pour le service rituel.");
+        showToastNotification("Veuillez indiquer votre nom pour le service.");
         return;
       }
 
@@ -965,9 +951,8 @@
 
       currentOrdersList.push(newOrder);
       syncOrdersToStorage();
-      
       closeProductModal();
-      showToastNotification(`L'ordre de préparation de votre ${drinkName} est transmis au Barista.`);
+      showToastNotification(`Commande de ${drinkName} transmise.`);
       
       document.getElementById("orderGuestName").value = "";
       document.getElementById("orderNotes").value = "";
@@ -983,27 +968,21 @@
         trackerSection.style.display = "none";
         return;
       }
-
       trackerSection.style.display = "block";
       const latestOrder = currentOrdersList[currentOrdersList.length - 1];
-      
       const badge = document.getElementById("trackerStatusBadgeText");
       const progress = document.getElementById("trackerProgressBarElement");
-      
       document.querySelectorAll(".tracker-step").forEach(s => s.className = "tracker-step");
 
       if (latestOrder.status === "pending") {
-        badge.textContent = "Ordre Reçu — En attente du Barista";
-        progress.style.width = "15%";
+        badge.textContent = "Ordre Reçu"; progress.style.width = "15%";
         document.getElementById("step-pending").classList.add("active");
       } else if (latestOrder.status === "preparing") {
-        badge.textContent = "Alchimie Active — Votre breuvage prend vie";
-        progress.style.width = "50%";
+        badge.textContent = "Alchimie Active"; progress.style.width = "50%";
         document.getElementById("step-pending").classList.add("done");
         document.getElementById("step-preparing").classList.add("active");
       } else if (latestOrder.status === "ready") {
-        badge.textContent = "Élixir Prêt — À déguster au comptoir d'honneur";
-        progress.style.width = "100%";
+        badge.textContent = "Élixir Prêt"; progress.style.width = "100%";
         document.getElementById("step-pending").classList.add("done");
         document.getElementById("step-preparing").classList.add("done");
         document.getElementById("step-ready").classList.add("active");
@@ -1013,40 +992,31 @@
     function renderAdminOrdersTable() {
       const tbody = document.getElementById("ordersTableBodyAdmin");
       tbody.innerHTML = "";
-
       if (currentOrdersList.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; color:var(--text-muted); font-style:italic; padding:20px;">Aucun rituel de commande en cours pour ce service.</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; color:var(--text-muted); padding:20px;">Aucune commande.</td></tr>`;
         return;
       }
-
       currentOrdersList.forEach(ord => {
         const tr = document.createElement("tr");
-        
-        let statusBadge = "";
-        let nextActionBtn = "";
+        let statusBadge = "", nextActionBtn = "";
 
         if (ord.status === "pending") {
           statusBadge = `<span class="badge-status-table badge-pending">En attente</span>`;
           nextActionBtn = `<button class="btn-single-action btn-action-next" onclick="updateOrderStatus('${ord.id}', 'preparing')">Préparer</button>`;
         } else if (ord.status === "preparing") {
-          statusBadge = `<span class="badge-status-table badge-preparing">En préparation</span>`;
-          nextActionBtn = `<button class="btn-single-action btn-action-next" onclick="updateOrderStatus('${ord.id}', 'ready')">Prêt pour le Service</button>`;
+          statusBadge = `<span class="badge-status-table badge-preparing">En cours</span>`;
+          nextActionBtn = `<button class="btn-single-action btn-action-next" onclick="updateOrderStatus('${ord.id}', 'ready')">Prêt</button>`;
         } else if (ord.status === "ready") {
           statusBadge = `<span class="badge-status-table badge-ready">Servi</span>`;
-          nextActionBtn = `<span style="font-size:0.7rem; color:var(--text-muted); font-weight:600;">Terminé</span>`;
+          nextActionBtn = `<span style="font-size:0.7rem;">Terminé</span>`;
         }
 
         tr.innerHTML = `
-          <td><span class="ticket-guest-name">${ord.guest}</span><br/><span style="font-size:0.65rem; color:var(--text-muted);">${ord.timestamp}</span></td>
-          <td style="font-weight:500; color:var(--gold);">${ord.drink}</td>
+          <td><span class="ticket-guest-name">${ord.guest}</span></td>
+          <td style="color:var(--gold);">${ord.drink}</td>
           <td><div class="table-customs-spec">${ord.customs}</div></td>
           <td>${statusBadge}</td>
-          <td>
-            <div class="admin-actions-row">
-              ${nextActionBtn}
-              <button class="btn-single-action btn-action-delete" onclick="deleteOrderSingle('${ord.id}')">Supprimer</button>
-            </div>
-          </td>
+          <td><div class="admin-actions-row">${nextActionBtn}<button class="btn-single-action btn-action-delete" onclick="deleteOrderSingle('${ord.id}')">Supprimer</button></div></td>
         `;
         tbody.appendChild(tr);
       });
@@ -1055,51 +1025,34 @@
     function updateOrderStatus(id, newStatus) {
       const ord = currentOrdersList.find(o => o.id === id);
       if (ord) {
-        ord.status = newStatus;
-        syncOrdersToStorage();
-        renderAdminOrdersTable();
-        detectActiveOrderTracker();
-        showToastNotification(`La commande de ${ord.guest} est désormais : ${newStatus}.`);
+        ord.status = newStatus; syncOrdersToStorage();
+        renderAdminOrdersTable(); detectActiveOrderTracker();
       }
     }
 
     function deleteOrderSingle(id) {
       currentOrdersList = currentOrdersList.filter(o => o.id !== id);
-      syncOrdersToStorage();
-      renderAdminOrdersTable();
-      detectActiveOrderTracker();
-      showToastNotification("Ticket archivé de la console.");
+      syncOrdersToStorage(); renderAdminOrdersTable(); detectActiveOrderTracker();
     }
 
     function clearAllOrders() {
-      currentOrdersList = [];
-      syncOrdersToStorage();
-      renderAdminOrdersTable();
-      detectActiveOrderTracker();
-      showToastNotification("Console réinitialisée pour le prochain salon.");
+      currentOrdersList = []; syncOrdersToStorage();
+      renderAdminOrdersTable(); detectActiveOrderTracker();
     }
 
     function renderAdminCatalogGrid() {
       const grid = document.getElementById("adminCatalogGridList");
       grid.innerHTML = "";
-
       localCatalogBoissons.forEach(item => {
-        const div = document.createElement("div");
-        div.className = "admin-catalog-card";
-        div.innerHTML = `
-          <span>${item.name} <small style="color:var(--gold-dim);">(${item.temp})</small></span>
-          <button class="btn-single-action btn-action-delete" style="padding:4px 8px; font-size:0.6rem;" onclick="deleteRecipeAdmin('${item.id}')">Retirer</button>
-        `;
+        const div = document.createElement("div"); div.className = "admin-catalog-card";
+        div.innerHTML = `<span>${item.name} <small>(${item.temp})</small></span>
+        <button class="btn-single-action btn-action-delete" onclick="deleteRecipeAdmin('${item.id}')">Retirer</button>`;
         grid.appendChild(div);
       });
     }
 
-    function openRecipeAdminModal() {
-      document.getElementById("recipeAdminModal").classList.add("active");
-    }
-    function closeRecipeAdminModal() {
-      document.getElementById("recipeAdminModal").classList.remove("active");
-    }
+    function openRecipeAdminModal() { document.getElementById("recipeAdminModal").classList.add("active"); }
+    function closeRecipeAdminModal() { document.getElementById("recipeAdminModal").classList.remove("active"); }
 
     function saveRecipeAdmin() {
       const name = document.getElementById("admRecName").value.trim();
@@ -1111,63 +1064,30 @@
       const origin = document.getElementById("admRecOrigin").value.trim();
       const prep = document.getElementById("admRecPrep").value.trim();
 
-      if (!name || !desc) {
-        showToastNotification("Le titre et la description courte sont impératifs.");
-        return;
-      }
-
-      const newDrink = {
-        id: "b_" + Date.now(),
-        name, family, temp, price, img, desc, origin, recipe: prep
-      };
-
-      localCatalogBoissons.push(newDrink);
-      syncCatalogToStorage();
-      renderMenuGridItems();
-      renderAdminCatalogGrid();
-      closeRecipeAdminModal();
-      showToastNotification(`Le breuvage noble "${name}" est désormais inscrit à la carte.`);
-
-      document.getElementById("admRecName").value = "";
-      document.getElementById("admRecPrice").value = "";
-      document.getElementById("admRecImg").value = "";
-      document.getElementById("admRecDesc").value = "";
-      document.getElementById("admRecOrigin").value = "";
-      document.getElementById("admRecPrep").value = "";
+      if (!name || !desc) return;
+      const newDrink = { id: "b_" + Date.now(), name, family, temp, price, img, desc, origin, recipe: prep };
+      localCatalogBoissons.push(newDrink); syncCatalogToStorage();
+      renderMenuGridItems(); renderAdminCatalogGrid(); closeRecipeAdminModal();
     }
 
     function deleteRecipeAdmin(id) {
       localCatalogBoissons = localCatalogBoissons.filter(b => b.id !== id);
-      syncCatalogToStorage();
-      renderMenuGridItems();
-      renderAdminCatalogGrid();
-      showToastNotification("Breuvage radié de la carte officielle.");
+      syncCatalogToStorage(); renderMenuGridItems(); renderAdminCatalogGrid();
     }
 
     function saveCustomizationAdmin() {
-      const title = document.getElementById("cfgBaristaTitle").value;
-      const img = document.getElementById("cfgBaristaImg").value;
-      const desc = document.getElementById("cfgBaristaDesc").value;
-
-      localStorage.setItem("sip_savour_cfg_title", title);
-      localStorage.setItem("sip_savour_cfg_img", img);
-      localStorage.setItem("sip_savour_cfg_desc", desc);
-
+      localStorage.setItem("sip_savour_cfg_title", document.getElementById("cfgBaristaTitle").value);
+      localStorage.setItem("sip_savour_cfg_img", document.getElementById("cfgBaristaImg").value);
+      localStorage.setItem("sip_savour_cfg_desc", document.getElementById("cfgBaristaDesc").value);
       applyCustomizationDOM();
-      showToastNotification("Les configurations signatures de la Loge ont été appliquées.");
     }
 
     function resetCustomizationAdmin() {
-      localStorage.removeItem("sip_savour_cfg_title");
-      localStorage.removeItem("sip_savour_cfg_img");
-      localStorage.removeItem("sip_savour_cfg_desc");
-
+      localStorage.removeItem("sip_savour_cfg_title"); localStorage.removeItem("sip_savour_cfg_img"); localStorage.removeItem("sip_savour_cfg_desc");
       document.getElementById("cfgBaristaTitle").value = "Latté d'Or d'Éthiopie";
       document.getElementById("cfgBaristaImg").value = "https://images.unsplash.com/photo-1541167760496-1628856ab772?w=600&q=80";
-      document.getElementById("cfgBaristaDesc").value = "Une infusion lactée onctueuse mariant un double shot de notre cru d'origine éthiopienne Yirgacheffe, sublimée par de fines notes de cardamome noire, miel sauvage et une délicate feuille d'or comestible.";
-
+      document.getElementById("cfgBaristaDesc").value = "Une infusion lactée onctueuse...";
       applyCustomizationDOM();
-      showToastNotification("Configurations d'origine rétablies.");
     }
 
     function applyCustomizationDOM() {
@@ -1178,160 +1098,48 @@
 
     function toggleThemeSystem() {
       const html = document.documentElement;
-      const current = html.getAttribute("data-theme");
-      const next = current === "dark" ? "light" : "dark";
+      const next = html.getAttribute("data-theme") === "dark" ? "light" : "dark";
       html.setAttribute("data-theme", next);
-      showToastNotification(`Ambiance tamisée basculée en mode : ${next === 'dark' ? 'Nocturne' : 'Diurne'}.`);
     }
 
     function showToastNotification(text) {
       const container = document.getElementById("toastContainer");
-      const el = document.createElement("div");
-      el.className = "toast-luxe";
-      el.innerHTML = `
-        <span>${text}</span>
-        <button style="background:none; border:none; color:var(--gold); cursor:pointer; font-weight:bold; margin-left:10px;" onclick="this.parentElement.remove()">✕</button>
-      `;
+      const el = document.createElement("div"); el.className = "toast-luxe";
+      el.innerHTML = `<span>${text}</span><button onclick="this.parentElement.remove()">✕</button>`;
       container.appendChild(el);
       setTimeout(() => { if(el) el.remove(); }, 5000);
     }
 
     function setupAccessibilityToolbarDetector() {
-      window.addEventListener("keydown", (e) => {
-        if (e.altKey && (e.key === "a" || e.key === "A" || e.key === "q" || e.key === "Q")) {
-          e.preventDefault();
-          showAccessibilityToolbar();
-        }
-      });
+      window.addEventListener("keydown", (e) => { if (e.altKey && e.key === "a") { showAccessibilityToolbar(); } });
     }
-
-    function showAccessibilityToolbar() {
-      const toolbar = document.getElementById("accessToolbar");
-      toolbar.style.opacity = "1";
-      toolbar.style.transform = "translateY(0)";
-      toolbar.style.pointerEvents = "auto";
-      document.body.classList.add("has-accessibility-bar");
-    }
-
-    function closeAccessibilityToolbar() {
-      const toolbar = document.getElementById("accessToolbar");
-      toolbar.style.opacity = "0";
-      toolbar.style.transform = "translateY(-100%)";
-      toolbar.style.pointerEvents = "none";
-      document.body.classList.remove("has-accessibility-bar");
-      stopSpeech();
-    }
-
-    function toggleHighContrast() {
-      const body = document.body;
-      const active = body.classList.toggle("high-contrast-mode");
-      document.getElementById("btn-contrast").setAttribute("aria-pressed", active ? "true" : "false");
-    }
-
-    function toggleLargeFonts() {
-      const body = document.body;
-      const active = body.classList.toggle("accessibility-mode");
-      document.getElementById("btn-text").setAttribute("aria-pressed", active ? "true" : "false");
-    }
-
-    function toggleSimplifiedLayout() {
-      const body = document.body;
-      const active = body.classList.toggle("simplified-mode");
-      document.getElementById("btn-layout").setAttribute("aria-pressed", active ? "true" : "false");
-    }
+    function showAccessibilityToolbar() { document.getElementById("accessToolbar").style.opacity = "1"; document.getElementById("accessToolbar").style.transform = "translateY(0)"; document.getElementById("accessToolbar").style.pointerEvents = "auto"; }
+    function closeAccessibilityToolbar() { document.getElementById("accessToolbar").style.opacity = "0"; document.getElementById("accessToolbar").style.transform = "translateY(-100%)"; document.getElementById("accessToolbar").style.pointerEvents = "none"; stopSpeech(); }
+    function toggleHighContrast() { document.body.classList.toggle("high-contrast-mode"); }
+    function toggleLargeFonts() { document.body.classList.toggle("accessibility-mode"); }
+    function toggleSimplifiedLayout() { document.body.classList.toggle("simplified-mode"); }
 
     function toggleSpeechSynthesis() {
       const btn = document.getElementById("btn-speech");
-      const pill = document.getElementById("speechStatusPill");
-      const isPressed = btn.getAttribute("aria-pressed") === "true";
-
-      if (!isPressed) {
-        btn.setAttribute("aria-pressed", "true");
-        pill.style.display = "inline-block";
-        document.getElementById("accessToolbar").classList.add("active-mode-visuel");
-        startSpeechCuration();
-      } else {
-        stopSpeech();
-      }
+      if (btn.getAttribute("aria-pressed") === "false") {
+        btn.setAttribute("aria-pressed", "true"); startSpeechCuration();
+      } else { stopSpeech(); }
     }
-
     function startSpeechCuration() {
-      if (!synth) return;
-      synth.cancel();
-
-      cartePlaylist = [];
-      playlistIndex = 0;
-
-      cartePlaylist.push("Bienvenue sur l'assistance vocale Sip and Savour. Nous allons vous lire la carte actuelle.");
-      
-      const baristaTitle = document.getElementById("baristaViewTitle").textContent;
-      const baristaDesc = document.getElementById("baristaViewDesc").textContent;
-      cartePlaylist.push(`En vedette et recommandation de votre barista : ${baristaTitle}. ${baristaDesc}.`);
-
-      localCatalogBoissons.forEach(item => {
-        if (currentCategoryFilter !== "tous" && item.family !== currentCategoryFilter) return;
-        if (currentTemperatureFilter !== "all" && item.temp !== currentTemperatureFilter) return;
-        
-        let phrase = `Breuvage : ${item.name}. Famille ${item.family}. `;
-        if (item.temp === "hot") {
-          phrase += `Servi Chaud. Les tarifs des nectars chauds sont exclusivement partagés par le sommelier. `;
-        } else {
-          phrase += `Servi Glacé au tarif de ${item.price} euros. `;
-        }
-        phrase += `Description : ${item.desc}`;
-        cartePlaylist.push(phrase);
-      });
-
-      cartePlaylist.push("Fin de la lecture de la carte. Vous pouvez sélectionner votre nectar et interagir avec l'écran.");
+      if (!synth) return; synth.cancel(); cartePlaylist = ["Lecture de la carte."];
+      localCatalogBoissons.forEach(item => { cartePlaylist.push(`${item.name}. ${item.desc}`); });
       speakNextPlaylistItem();
     }
-
     function speakNextPlaylistItem() {
-      if (!synth || playlistIndex >= cartePlaylist.length) {
-        resetSpeechButtonsDOM();
-        return;
-      }
-
-      const textToSpeak = cartePlaylist[playlistIndex];
-      const utterance = new SpeechSynthesisUtterance(textToSpeak);
-      utterance.lang = "fr-FR";
-      utterance.rate = 0.95;
-      
-      utterance.onend = function() {
-        playlistIndex++;
-        speakNextPlaylistItem();
-      };
-
-      utterance.onerror = function() {
-        resetSpeechButtonsDOM();
-      };
-
-      synth.speak(utterance);
+      if (!synth || playlistIndex >= cartePlaylist.length) { resetSpeechButtonsDOM(); return; }
+      const u = new SpeechSynthesisUtterance(cartePlaylist[playlistIndex]); u.lang = "fr-FR";
+      u.onend = () => { playlistIndex++; speakNextPlaylistItem(); };
+      synth.speak(u);
     }
+    function stopSpeech() { if (synth) synth.cancel(); resetSpeechButtonsDOM(); }
+    function resetSpeechButtonsDOM() { const btn = document.getElementById("btn-speech"); if(btn) btn.setAttribute("aria-pressed", "false"); cartePlaylist = []; playlistIndex = 0; }
 
-    function stopSpeech() {
-      if (synth) {
-        synth.cancel();
-      }
-      resetSpeechButtonsDOM();
-    }
-
-    function resetSpeechButtonsDOM() {
-      const btn = document.getElementById("btn-speech");
-      const pill = document.getElementById("speechStatusPill");
-      if (btn) btn.setAttribute("aria-pressed", "false");
-      if (pill) pill.style.display = "none";
-      const toolbar = document.getElementById("accessToolbar");
-      if (toolbar) toolbar.classList.remove("active-mode-visuel");
-      cartePlaylist = [];
-      playlistIndex = 0;
-    }
-
-    if (document.readyState === "complete" || document.readyState === "interactive") {
-      initializeAppSystem();
-    } else {
-      document.addEventListener("DOMContentLoaded", initializeAppSystem);
-    }
+    if (document.readyState === "complete" || document.readyState === "interactive") { initializeAppSystem(); } else { document.addEventListener("DOMContentLoaded", initializeAppSystem); }
   </script>
 </body>
 </html>
