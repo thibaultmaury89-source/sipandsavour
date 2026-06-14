@@ -78,15 +78,27 @@
     .auth-subtitle { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 4px; color: var(--text-muted); margin-bottom: 35px; }
     .form-group { display: flex; flex-direction: column; gap: 8px; width: 100%; text-align: left; margin-bottom: 15px; }
     .form-group label { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 2px; color: var(--text-muted); font-weight: 600; }
+    
     .form-input, select, textarea {
       background: rgba(17,10,5,0.4); border: 1px solid var(--border-fine); padding: 12px 16px;
       color: var(--text-light); font-family: inherit; font-size: 0.85rem; letter-spacing: 1px;
       outline: none; transition: all 0.3s; width: 100%; border-radius: 6px;
     }
+    select, select option {
+      background: #110a05 !important;
+      color: #fdfbf7 !important;
+    }
+    [data-theme="light"] select,
+    [data-theme="light"] select option {
+      background: #fdfbf7 !important;
+      color: #21160e !important;
+    }
+
     [data-theme="light"] .form-input,
     [data-theme="light"] select,
-    [data-theme="light"] textarea { background: rgba(255,255,255,0.6); color: #110a05; }
-    .form-input:focus, select:focus, textarea:focus { border-color: var(--gold); background: rgba(197,168,128,0.05); }
+    [data-theme="light"] textarea { background: rgba(255,255,255,0.6); color: #21160e; }
+    .form-input:focus, select:focus, textarea:focus { border-color: var(--gold); background: rgba(197, 168, 128, 0.05); }
+    
     .btn-luxe {
       background: var(--gold); color: #110a05; border: none; padding: 14px; font-family: var(--font-sans);
       font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 2px; cursor: pointer;
@@ -169,16 +181,6 @@
     .admin-customization-panel .form-group { margin-bottom: 0; }
     .admin-help-text { font-size: 0.72rem; color: var(--text-muted); margin-bottom: 18px; }
     .admin-customization-actions { display: flex; gap: 10px; flex-wrap: wrap; }
-    #orderMilkSelect,
-    #orderMilkSelect option {
-      background: #000000;
-      color: #ffffff;
-    }
-    #orderMilkSelect {
-      color-scheme: dark;
-      border-color: rgba(255,255,255,0.38);
-    }
-    #orderMilkSelect:focus { border-color: var(--gold); box-shadow: 0 0 0 2px rgba(197,168,128,0.18); }
 
     /* HERO */
     .hero-cinematic { min-height: 40vh; display: grid; grid-template-columns: 1.2fr 0.8fr; align-items: center; padding: 40px; max-width: 1300px; margin: 0 auto; gap: 40px; }
@@ -629,6 +631,23 @@
             <option value="Nectar d'Amande Douce">Nectar d'Amande Douce</option>
           </select>
         </div>
+
+        <div class="form-group">
+          <label for="orderSugarSelect">Quantité de Sucre</label>
+          <select id="orderSugarSelect">
+            <option value="Aucun sucre">Aucun sucre</option>
+            <option value="1 sucre">1 sucre</option>
+            <option value="2 sucres">2 sucres</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="orderFoamSelect">Mousse de lait</label>
+          <select id="orderFoamSelect">
+            <option value="Fine">Fine</option>
+            <option value="Épaisse">Épaisse</option>
+          </select>
+        </div>
+
         <div class="form-group span-full">
           <label for="orderNotes">Instructions Particulières au Barista</label>
           <input type="text" id="orderNotes" class="form-input" placeholder="Ex: Extraction serrée, soupçon de cannelle..." />
@@ -894,7 +913,6 @@
 
     function filterCarteDynamic() { renderMenuGridItems(); }
 
-    // FONCTION MODALE ADAPTÉE ET SÉPARÉE SELON LE BOUTON APPUYÉ
     function openProductModalByIdAndTab(id, defaultTab, directObject = null) {
       let item = directObject || localCatalogBoissons.find(b => b.id === id);
       if (!item) return;
@@ -904,7 +922,6 @@
       document.getElementById("tabProductOrigin").textContent = item.origin || "Origine protégée.";
       document.getElementById("tabProductRecipe").textContent = item.recipe || "Extraction traditionnelle.";
       
-      // Cibler le bon bouton d'onglet à activer selon le parcours choisi
       let targetTabBtn = document.getElementById("tabLinkOrigin");
       if (defaultTab === 'recipe') {
         targetTabBtn = document.getElementById("tabLinkRecipe");
@@ -931,6 +948,8 @@
     function submitOrderToFirebase() {
       const guestName = document.getElementById("orderGuestName").value.trim();
       const milkChoice = document.getElementById("orderMilkSelect").value;
+      const sugarChoice = document.getElementById("orderSugarSelect").value;
+      const foamChoice = document.getElementById("orderFoamSelect").value;
       const specialNotes = document.getElementById("orderNotes").value.trim();
 
       if (!guestName) {
@@ -940,11 +959,17 @@
 
       let drinkName = document.getElementById("mdProductTitle").textContent;
 
+      // Composition dynamique du texte des options pour la console sommelier
+      let customSpecs = `Lait : ${milkChoice} | Sucre : ${sugarChoice} | Mousse : ${foamChoice}`;
+      if (specialNotes) {
+        customSpecs += ` | Notes : ${specialNotes}`;
+      }
+
       const newOrder = {
         id: "ord_" + Date.now(),
         guest: guestName,
         drink: drinkName,
-        customs: `Lait : ${milkChoice}${specialNotes ? ' | Notes : ' + specialNotes : ''}`,
+        customs: customSpecs,
         status: "pending",
         timestamp: new Date().toLocaleTimeString('fr-FR', {hour: '2-digit', minute:'2-digit'})
       };
@@ -954,9 +979,12 @@
       closeProductModal();
       showToastNotification(`Commande de ${drinkName} transmise.`);
       
+      // Réinitialisation du formulaire
       document.getElementById("orderGuestName").value = "";
       document.getElementById("orderNotes").value = "";
       document.getElementById("orderMilkSelect").selectedIndex = 0;
+      document.getElementById("orderSugarSelect").selectedIndex = 0;
+      document.getElementById("orderFoamSelect").selectedIndex = 0;
 
       renderAdminOrdersTable();
       detectActiveOrderTracker();
