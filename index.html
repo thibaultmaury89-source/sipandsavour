@@ -232,8 +232,6 @@
     .item-media { width: 100%; aspect-ratio: 16/10; overflow: hidden; position: relative; border-radius: 4px; background: #1a120b; border: 1px solid rgba(197,168,128,0.1); }
     .item-media img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s; }
     .carte-item:hover .item-media img { transform: scale(1.04); }
-    .item-media img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s; }
-    .carte-item:hover .item-media img { transform: scale(1.04); }
     .item-tag-hot-cold { position: absolute; top: 10px; left: 10px; font-size: 0.55rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; padding: 3px 8px; border-radius: 3px; backdrop-filter: blur(4px); }
     .tag-hot  { background: rgba(214,107,83,0.15); color: #e57c67; border: 1px solid rgba(214,107,83,0.3); }
     .tag-cold { background: rgba(114,150,105,0.15); color: #a8c99b; border: 1px solid rgba(114,150,105,0.3); }
@@ -400,7 +398,7 @@
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-    import { getDatabase, ref, set, onValue } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+    import { getDatabase, ref, set, onValue, remove } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
     // Configuration Firebase Realtime Database
     const firebaseConfig = {
@@ -410,360 +408,7 @@
     const app = initializeApp(firebaseConfig);
     const db = getDatabase(app);
 
-    // Exposition au scope global pour être utilisé par les boutons HTML
-    window.db = db;
-    window.ref = ref;
-    window.set = set;
-
-    // Écouteur en temps réel sur la configuration globale stockée sur Firebase
-    const configCardRef = ref(db, "sip_savour_carte_config");
-    onValue(configCardRef, (snapshot) => {
-      const data = snapshot.val();
-      if (data) {
-        if (data.hotPrice) document.getElementById("cfgHotPrice").value = data.hotPrice;
-        if (data.milksList) document.getElementById("cfgMilksList").value = data.milksList;
-        if (data.sugarsList) document.getElementById("cfgSugarsList").value = data.sugarsList;
-        
-        // Mettre à jour l'application en temps réel dès réception
-        window.applyHotPriceToCatalog();
-        window.populateCustomOptionsSelects();
-        window.renderMenuGridItems();
-      }
-    });
-  </script>
-</head>
-<body>
-
-  <div class="accessibility-toolbar" id="accessToolbar" role="toolbar" aria-label="Options d'accessibilité du salon">
-    <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
-      <button class="access-ctrl-btn" id="btn-contrast" aria-pressed="false" onclick="toggleHighContrast()">Contraste élevé</button>
-      <button class="access-ctrl-btn" id="btn-text" aria-pressed="false" onclick="toggleLargeFonts()">Texte agrandi</button>
-      <button class="access-ctrl-btn" id="btn-layout" aria-pressed="false" onclick="toggleSimplifiedLayout()">Vue épurée</button>
-      <button class="access-ctrl-btn" id="btn-speech" aria-pressed="false" onclick="toggleSpeechSynthesis()">Lire la carte</button>
-      <button class="access-ctrl-btn" id="btn-speech-stop" style="background: rgba(214,107,83,0.15); color: #e57c67; border-color: rgba(214,107,83,0.3);" onclick="stopSpeech()">Arrêter la lecture</button>
-    </div>
-    <div style="display: flex; gap: 10px; align-items: center;">
-      <span class="voice-feedback-pill" id="speechStatusPill">Lecture audio active</span>
-      <button class="access-ctrl-btn" style="background: none; border: none; text-decoration: underline;" onclick="closeAccessibilityToolbar()">Masquer</button>
-    </div>
-  </div>
-
-  <div class="ambiance-glow glow-1"></div>
-  <div class="ambiance-glow glow-2"></div>
-
-  <div class="auth-screen" id="authScreen">
-    <div class="auth-card">
-      <h1 class="auth-logo">Sip & Savour</h1>
-      <p class="auth-subtitle">Salon Privé & Torréfaction</p>
-      
-      <div class="form-group">
-        <label for="gateCodeInput">Code d'accès secret de la Loge</label>
-        <input type="password" id="gateCodeInput" class="form-input" placeholder="••••" autocomplete="off" onkeydown="if(event.key==='Enter') verifyGateSecretCode()" />
-      </div>
-
-      <button class="btn-luxe" id="btnSubmitAuth" onclick="verifyGateSecretCode()">Franchir le Seuil</button>
-      <p class="auth-error" id="authErrorMsg">Code erroné. Le salon reste clos.</p>
-    </div>
-  </div>
-
-  <div class="wrapper" id="mainAppWrapper">
-    
-    <header>
-      <a href="#" class="brand-signature">
-        Sip & Savour
-        <span>Maison de Torréfaction & Salon</span>
-      </a>
-
-      <div class="nav-controls">
-        <div class="search-luxe">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-          <input type="text" id="luxeSearchInput" placeholder="Rechercher..." oninput="filterCarteDynamic()" />
-        </div>
-        <button class="theme-toggle-btn" onclick="toggleThemeSystem()">Atmosphère</button>
-        <div class="club-badge" onclick="triggerAdminAccessSecret()" id="badgeAdminLabel">Membre Privé</div>
-        <button class="btn-quit" onclick="logout()">Quitter</button>
-      </div>
-    </header>
-
-    <div class="main-body-content">
-      
-      <section class="live-tracker-section" id="liveOrderTrackerSection">
-        <div class="tracker-card">
-          <div class="tracker-header">
-            <h4>Suivi de votre dégustation</h4>
-            <span class="tracker-status-badge" id="trackerStatusBadgeText">En attente</span>
-          </div>
-          <div class="tracker-progress-container">
-            <div class="tracker-progress-bar" id="trackerProgressBarElement"></div>
-          </div>
-          <div class="tracker-steps">
-            <div class="tracker-step active" id="step-pending">
-              <div class="step-icon">1</div>
-              <div class="step-label">Commande</div>
-            </div>
-            <div class="tracker-step" id="step-preparing">
-              <div class="step-icon">2</div>
-              <div class="step-label">Préparation</div>
-            </div>
-            <div class="tracker-step" id="step-ready">
-              <div class="step-icon">3</div>
-              <div class="step-label">Prêt</div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section class="top-dashboard-admin" id="adminDashboardSection">
-        <div class="dashboard-container">
-          <div class="dashboard-header">
-            <h2 class="dashboard-title">Console du Sommelier & Gestion des Commandes</h2>
-            <button class="btn-clear-all-orders" onclick="clearAllOrders()">Réinitialiser le service</button>
-          </div>
-          
-          <div class="table-responsive-luxe">
-            <table class="table-luxe" id="ordersTableAdmin">
-              <thead>
-                <tr>
-                  <th>Hôte</th>
-                  <th>Breuvage</th>
-                  <th>Personnalisation</th>
-                  <th>Statut</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody id="ordersTableBodyAdmin">
-                </tbody>
-            </table>
-          </div>
-        </div>
-
-        <div class="dashboard-container">
-          <div class="dashboard-header">
-            <h2 class="dashboard-title">Paramètres des Boissons Chaudes & Options d'Ajouts</h2>
-          </div>
-          <p class="admin-help-text">Définissez le prix unique appliqué aux boissons chaudes du catalogue et listez les choix d'ajouts mis à disposition des hôtes. L'enregistrement se fait en temps réel sur Firebase.</p>
-          <div class="admin-customization-panel" style="grid-template-columns: repeat(3, 1fr);">
-            <div class="form-group">
-              <label>Prix Fixe des Boissons Chaudes (€)</label>
-              <input type="number" id="cfgHotPrice" class="form-input" step="0.1" value="6.5" />
-            </div>
-            <div class="form-group">
-              <label>Options de Laits Élite (séparés par des virgules)</label>
-              <input type="text" id="cfgMilksList" class="form-input" value="Aucun (Noir Absolu), Lait Entier Bio des Alpes, Crème d'Avoine Artisanal, Nectar d'Amande Douce" />
-            </div>
-            <div class="form-group">
-              <label>Options de Sucres (séparés par des virgules)</label>
-              <input type="text" id="cfgSugarsList" class="form-input" value="Aucun sucre, 1 sucre, 2 sucres" />
-            </div>
-          </div>
-          <div class="admin-customization-actions">
-            <button class="btn-luxe" style="width: auto; padding: 12px 25px;" onclick="saveHotAndOptionsConfigFirebase()">Enregistrer la configuration sur Firebase</button>
-          </div>
-        </div>
-
-        <div class="dashboard-container">
-          <div class="dashboard-header">
-            <h2 class="dashboard-title">Recettes et Curation de la Carte</h2>
-            <button class="btn-single-action btn-action-next" onclick="openRecipeAdminModal()">Ajouter un breuvage</button>
-          </div>
-          <div class="admin-catalog-grid" id="adminCatalogGridList">
-            </div>
-        </div>
-
-        <div class="dashboard-container">
-          <div class="dashboard-header">
-            <h2 class="dashboard-title">Configuration Signature du Salon</h2>
-          </div>
-          <p class="admin-help-text">Modifiez instantanément la boisson mise en avant dans les recommandations du sommelier.</p>
-          <div class="admin-customization-panel">
-            <div class="form-group">
-              <label>Nom de la Boisson Vedette</label>
-              <input type="text" id="cfgBaristaTitle" class="form-input" value="Latté d'Or d'Éthiopie" />
-            </div>
-            <div class="form-group">
-              <label>Image de la Boisson (URL)</label>
-              <input type="text" id="cfgBaristaImg" class="form-input" value="https://images.unsplash.com/photo-1541167760496-1628856ab772?w=600&q=80" />
-            </div>
-            <div class="form-group">
-              <label>Description Narrative</label>
-              <textarea id="cfgBaristaDesc" class="form-input" rows="1">Une infusion lactée onctueuse mariant un double shot de notre cru d'origine éthiopienne Yirgacheffe, sublimée par de fines notes de cardamome noire, miel sauvage et une délicate feuille d'or comestible.</textarea>
-            </div>
-          </div>
-          <div class="admin-customization-actions">
-            <button class="btn-single-action btn-action-next" onclick="saveCustomizationAdmin()">Appliquer les modifications</button>
-            <button class="btn-single-action" onclick="resetCustomizationAdmin()" style="border-color:var(--text-muted); color:var(--text-muted);">Restaurer par défaut</button>
-          </div>
-        </div>
-      </section>
-
-      <section class="hero-cinematic">
-        <div>
-          <span class="hero-tagline">Une Expérience Sensorielle Hors du Temps</span>
-          <h2 class="hero-title-luxe">Le raffinement absolu d'un café <em>haute couture</em></h2>
-          <p class="hero-manifesto">« Chaque grain est une histoire, chaque tasse une symphonie sacrée dictée par l'artisan. »</p>
-        </div>
-        <div>
-          <div class="frame-artisan">
-            <img src="https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?w=500&q=80" alt="Artisan Torréfacteur" />
-            <div class="frame-caption">
-              <h4>Maître Torréfacteur</h4>
-              <p>Cru d'Exception Actuel</p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section class="barista-choice-section">
-        <div class="barista-choice-card">
-          <div class="barista-choice-media">
-            <img id="baristaViewImg" src="https://images.unsplash.com/photo-1541167760496-1628856ab772?w=600&q=80" alt="Recommandation Barista" />
-          </div>
-          <div class="barista-choice-content">
-            <span class="barista-choice-label">Recommandation de votre barista</span>
-            <h3 class="barista-choice-title" id="baristaViewTitle">Latté d'Or d'Éthiopie</h3>
-            <p class="barista-choice-text" id="baristaViewDesc">Une infusion lactée onctueuse mariant un double shot de notre cru d'origine éthiopienne Yirgacheffe, sublimée par de fines notes de cardamome noire, miel sauvage et une délicate feuille d'or comestible.</p>
-            <button class="btn-luxe" style="margin-top: 10px; width: fit-content; padding: 12px 30px;" onclick="triggerQuickOrderFromBarista()">Commander</button>
-          </div>
-        </div>
-      </section>
-
-      <section class="salon-curation">
-        <div class="seasonal-indicator">
-          <span class="season-label">Collection Éphémère d'Automne</span>
-          <span class="season-desc">Sélection exclusive de la maison</span>
-        </div>
-
-        <div class="curation-tabs-row">
-          <div class="filter-group-luxe">
-            <button class="filter-btn-luxe active" onclick="switchCategoryFilter('tous', this)">Tous nos nectars</button>
-            <button class="filter-btn-luxe" onclick="switchCategoryFilter('café', this)">Cafés Rares</button>
-            <button class="filter-btn-luxe" onclick="switchCategoryFilter('thé', this)">Thés de Cérémonie</button>
-            <button class="filter-btn-luxe" onclick="switchCategoryFilter('infusion', this)">Infusions Secrètes</button>
-          </div>
-
-          <div class="temp-selector-luxe">
-            <button class="temp-btn-luxe active" onclick="switchTemperatureFilter('all', this)">Tous</button>
-            <button class="temp-btn-luxe" onclick="switchTemperatureFilter('hot', this)">Chauds</button>
-            <button class="temp-btn-luxe" onclick="switchTemperatureFilter('cold', this)">Glacés</button>
-          </div>
-        </div>
-      </section>
-
-      <div class="grid-container">
-        <main class="menu-grid-luxe" id="menuGridItemsContainer">
-          </main>
-      </div>
-
-    </div>
-  </div>
-
-  <div class="toast-notification-zone" id="toastContainer"></div>
-
-  <div class="modal-backdrop-luxe" id="productModal">
-    <div class="modal-box-luxe">
-      <button class="modal-close-luxe" onclick="closeProductModal()">✕</button>
-      <h3 class="modal-title-luxe" id="mdProductTitle">Breuvage</h3>
-      
-      <div class="tabs-nav-product">
-        <button class="tab-link-product" id="tabLinkOrigin" onclick="switchProductTab('origin', this)">Origine & Notes</button>
-        <button class="tab-link-product" id="tabLinkRecipe" onclick="switchProductTab('recipe', this)">Secret de Préparation</button>
-      </div>
-
-      <div class="tab-pane-product" id="tabProductOrigin">Informations sur la provenance...</div>
-      <div class="tab-pane-product" id="tabProductRecipe">Détails de l'extraction artisanale...</div>
-
-      <hr style="border: none; border-top: 1px solid var(--border-fine); margin: 25px 0 20px 0;" />
-      
-      <h4 style="font-family:var(--font-serif); font-size:1.2rem; color:var(--gold); margin-bottom:15px; font-weight:400;">Personnalisation Rituelle</h4>
-      
-      <div class="modal-form-grid">
-        <div class="form-group">
-          <label for="orderGuestName">Votre Nom d'Hôte</label>
-          <input type="text" id="orderGuestName" class="form-input" placeholder="Ex: Comte de Provence" />
-        </div>
-        <div class="form-group">
-          <label for="orderMilkSelect">Sélection de Lait Élite</label>
-          <select id="orderMilkSelect">
-          </select>
-        </div>
-
-        <div class="form-group">
-          <label for="orderSugarSelect">Quantité de Sucre</label>
-          <select id="orderSugarSelect">
-          </select>
-        </div>
-        <div class="form-group">
-          <label for="orderFoamSelect">Mousse de lait</label>
-          <select id="orderFoamSelect">
-            <option value="Fine">Fine</option>
-            <option value="Épaisse">Épaisse</option>
-          </select>
-        </div>
-
-        <div class="form-group span-full">
-          <label for="orderNotes">Instructions Particulières au Barista</label>
-          <input type="text" id="orderNotes" class="form-input" placeholder="Ex: Extraction serrée, soupçon de cannelle..." />
-        </div>
-        <div class="span-full" style="margin-top: 10px;">
-          <button class="btn-luxe" onclick="submitOrderToFirebase()">Transmettre l'Ordre de Préparation</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="modal-backdrop-luxe" id="recipeAdminModal">
-    <div class="modal-box-luxe" style="max-width: 500px;">
-      <button class="modal-close-luxe" onclick="closeRecipeAdminModal()">✕</button>
-      <h3 class="modal-title-luxe" id="recipeAdminModalTitle">Nouveau Breuvage Élite</h3>
-      
-      <div class="form-group">
-        <label>Nom de la Boisson</label>
-        <input type="text" id="admRecName" class="form-input" placeholder="Ex: Cappuccino de la Cour" />
-      </div>
-      <div class="form-group">
-        <label>Famille</label>
-        <select id="admRecFamily">
-          <option value="café">Café</option>
-          <option value="thé">Thé</option>
-          <option value="infusion">Infusion</option>
-        </select>
-      </div>
-      <div class="form-group">
-        <label>Température</label>
-        <select id="admRecTemp">
-          <option value="hot">Chaud (Hot)</option>
-          <option value="cold">Glacé (Cold)</option>
-        </select>
-      </div>
-      <div class="form-group">
-        <label>Prix (en €) — *Sera écrasé par le prix fixe si Chaud*</label>
-        <input type="number" id="admRecPrice" class="form-input" step="0.5" placeholder="7.50" />
-      </div>
-      <div class="form-group">
-        <label>Image Descriptive (URL)</label>
-        <input type="text" id="admRecImg" class="form-input" placeholder="https://..." />
-      </div>
-      <div class="form-group">
-        <label>Description Courte</label>
-        <input type="text" id="admRecDesc" class="form-input" placeholder="Description en vitrine..." />
-      </div>
-      <div class="form-group">
-        <label>Origine & Notes Historiques</label>
-        <textarea id="admRecOrigin" class="form-input" rows="2" placeholder="Terroir, altitude, notes aromatiques..."></textarea>
-      </div>
-      <div class="form-group">
-        <label>Secret de Préparation</label>
-        <textarea id="admRecPrep" class="form-input" rows="2" placeholder="Grammage, température de l'eau, temps d'extraction..."></textarea>
-      </div>
-
-      <div style="margin-top: 20px; display: flex; gap: 10px;">
-        <button class="btn-luxe" onclick="saveRecipeAdmin()">Sauvegarder</button>
-        <button class="btn-luxe" onclick="closeRecipeAdminModal()" style="background:none; border:1px solid var(--border-fine); color:var(--text-light);">Annuler</button>
-      </div>
-    </div>
-  </div>
-
-  <script>
+    // CATALOGUE DE BASE SI PAS ENCORE DE DONNÉES SUR FIREBASE
     let localCatalogBoissons = [
       {
         id: "b1",
@@ -797,28 +442,6 @@
         desc: "Thé vert de cérémonie du Japon fouetté à la main, servi sur un lit de glace et lait d'amande douce.",
         origin: "Matcha de grade impérial provenant de Uji, Kyoto (Japon).\nFeuilles de printemps ombragées pendant 4 semaines avant récolte.\nNotes de dégustation : Umami puissant, herbe fraîche coupée, subtile rondeur végétale.",
         recipe: "2g de poudre de Matcha tamisée deux fois.\nÉmulsion traditionnelle au fouet en bambou (Chasen) avec 60ml d'eau pure à 75°C en mouvements de 'W'.\nVersé délicatement sur un shaker de lait d'amande froide et glaçons cubiques translucides."
-      },
-      {
-        id: "b4",
-        name: "Infusion Rubis des Bois",
-        family: "infusion",
-        temp: "hot",
-        price: 7.0,
-        img: "https://images.unsplash.com/photo-1576092768241-dec231879fc3?w=600&q=80",
-        desc: "Mélange royal de baies sauvages, hibiscus pourpre et une pointe de menthe poivrée fraîche.",
-        origin: "Récolte sauvage éco-certifiée dans les sous-bois du Massif Central.\nComposition : Hibiscus sabdariffa, canneberges entières, cynorrhodon, menthe froissée.\nNotes : Acidité vive, fruits rouges profonds, finale fraîche et rafraîchissante.",
-        recipe: "6g de mélange noble pour une théière de 400ml.\nInfusion minutée à 5 minutes exactement dans une eau de source chauffée à 95°C.\nServi en carafe de verre soufflé thermique."
-      },
-      {
-        id: "b5",
-        name: "Cold Brew Signature Cascara",
-        family: "café",
-        temp: "cold",
-        price: 8.0,
-        img: "https://images.unsplash.com/photo-1517701550927-30cf4ba1dba5?w=600&q=80",
-        desc: "Café infusé à froid pendant 18 heures, clarifié et aromatisé naturellement à la pulpe de cerise de café.",
-        origin: "Café Geisha du Panama (Finca Deborah) infusé à froid, assemblé avec une réduction de Cascara bio.\nNotes de dégustation : Fleur d'oranger, cerise noire, bergamote, effervescence naturelle.",
-        recipe: "Infusion lente en immersion totale à 4°C pendant 18 heures avec un ratio de 80g/L.\nDouble filtration sur filtre papier épais.\nAjout de 10% de concentré de Cascara avant mise en bouteille sous atmosphère protectrice."
       }
     ];
 
@@ -830,12 +453,106 @@
     let cartePlaylist = [];
     let playlistIndex = 0;
 
+    // --- ENREGISTREMENT ET ÉCOUTE DE LA CONFIGURATION GLOBALE CHAUDE/OPTIONS (FIREBASE) ---
+    function saveHotAndOptionsConfigFirebase() {
+      const hotPriceValue = document.getElementById("cfgHotPrice").value;
+      const milksListValue = document.getElementById("cfgMilksList").value;
+      const sugarsListValue = document.getElementById("cfgSugarsList").value;
+
+      set(ref(db, "sip_savour_carte_config"), {
+        hotPrice: hotPriceValue,
+        milksList: milksListValue,
+        sugarsList: sugarsListValue
+      })
+      .then(() => {
+        window.showToastNotification("Synchronisé avec Firebase Cloud avec succès.");
+      })
+      .catch((error) => {
+        console.error("Firebase Error: ", error);
+        window.showToastNotification("Erreur lors de la liaison réseau Firebase.");
+      });
+    }
+
+    const configCardRef = ref(db, "sip_savour_carte_config");
+    onValue(configCardRef, (snapshot) => {
+      const data = snapshot.val();
+      if (data) {
+        if (data.hotPrice) document.getElementById("cfgHotPrice").value = data.hotPrice;
+        if (data.milksList) document.getElementById("cfgMilksList").value = data.milksList;
+        if (data.sugarsList) document.getElementById("cfgSugarsList").value = data.sugarsList;
+        
+        applyHotPriceToCatalog();
+        populateCustomOptionsSelects();
+        renderMenuGridItems();
+      }
+    });
+
+    // --- ÉCOUTE DES COMMANDES EN TEMPS RÉEL (FIREBASE) ---
+    const ordersRef = ref(db, "sip_savour_orders");
+    onValue(ordersRef, (snapshot) => {
+      const data = snapshot.val();
+      currentOrdersList = data ? Object.values(data) : [];
+      renderAdminOrdersTable();
+      detectActiveOrderTracker();
+    });
+
+    // --- TRANSMISSION D'UNE COMMANDE (FIREBASE) ---
+    function submitOrderToFirebase() {
+      const guestName = document.getElementById("orderGuestName").value.trim();
+      const milkChoice = document.getElementById("orderMilkSelect").value;
+      const sugarChoice = document.getElementById("orderSugarSelect").value;
+      const foamChoice = document.getElementById("orderFoamSelect").value;
+      const specialNotes = document.getElementById("orderNotes").value.trim();
+
+      if (!guestName) {
+        window.showToastNotification("Veuillez indiquer votre nom pour le service.");
+        return;
+      }
+
+      let drinkName = document.getElementById("mdProductTitle").textContent;
+      let customSpecs = `Lait : ${milkChoice} | Sucre : ${sugarChoice} | Mousse : ${foamChoice}`;
+      if (specialNotes) customSpecs += ` | Notes : ${specialNotes}`;
+
+      const orderId = "ord_" + Date.now();
+      const newOrder = {
+        id: orderId,
+        guest: guestName,
+        drink: drinkName,
+        customs: customSpecs,
+        status: "pending",
+        timestamp: new Date().toLocaleTimeString('fr-FR', {hour: '2-digit', minute:'2-digit'})
+      };
+
+      set(ref(db, "sip_savour_orders/" + orderId), newOrder)
+        .then(() => {
+          closeProductModal();
+          window.showToastNotification(`Commande de ${drinkName} transmise.`);
+          document.getElementById("orderGuestName").value = "";
+          document.getElementById("orderNotes").value = "";
+        });
+    }
+
+    // --- MISE À JOUR STATUT COMMANDE (FIREBASE) ---
+    function updateOrderStatus(id, newStatus) {
+      set(ref(db, `sip_savour_orders/${id}/status`), newStatus);
+    }
+
+    // --- SUPPRESSION D'UNE COMMANDE (FIREBASE) ---
+    function deleteOrderSingle(id) {
+      remove(ref(db, `sip_savour_orders/${id}`));
+    }
+
+    // --- RÉINITIALISER TOUTES LES COMMANDES (FIREBASE) ---
+    function clearAllOrders() {
+      remove(ref(db, "sip_savour_orders"));
+    }
+
+    // --- RESTE DE LA LOGIQUE INTERNE DE L'APPLICATION ---
     function initializeAppSystem() {
       loadSavedDataFromLocalStorage();
       applyHotPriceToCatalog();
       renderMenuGridItems();
       renderAdminCatalogGrid();
-      renderAdminOrdersTable();
       detectActiveOrderTracker();
       setupAccessibilityToolbarDetector();
       populateCustomOptionsSelects();
@@ -844,51 +561,21 @@
     function loadSavedDataFromLocalStorage() {
       const savedCatalog = localStorage.getItem("sip_savour_catalog");
       if (savedCatalog) { localCatalogBoissons = JSON.parse(savedCatalog); }
-      const savedOrders = localStorage.getItem("sip_savour_orders");
-      if (savedOrders) { currentOrdersList = JSON.parse(savedOrders); }
       const savedBaristaTitle = localStorage.getItem("sip_savour_cfg_title");
       if (savedBaristaTitle) document.getElementById("cfgBaristaTitle").value = savedBaristaTitle;
       const savedBaristaImg = localStorage.getItem("sip_savour_cfg_img");
       if (savedBaristaImg) document.getElementById("cfgBaristaImg").value = savedBaristaImg;
       const savedBaristaDesc = localStorage.getItem("sip_savour_cfg_desc");
       if (savedBaristaDesc) document.getElementById("cfgBaristaDesc").value = savedBaristaDesc;
-      
       applyCustomizationDOM();
     }
 
     function syncCatalogToStorage() { localStorage.setItem("sip_savour_catalog", JSON.stringify(localCatalogBoissons)); }
-    function syncOrdersToStorage() { localStorage.setItem("sip_savour_orders", JSON.stringify(currentOrdersList)); }
-
-    // ENREGISTREMENT VIA GOOGLE FIREBASE REALTIME DATABASE (Optimisé)
-    function saveHotAndOptionsConfigFirebase() {
-      const hotPriceValue = document.getElementById("cfgHotPrice").value;
-      const milksListValue = document.getElementById("cfgMilksList").value;
-      const sugarsListValue = document.getElementById("cfgSugarsList").value;
-
-      if (window.set && window.ref && window.db) {
-        window.set(window.ref(window.db, "sip_savour_carte_config"), {
-          hotPrice: hotPriceValue,
-          milksList: milksListValue,
-          sugarsList: sugarsListValue
-        })
-        .then(() => {
-          showToastNotification("Synchronisé avec Firebase Cloud avec succès.");
-        })
-        .catch((error) => {
-          console.error("Firebase Error: ", error);
-          showToastNotification("Erreur lors de la liaison réseau Firebase.");
-        });
-      } else {
-        showToastNotification("Base de données en cours d'initialisation.");
-      }
-    }
 
     function applyHotPriceToCatalog() {
       const targetPrice = parseFloat(document.getElementById("cfgHotPrice").value) || 0;
       localCatalogBoissons.forEach(item => {
-        if (item.temp === "hot") {
-          item.price = targetPrice;
-        }
+        if (item.temp === "hot") item.price = targetPrice;
       });
       syncCatalogToStorage();
     }
@@ -896,12 +583,9 @@
     function populateCustomOptionsSelects() {
       const milkSelect = document.getElementById("orderMilkSelect");
       const sugarSelect = document.getElementById("orderSugarSelect");
-      
       if(!milkSelect || !sugarSelect) return;
-
       const milks = document.getElementById("cfgMilksList").value.split(",").map(s => s.trim()).filter(Boolean);
       const sugars = document.getElementById("cfgSugarsList").value.split(",").map(s => s.trim()).filter(Boolean);
-
       milkSelect.innerHTML = milks.map(m => `<option value="${m}">${m}</option>`).join("");
       sugarSelect.innerHTML = sugars.map(s => `<option value="${s}">${s}</option>`).join("");
     }
@@ -911,7 +595,7 @@
       if (code === "1234" || code === "0000" || code === "") {
         document.getElementById("authScreen").classList.add("hidden");
         document.getElementById("mainAppWrapper").classList.add("active");
-        showToastNotification("Bienvenue au Salon Sip & Savour.");
+        window.showToastNotification("Bienvenue au Salon Sip & Savour.");
       } else {
         const err = document.getElementById("authErrorMsg");
         err.style.display = "block";
@@ -941,14 +625,10 @@
     function triggerQuickOrderFromBarista() {
       const currentTitle = document.getElementById("baristaViewTitle").textContent;
       const currentDesc = document.getElementById("baristaViewDesc").textContent;
-      
       let matchItem = localCatalogBoissons.find(b => b.name.toLowerCase() === currentTitle.toLowerCase());
       if (!matchItem) {
         matchItem = {
-          id: "barista_promo",
-          name: currentTitle,
-          desc: currentDesc,
-          temp: "hot",
+          id: "barista_promo", name: currentTitle, desc: currentDesc, temp: "hot",
           origin: "Sélection spéciale exclusive recommandée par votre barista.",
           recipe: "Extraction artisanale sur-mesure ajustée selon vos préférences rituelles."
         };
@@ -969,15 +649,9 @@
 
         const card = document.createElement("article");
         card.className = "carte-item";
-
         const isHot = item.temp === "hot";
         const tagClass = isHot ? "tag-hot" : "tag-cold";
         const tagLabel = isHot ? "Chaud" : "Glacé";
-        const familyClass = "tag-" + item.family;
-
-        const priceDisplayHTML = `<span class="item-price">${item.price.toFixed(2)}€</span>`;
-        const dotLineHTML = `<div class="item-line-dots"></div>`;
-
         card.innerHTML = `
           <div class="item-media">
             <span class="item-tag-hot-cold ${tagClass}">${tagLabel}</span>
@@ -985,11 +659,11 @@
           </div>
           <div class="item-header">
             <h3 class="item-title">${item.name}</h3>
-            ${dotLineHTML}
-            ${priceDisplayHTML}
+            <div class="item-line-dots"></div>
+            <span class="item-price">${item.price.toFixed(2)}€</span>
           </div>
           <p class="item-description">${item.desc}</p>
-          <div><span class="item-family-tag ${familyClass}">${item.family}</span></div>
+          <div><span class="item-family-tag tag-${item.family}">${item.family}</span></div>
           <div class="actions-dual-row">
             <button class="btn-action-split btn-split-discover" onclick="openProductModalByIdAndTab('${item.id}', 'origin')">Découvrir</button>
             <button class="btn-action-split btn-split-order" onclick="openProductModalByIdAndTab('${item.id}', 'recipe')">Commander</button>
@@ -1006,100 +680,37 @@
       renderMenuGridItems();
     }
 
-    // Exportations globales requises
-    window.applyHotPriceToCatalog = applyHotPriceToCatalog;
-    window.populateCustomOptionsSelects = populateCustomOptionsSelects;
-    window.renderMenuGridItems = renderMenuGridItems;
-    window.saveHotAndOptionsConfigFirebase = saveHotAndOptionsConfigFirebase;
-    window.switchCategoryFilter = switchCategoryFilter;
-    window.triggerAdminAccessSecret = triggerAdminAccessSecret;
-    window.triggerQuickOrderFromBarista = triggerQuickOrderFromBarista;
-    window.verifyGateSecretCode = verifyGateSecretCode;
-    window.logout = logout;
-
     function switchTemperatureFilter(temp, btn) {
       currentTemperatureFilter = temp;
       document.querySelectorAll(".temp-btn-luxe").forEach(b => b.classList.remove("active"));
       btn.classList.add("active");
       renderMenuGridItems();
     }
-    window.switchTemperatureFilter = switchTemperatureFilter;
-
-    function filterCarteDynamic() { renderMenuGridItems(); }
-    window.filterCarteDynamic = filterCarteDynamic;
 
     function openProductModalByIdAndTab(id, defaultTab, directObject = null) {
       let item = directObject || localCatalogBoissons.find(b => b.id === id);
       if (!item) return;
-
       activeSelectedProductId = item.id;
       document.getElementById("mdProductTitle").textContent = item.name;
       document.getElementById("tabProductOrigin").textContent = item.origin || "Origine protégée.";
       document.getElementById("tabProductRecipe").textContent = item.recipe || "Extraction traditionnelle.";
-      
-      let targetTabBtn = document.getElementById("tabLinkOrigin");
-      if (defaultTab === 'recipe') {
-        targetTabBtn = document.getElementById("tabLinkRecipe");
-      }
-
+      let targetTabBtn = defaultTab === 'recipe' ? document.getElementById("tabLinkRecipe") : document.getElementById("tabLinkOrigin");
       switchProductTab(defaultTab, targetTabBtn);
       document.getElementById("productModal").classList.add("active");
     }
-    window.openProductModalByIdAndTab = openProductModalByIdAndTab;
 
     function closeProductModal() {
       document.getElementById("productModal").classList.remove("active");
       activeSelectedProductId = null;
     }
-    window.closeProductModal = closeProductModal;
 
     function switchProductTab(tabName, btn) {
       document.querySelectorAll(".tab-link-product").forEach(b => b.classList.remove("active"));
       document.querySelectorAll(".tab-pane-product").forEach(p => p.classList.remove("active"));
-      
       if (btn) btn.classList.add("active");
       if (tabName === 'origin') document.getElementById("tabProductOrigin").classList.add("active");
       if (tabName === 'recipe') document.getElementById("tabProductRecipe").classList.add("active");
     }
-    window.switchProductTab = switchProductTab;
-
-    function submitOrderToFirebase() {
-      const guestName = document.getElementById("orderGuestName").value.trim();
-      const milkChoice = document.getElementById("orderMilkSelect").value;
-      const sugarChoice = document.getElementById("orderSugarSelect").value;
-      const foamChoice = document.getElementById("orderFoamSelect").value;
-      const specialNotes = document.getElementById("orderNotes").value.trim();
-
-      if (!guestName) {
-        showToastNotification("Veuillez indiquer votre nom pour le service.");
-        return;
-      }
-
-      let drinkName = document.getElementById("mdProductTitle").textContent;
-      let customSpecs = `Lait : ${milkChoice} | Sucre : ${sugarChoice} | Mousse : ${foamChoice}`;
-      if (specialNotes) customSpecs += ` | Notes : ${specialNotes}`;
-
-      const newOrder = {
-        id: "ord_" + Date.now(),
-        guest: guestName,
-        drink: drinkName,
-        customs: customSpecs,
-        status: "pending",
-        timestamp: new Date().toLocaleTimeString('fr-FR', {hour: '2-digit', minute:'2-digit'})
-      };
-
-      currentOrdersList.push(newOrder);
-      syncOrdersToStorage();
-      closeProductModal();
-      showToastNotification(`Commande de ${drinkName} transmise.`);
-      
-      document.getElementById("orderGuestName").value = "";
-      document.getElementById("orderNotes").value = "";
-
-      renderAdminOrdersTable();
-      detectActiveOrderTracker();
-    }
-    window.submitOrderToFirebase = submitOrderToFirebase;
 
     function detectActiveOrderTracker() {
       const trackerSection = document.getElementById("liveOrderTrackerSection");
@@ -1139,7 +750,6 @@
       currentOrdersList.forEach(ord => {
         const tr = document.createElement("tr");
         let statusBadge = "", nextActionBtn = "";
-
         if (ord.status === "pending") {
           statusBadge = `<span class="badge-status-table badge-pending">En attente</span>`;
           nextActionBtn = `<button class="btn-single-action btn-action-next" onclick="updateOrderStatus('${ord.id}', 'preparing')">Préparer</button>`;
@@ -1150,7 +760,6 @@
           statusBadge = `<span class="badge-status-table badge-ready">Servi</span>`;
           nextActionBtn = `<span style="font-size:0.7rem;">Terminé</span>`;
         }
-
         tr.innerHTML = `
           <td><span class="ticket-guest-name">${ord.guest}</span></td>
           <td style="color:var(--gold);">${ord.drink}</td>
@@ -1161,27 +770,6 @@
         tbody.appendChild(tr);
       });
     }
-
-    function updateOrderStatus(id, newStatus) {
-      const ord = currentOrdersList.find(o => o.id === id);
-      if (ord) {
-        ord.status = newStatus; syncOrdersToStorage();
-        renderAdminOrdersTable(); detectActiveOrderTracker();
-      }
-    }
-    window.updateOrderStatus = updateOrderStatus;
-
-    function deleteOrderSingle(id) {
-      currentOrdersList = currentOrdersList.filter(o => o.id !== id);
-      syncOrdersToStorage(); renderAdminOrdersTable(); detectActiveOrderTracker();
-    }
-    window.deleteOrderSingle = deleteOrderSingle;
-
-    function clearAllOrders() {
-      currentOrdersList = []; syncOrdersToStorage();
-      renderAdminOrdersTable(); detectActiveOrderTracker();
-    }
-    window.clearAllOrders = clearAllOrders;
 
     function renderAdminCatalogGrid() {
       const grid = document.getElementById("adminCatalogGridList");
@@ -1195,11 +783,6 @@
       });
     }
 
-    function openRecipeAdminModal() { document.getElementById("recipeAdminModal").classList.add("active"); }
-    function closeRecipeAdminModal() { document.getElementById("recipeAdminModal").classList.remove("active"); }
-    window.openRecipeAdminModal = openRecipeAdminModal;
-    window.closeRecipeAdminModal = closeRecipeAdminModal;
-
     function saveRecipeAdmin() {
       const name = document.getElementById("admRecName").value.trim();
       const family = document.getElementById("admRecFamily").value;
@@ -1209,21 +792,17 @@
       const desc = document.getElementById("admRecDesc").value.trim();
       const origin = document.getElementById("admRecOrigin").value.trim();
       const prep = document.getElementById("admRecPrep").value.trim();
-
       if (!name || !desc) return;
       if (temp === "hot") price = parseFloat(document.getElementById("cfgHotPrice").value) || 0;
-
       const newDrink = { id: "b_" + Date.now(), name, family, temp, price, img, desc, origin, recipe: prep };
       localCatalogBoissons.push(newDrink); syncCatalogToStorage();
       renderMenuGridItems(); renderAdminCatalogGrid(); closeRecipeAdminModal();
     }
-    window.saveRecipeAdmin = saveRecipeAdmin;
 
     function deleteRecipeAdmin(id) {
       localCatalogBoissons = localCatalogBoissons.filter(b => b.id !== id);
       syncCatalogToStorage(); renderMenuGridItems(); renderAdminCatalogGrid();
     }
-    window.deleteRecipeAdmin = deleteRecipeAdmin;
 
     function saveCustomizationAdmin() {
       localStorage.setItem("sip_savour_cfg_title", document.getElementById("cfgBaristaTitle").value);
@@ -1231,7 +810,6 @@
       localStorage.setItem("sip_savour_cfg_desc", document.getElementById("cfgBaristaDesc").value);
       applyCustomizationDOM();
     }
-    window.saveCustomizationAdmin = saveCustomizationAdmin;
 
     function resetCustomizationAdmin() {
       localStorage.removeItem("sip_savour_cfg_title"); localStorage.removeItem("sip_savour_cfg_img"); localStorage.removeItem("sip_savour_cfg_desc");
@@ -1240,51 +818,12 @@
       document.getElementById("cfgBaristaDesc").value = "Une infusion lactée onctueuse...";
       applyCustomizationDOM();
     }
-    window.resetCustomizationAdmin = resetCustomizationAdmin;
 
     function applyCustomizationDOM() {
       document.getElementById("baristaViewTitle").textContent = document.getElementById("cfgBaristaTitle").value;
       document.getElementById("baristaViewImg").src = document.getElementById("cfgBaristaImg").value;
       document.getElementById("baristaViewDesc").textContent = document.getElementById("cfgBaristaDesc").value;
     }
-
-    function toggleThemeSystem() {
-      const html = document.documentElement;
-      const next = html.getAttribute("data-theme") === "dark" ? "light" : "dark";
-      html.setAttribute("data-theme", next);
-    }
-    window.toggleThemeSystem = toggleThemeSystem;
-
-    function showToastNotification(text) {
-      const container = document.getElementById("toastContainer");
-      if(!container) return;
-      const el = document.createElement("div"); el.className = "toast-luxe";
-      el.innerHTML = `<span>${text}</span><button onclick="this.parentElement.remove()">✕</button>`;
-      container.appendChild(el);
-      setTimeout(() => { if(el) el.remove(); }, 5000);
-    }
-
-    function setupAccessibilityToolbarDetector() {
-      window.addEventListener("keydown", (e) => { if (e.altKey && e.key === "a") { showAccessibilityToolbar(); } });
-    }
-    function showAccessibilityToolbar() { document.getElementById("accessToolbar").style.opacity = "1"; document.getElementById("accessToolbar").style.transform = "translateY(0)"; document.getElementById("accessToolbar").style.pointerEvents = "auto"; }
-    function closeAccessibilityToolbar() { document.getElementById("accessToolbar").style.opacity = "0"; document.getElementById("accessToolbar").style.transform = "translateY(-100%)"; document.getElementById("accessToolbar").style.pointerEvents = "none"; stopSpeech(); }
-    function toggleHighContrast() { document.body.classList.toggle("high-contrast-mode"); }
-    function toggleLargeFonts() { document.body.classList.toggle("accessibility-mode"); }
-    function toggleSimplifiedLayout() { document.body.classList.toggle("simplified-mode"); }
-
-    window.closeAccessibilityToolbar = closeAccessibilityToolbar;
-    window.toggleHighContrast = toggleHighContrast;
-    window.toggleLargeFonts = toggleLargeFonts;
-    window.toggleSimplifiedLayout = toggleSimplifiedLayout;
-
-    function toggleSpeechSynthesis() {
-      const btn = document.getElementById("btn-speech");
-      if (btn.getAttribute("aria-pressed") === "false") {
-        btn.setAttribute("aria-pressed", "true"); startSpeechCuration();
-      } else { stopSpeech(); }
-    }
-    window.toggleSpeechSynthesis = toggleSpeechSynthesis;
 
     function startSpeechCuration() {
       if (!synth) return; synth.cancel(); cartePlaylist = ["Lecture de la carte."];
@@ -1298,11 +837,62 @@
       synth.speak(u);
     }
     function stopSpeech() { if (synth) synth.cancel(); resetSpeechButtonsDOM(); }
-    window.stopSpeech = stopSpeech;
-
     function resetSpeechButtonsDOM() { const btn = document.getElementById("btn-speech"); if(btn) btn.setAttribute("aria-pressed", "false"); cartePlaylist = []; playlistIndex = 0; }
 
+    // --- MISE À DISPOSITION DES FONCTIONS POUR LE RENDER HTML ---
+    window.saveHotAndOptionsConfigFirebase = saveHotAndOptionsConfigFirebase;
+    window.submitOrderToFirebase = submitOrderToFirebase;
+    window.updateOrderStatus = updateOrderStatus;
+    window.deleteOrderSingle = deleteOrderSingle;
+    window.clearAllOrders = clearAllOrders;
+    window.verifyGateSecretCode = verifyGateSecretCode;
+    window.logout = logout;
+    window.triggerAdminAccessSecret = triggerAdminAccessSecret;
+    window.triggerQuickOrderFromBarista = triggerQuickOrderFromBarista;
+    window.switchCategoryFilter = switchCategoryFilter;
+    window.switchTemperatureFilter = switchTemperatureFilter;
+    window.openProductModalByIdAndTab = openProductModalByIdAndTab;
+    window.closeProductModal = closeProductModal;
+    window.switchProductTab = switchProductTab;
+    window.saveRecipeAdmin = saveRecipeAdmin;
+    window.deleteRecipeAdmin = deleteRecipeAdmin;
+    window.saveCustomizationAdmin = saveCustomizationAdmin;
+    window.resetCustomizationAdmin = resetCustomizationAdmin;
+    window.stopSpeech = stopSpeech;
+
+    // Lancement de l'application
     if (document.readyState === "complete" || document.readyState === "interactive") { initializeAppSystem(); } else { document.addEventListener("DOMContentLoaded", initializeAppSystem); }
+  </script>
+
+  <script>
+    // Scripts secondaires d'accessibilité (non-bloquants)
+    function toggleThemeSystem() {
+      const html = document.documentElement;
+      html.setAttribute("data-theme", html.getAttribute("data-theme") === "dark" ? "light" : "dark");
+    }
+    function showAccessibilityToolbar() { document.getElementById("accessToolbar").style.opacity = "1"; document.getElementById("accessToolbar").style.transform = "translateY(0)"; document.getElementById("accessToolbar").style.pointerEvents = "auto"; }
+    function closeAccessibilityToolbar() { document.getElementById("accessToolbar").style.opacity = "0"; document.getElementById("accessToolbar").style.transform = "translateY(-100%)"; document.getElementById("accessToolbar").style.pointerEvents = "none"; if(window.stopSpeech) window.stopSpeech(); }
+    function toggleHighContrast() { document.body.classList.toggle("high-contrast-mode"); }
+    function toggleLargeFonts() { document.body.classList.toggle("accessibility-mode"); }
+    function toggleSimplifiedLayout() { document.body.classList.toggle("simplified-mode"); }
+    function setupAccessibilityToolbarDetector() { window.addEventListener("keydown", (e) => { if (e.altKey && e.key === "a") { showAccessibilityToolbar(); } }); }
+    function toggleSpeechSynthesis() { const btn = document.getElementById("btn-speech"); if (btn.getAttribute("aria-pressed") === "false") { btn.setAttribute("aria-pressed", "true"); if(window.startSpeechCuration) window.startSpeechCuration(); } else { if(window.stopSpeech) window.stopSpeech(); } }
+    
+    function showToastNotification(text) {
+      const container = document.getElementById("toastContainer");
+      if(!container) return;
+      const el = document.createElement("div"); el.className = "toast-luxe";
+      el.innerHTML = `<span>${text}</span><button onclick="this.parentElement.remove()">✕</button>`;
+      container.appendChild(el);
+      setTimeout(() => { if(el) el.remove(); }, 5000);
+    }
+    window.toggleThemeSystem = toggleThemeSystem;
+    window.closeAccessibilityToolbar = closeAccessibilityToolbar;
+    window.toggleHighContrast = toggleHighContrast;
+    window.toggleLargeFonts = toggleLargeFonts;
+    window.toggleSimplifiedLayout = toggleSimplifiedLayout;
+    window.toggleSpeechSynthesis = toggleSpeechSynthesis;
+    window.showToastNotification = showToastNotification;
   </script>
 </body>
 </html>
