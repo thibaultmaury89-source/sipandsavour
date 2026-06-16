@@ -170,7 +170,6 @@
     .admin-actions-row { display: flex; gap: 6px; }
     .btn-single-action { border: 1px solid var(--gold); background: transparent; color: var(--gold); font-size: 0.65rem; text-transform: uppercase; letter-spacing: 1px; padding: 6px 10px; cursor: pointer; transition: all 0.3s; font-weight: 600; text-align: center; border-radius: 4px; }
     .btn-single-action:hover { background: var(--gold); color: #110a05; }
-    .btn-action-next { background: var(--gold); color: #110a05; }
     .btn-single-action.btn-action-next:hover { color: #110a05; background: var(--text-light); }
     .btn-action-delete { border-color: rgba(214,107,83,0.4); color: #e57c67; }
     .btn-action-delete:hover { background: #d66b53; color: white; border-color: #d66b53; }
@@ -231,6 +230,8 @@
     .carte-item { background: var(--panel-bg); border: 1px solid var(--border-fine); padding: 18px; position: relative; transition: all 0.3s ease; display: flex; flex-direction: column; gap: 12px; box-shadow: var(--shadow-luxe); border-radius: 6px; }
     .carte-item:hover { border-color: var(--gold); transform: translateY(-3px); }
     .item-media { width: 100%; aspect-ratio: 16/10; overflow: hidden; position: relative; border-radius: 4px; background: #1a120b; border: 1px solid rgba(197,168,128,0.1); }
+    .item-media img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s; }
+    .carte-item:hover .item-media img { transform: scale(1.04); }
     .item-media img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s; }
     .carte-item:hover .item-media img { transform: scale(1.04); }
     .item-tag-hot-cold { position: absolute; top: 10px; left: 10px; font-size: 0.55rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; padding: 3px 8px; border-radius: 3px; backdrop-filter: blur(4px); }
@@ -396,6 +397,40 @@
       .frame-artisan { max-width: 260px; }
     }
   </style>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { getDatabase, ref, set, onValue } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+
+    // Configuration Firebase Realtime Database
+    const firebaseConfig = {
+      databaseURL: "https://sipandsavour-default-rtdb.firebaseio.com"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+
+    // Exposition au scope global pour être utilisé par les boutons HTML
+    window.db = db;
+    window.ref = ref;
+    window.set = set;
+
+    // Écouteur en temps réel sur la configuration globale stockée sur Firebase
+    const configCardRef = ref(db, "sip_savour_carte_config");
+    onValue(configCardRef, (snapshot) => {
+      const data = snapshot.val();
+      if (data) {
+        if (data.hotPrice) document.getElementById("cfgHotPrice").value = data.hotPrice;
+        if (data.milksList) document.getElementById("cfgMilksList").value = data.milksList;
+        if (data.sugarsList) document.getElementById("cfgSugarsList").value = data.sugarsList;
+        
+        // Mettre à jour l'application en temps réel dès réception
+        window.applyHotPriceToCatalog();
+        window.populateCustomOptionsSelects();
+        window.renderMenuGridItems();
+      }
+    });
+  </script>
 </head>
 <body>
 
@@ -499,6 +534,30 @@
               <tbody id="ordersTableBodyAdmin">
                 </tbody>
             </table>
+          </div>
+        </div>
+
+        <div class="dashboard-container">
+          <div class="dashboard-header">
+            <h2 class="dashboard-title">Paramètres des Boissons Chaudes & Options d'Ajouts</h2>
+          </div>
+          <p class="admin-help-text">Définissez le prix unique appliqué aux boissons chaudes du catalogue et listez les choix d'ajouts mis à disposition des hôtes. L'enregistrement se fait en temps réel sur Firebase.</p>
+          <div class="admin-customization-panel" style="grid-template-columns: repeat(3, 1fr);">
+            <div class="form-group">
+              <label>Prix Fixe des Boissons Chaudes (€)</label>
+              <input type="number" id="cfgHotPrice" class="form-input" step="0.1" value="6.5" />
+            </div>
+            <div class="form-group">
+              <label>Options de Laits Élite (séparés par des virgules)</label>
+              <input type="text" id="cfgMilksList" class="form-input" value="Aucun (Noir Absolu), Lait Entier Bio des Alpes, Crème d'Avoine Artisanal, Nectar d'Amande Douce" />
+            </div>
+            <div class="form-group">
+              <label>Options de Sucres (séparés par des virgules)</label>
+              <input type="text" id="cfgSugarsList" class="form-input" value="Aucun sucre, 1 sucre, 2 sucres" />
+            </div>
+          </div>
+          <div class="admin-customization-actions">
+            <button class="btn-luxe" style="width: auto; padding: 12px 25px;" onclick="saveHotAndOptionsConfigFirebase()">Enregistrer la configuration sur Firebase</button>
           </div>
         </div>
 
@@ -625,19 +684,12 @@
         <div class="form-group">
           <label for="orderMilkSelect">Sélection de Lait Élite</label>
           <select id="orderMilkSelect">
-            <option value="Aucun (Noir Absolu)">Aucun (Noir Absolu)</option>
-            <option value="Lait Entier Bio des Alpes">Lait Entier Bio des Alpes</option>
-            <option value="Crème d'Avoine Artisanal">Crème d'Avoine Artisanal</option>
-            <option value="Nectar d'Amande Douce">Nectar d'Amande Douce</option>
           </select>
         </div>
 
         <div class="form-group">
           <label for="orderSugarSelect">Quantité de Sucre</label>
           <select id="orderSugarSelect">
-            <option value="Aucun sucre">Aucun sucre</option>
-            <option value="1 sucre">1 sucre</option>
-            <option value="2 sucres">2 sucres</option>
           </select>
         </div>
         <div class="form-group">
@@ -684,7 +736,7 @@
         </select>
       </div>
       <div class="form-group">
-        <label>Prix (en €) — *Sera masqué automatiquement si Chaud*</label>
+        <label>Prix (en €) — *Sera écrasé par le prix fixe si Chaud*</label>
         <input type="number" id="admRecPrice" class="form-input" step="0.5" placeholder="7.50" />
       </div>
       <div class="form-group">
@@ -780,11 +832,13 @@
 
     function initializeAppSystem() {
       loadSavedDataFromLocalStorage();
+      applyHotPriceToCatalog();
       renderMenuGridItems();
       renderAdminCatalogGrid();
       renderAdminOrdersTable();
       detectActiveOrderTracker();
       setupAccessibilityToolbarDetector();
+      populateCustomOptionsSelects();
     }
 
     function loadSavedDataFromLocalStorage() {
@@ -804,6 +858,53 @@
 
     function syncCatalogToStorage() { localStorage.setItem("sip_savour_catalog", JSON.stringify(localCatalogBoissons)); }
     function syncOrdersToStorage() { localStorage.setItem("sip_savour_orders", JSON.stringify(currentOrdersList)); }
+
+    // ENREGISTREMENT VIA GOOGLE FIREBASE REALTIME DATABASE (Optimisé)
+    function saveHotAndOptionsConfigFirebase() {
+      const hotPriceValue = document.getElementById("cfgHotPrice").value;
+      const milksListValue = document.getElementById("cfgMilksList").value;
+      const sugarsListValue = document.getElementById("cfgSugarsList").value;
+
+      if (window.set && window.ref && window.db) {
+        window.set(window.ref(window.db, "sip_savour_carte_config"), {
+          hotPrice: hotPriceValue,
+          milksList: milksListValue,
+          sugarsList: sugarsListValue
+        })
+        .then(() => {
+          showToastNotification("Synchronisé avec Firebase Cloud avec succès.");
+        })
+        .catch((error) => {
+          console.error("Firebase Error: ", error);
+          showToastNotification("Erreur lors de la liaison réseau Firebase.");
+        });
+      } else {
+        showToastNotification("Base de données en cours d'initialisation.");
+      }
+    }
+
+    function applyHotPriceToCatalog() {
+      const targetPrice = parseFloat(document.getElementById("cfgHotPrice").value) || 0;
+      localCatalogBoissons.forEach(item => {
+        if (item.temp === "hot") {
+          item.price = targetPrice;
+        }
+      });
+      syncCatalogToStorage();
+    }
+
+    function populateCustomOptionsSelects() {
+      const milkSelect = document.getElementById("orderMilkSelect");
+      const sugarSelect = document.getElementById("orderSugarSelect");
+      
+      if(!milkSelect || !sugarSelect) return;
+
+      const milks = document.getElementById("cfgMilksList").value.split(",").map(s => s.trim()).filter(Boolean);
+      const sugars = document.getElementById("cfgSugarsList").value.split(",").map(s => s.trim()).filter(Boolean);
+
+      milkSelect.innerHTML = milks.map(m => `<option value="${m}">${m}</option>`).join("");
+      sugarSelect.innerHTML = sugars.map(s => `<option value="${s}">${s}</option>`).join("");
+    }
 
     function verifyGateSecretCode() {
       const code = document.getElementById("gateCodeInput").value;
@@ -857,6 +958,7 @@
 
     function renderMenuGridItems() {
       const container = document.getElementById("menuGridItemsContainer");
+      if(!container) return;
       container.innerHTML = "";
       const query = document.getElementById("luxeSearchInput").value.toLowerCase();
 
@@ -873,8 +975,8 @@
         const tagLabel = isHot ? "Chaud" : "Glacé";
         const familyClass = "tag-" + item.family;
 
-        const priceDisplayHTML = isHot ? "" : `<span class="item-price">${item.price.toFixed(2)}€</span>`;
-        const dotLineHTML = isHot ? "" : `<div class="item-line-dots"></div>`;
+        const priceDisplayHTML = `<span class="item-price">${item.price.toFixed(2)}€</span>`;
+        const dotLineHTML = `<div class="item-line-dots"></div>`;
 
         card.innerHTML = `
           <div class="item-media">
@@ -904,14 +1006,27 @@
       renderMenuGridItems();
     }
 
+    // Exportations globales requises
+    window.applyHotPriceToCatalog = applyHotPriceToCatalog;
+    window.populateCustomOptionsSelects = populateCustomOptionsSelects;
+    window.renderMenuGridItems = renderMenuGridItems;
+    window.saveHotAndOptionsConfigFirebase = saveHotAndOptionsConfigFirebase;
+    window.switchCategoryFilter = switchCategoryFilter;
+    window.triggerAdminAccessSecret = triggerAdminAccessSecret;
+    window.triggerQuickOrderFromBarista = triggerQuickOrderFromBarista;
+    window.verifyGateSecretCode = verifyGateSecretCode;
+    window.logout = logout;
+
     function switchTemperatureFilter(temp, btn) {
       currentTemperatureFilter = temp;
       document.querySelectorAll(".temp-btn-luxe").forEach(b => b.classList.remove("active"));
       btn.classList.add("active");
       renderMenuGridItems();
     }
+    window.switchTemperatureFilter = switchTemperatureFilter;
 
     function filterCarteDynamic() { renderMenuGridItems(); }
+    window.filterCarteDynamic = filterCarteDynamic;
 
     function openProductModalByIdAndTab(id, defaultTab, directObject = null) {
       let item = directObject || localCatalogBoissons.find(b => b.id === id);
@@ -930,11 +1045,13 @@
       switchProductTab(defaultTab, targetTabBtn);
       document.getElementById("productModal").classList.add("active");
     }
+    window.openProductModalByIdAndTab = openProductModalByIdAndTab;
 
     function closeProductModal() {
       document.getElementById("productModal").classList.remove("active");
       activeSelectedProductId = null;
     }
+    window.closeProductModal = closeProductModal;
 
     function switchProductTab(tabName, btn) {
       document.querySelectorAll(".tab-link-product").forEach(b => b.classList.remove("active"));
@@ -944,6 +1061,7 @@
       if (tabName === 'origin') document.getElementById("tabProductOrigin").classList.add("active");
       if (tabName === 'recipe') document.getElementById("tabProductRecipe").classList.add("active");
     }
+    window.switchProductTab = switchProductTab;
 
     function submitOrderToFirebase() {
       const guestName = document.getElementById("orderGuestName").value.trim();
@@ -958,12 +1076,8 @@
       }
 
       let drinkName = document.getElementById("mdProductTitle").textContent;
-
-      // Composition dynamique du texte des options pour la console sommelier
       let customSpecs = `Lait : ${milkChoice} | Sucre : ${sugarChoice} | Mousse : ${foamChoice}`;
-      if (specialNotes) {
-        customSpecs += ` | Notes : ${specialNotes}`;
-      }
+      if (specialNotes) customSpecs += ` | Notes : ${specialNotes}`;
 
       const newOrder = {
         id: "ord_" + Date.now(),
@@ -979,16 +1093,13 @@
       closeProductModal();
       showToastNotification(`Commande de ${drinkName} transmise.`);
       
-      // Réinitialisation du formulaire
       document.getElementById("orderGuestName").value = "";
       document.getElementById("orderNotes").value = "";
-      document.getElementById("orderMilkSelect").selectedIndex = 0;
-      document.getElementById("orderSugarSelect").selectedIndex = 0;
-      document.getElementById("orderFoamSelect").selectedIndex = 0;
 
       renderAdminOrdersTable();
       detectActiveOrderTracker();
     }
+    window.submitOrderToFirebase = submitOrderToFirebase;
 
     function detectActiveOrderTracker() {
       const trackerSection = document.getElementById("liveOrderTrackerSection");
@@ -1019,6 +1130,7 @@
 
     function renderAdminOrdersTable() {
       const tbody = document.getElementById("ordersTableBodyAdmin");
+      if(!tbody) return;
       tbody.innerHTML = "";
       if (currentOrdersList.length === 0) {
         tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; color:var(--text-muted); padding:20px;">Aucune commande.</td></tr>`;
@@ -1057,23 +1169,27 @@
         renderAdminOrdersTable(); detectActiveOrderTracker();
       }
     }
+    window.updateOrderStatus = updateOrderStatus;
 
     function deleteOrderSingle(id) {
       currentOrdersList = currentOrdersList.filter(o => o.id !== id);
       syncOrdersToStorage(); renderAdminOrdersTable(); detectActiveOrderTracker();
     }
+    window.deleteOrderSingle = deleteOrderSingle;
 
     function clearAllOrders() {
       currentOrdersList = []; syncOrdersToStorage();
       renderAdminOrdersTable(); detectActiveOrderTracker();
     }
+    window.clearAllOrders = clearAllOrders;
 
     function renderAdminCatalogGrid() {
       const grid = document.getElementById("adminCatalogGridList");
+      if(!grid) return;
       grid.innerHTML = "";
       localCatalogBoissons.forEach(item => {
         const div = document.createElement("div"); div.className = "admin-catalog-card";
-        div.innerHTML = `<span>${item.name} <small>(${item.temp})</small></span>
+        div.innerHTML = `<span>${item.name} <small>(${item.temp})</small> — ${item.price.toFixed(2)}€</span>
         <button class="btn-single-action btn-action-delete" onclick="deleteRecipeAdmin('${item.id}')">Retirer</button>`;
         grid.appendChild(div);
       });
@@ -1081,27 +1197,33 @@
 
     function openRecipeAdminModal() { document.getElementById("recipeAdminModal").classList.add("active"); }
     function closeRecipeAdminModal() { document.getElementById("recipeAdminModal").classList.remove("active"); }
+    window.openRecipeAdminModal = openRecipeAdminModal;
+    window.closeRecipeAdminModal = closeRecipeAdminModal;
 
     function saveRecipeAdmin() {
       const name = document.getElementById("admRecName").value.trim();
       const family = document.getElementById("admRecFamily").value;
       const temp = document.getElementById("admRecTemp").value;
-      const price = parseFloat(document.getElementById("admRecPrice").value) || 0;
+      let price = parseFloat(document.getElementById("admRecPrice").value) || 0;
       const img = document.getElementById("admRecImg").value.trim();
       const desc = document.getElementById("admRecDesc").value.trim();
       const origin = document.getElementById("admRecOrigin").value.trim();
       const prep = document.getElementById("admRecPrep").value.trim();
 
       if (!name || !desc) return;
+      if (temp === "hot") price = parseFloat(document.getElementById("cfgHotPrice").value) || 0;
+
       const newDrink = { id: "b_" + Date.now(), name, family, temp, price, img, desc, origin, recipe: prep };
       localCatalogBoissons.push(newDrink); syncCatalogToStorage();
       renderMenuGridItems(); renderAdminCatalogGrid(); closeRecipeAdminModal();
     }
+    window.saveRecipeAdmin = saveRecipeAdmin;
 
     function deleteRecipeAdmin(id) {
       localCatalogBoissons = localCatalogBoissons.filter(b => b.id !== id);
       syncCatalogToStorage(); renderMenuGridItems(); renderAdminCatalogGrid();
     }
+    window.deleteRecipeAdmin = deleteRecipeAdmin;
 
     function saveCustomizationAdmin() {
       localStorage.setItem("sip_savour_cfg_title", document.getElementById("cfgBaristaTitle").value);
@@ -1109,6 +1231,7 @@
       localStorage.setItem("sip_savour_cfg_desc", document.getElementById("cfgBaristaDesc").value);
       applyCustomizationDOM();
     }
+    window.saveCustomizationAdmin = saveCustomizationAdmin;
 
     function resetCustomizationAdmin() {
       localStorage.removeItem("sip_savour_cfg_title"); localStorage.removeItem("sip_savour_cfg_img"); localStorage.removeItem("sip_savour_cfg_desc");
@@ -1117,6 +1240,7 @@
       document.getElementById("cfgBaristaDesc").value = "Une infusion lactée onctueuse...";
       applyCustomizationDOM();
     }
+    window.resetCustomizationAdmin = resetCustomizationAdmin;
 
     function applyCustomizationDOM() {
       document.getElementById("baristaViewTitle").textContent = document.getElementById("cfgBaristaTitle").value;
@@ -1129,9 +1253,11 @@
       const next = html.getAttribute("data-theme") === "dark" ? "light" : "dark";
       html.setAttribute("data-theme", next);
     }
+    window.toggleThemeSystem = toggleThemeSystem;
 
     function showToastNotification(text) {
       const container = document.getElementById("toastContainer");
+      if(!container) return;
       const el = document.createElement("div"); el.className = "toast-luxe";
       el.innerHTML = `<span>${text}</span><button onclick="this.parentElement.remove()">✕</button>`;
       container.appendChild(el);
@@ -1147,12 +1273,19 @@
     function toggleLargeFonts() { document.body.classList.toggle("accessibility-mode"); }
     function toggleSimplifiedLayout() { document.body.classList.toggle("simplified-mode"); }
 
+    window.closeAccessibilityToolbar = closeAccessibilityToolbar;
+    window.toggleHighContrast = toggleHighContrast;
+    window.toggleLargeFonts = toggleLargeFonts;
+    window.toggleSimplifiedLayout = toggleSimplifiedLayout;
+
     function toggleSpeechSynthesis() {
       const btn = document.getElementById("btn-speech");
       if (btn.getAttribute("aria-pressed") === "false") {
         btn.setAttribute("aria-pressed", "true"); startSpeechCuration();
       } else { stopSpeech(); }
     }
+    window.toggleSpeechSynthesis = toggleSpeechSynthesis;
+
     function startSpeechCuration() {
       if (!synth) return; synth.cancel(); cartePlaylist = ["Lecture de la carte."];
       localCatalogBoissons.forEach(item => { cartePlaylist.push(`${item.name}. ${item.desc}`); });
@@ -1165,6 +1298,8 @@
       synth.speak(u);
     }
     function stopSpeech() { if (synth) synth.cancel(); resetSpeechButtonsDOM(); }
+    window.stopSpeech = stopSpeech;
+
     function resetSpeechButtonsDOM() { const btn = document.getElementById("btn-speech"); if(btn) btn.setAttribute("aria-pressed", "false"); cartePlaylist = []; playlistIndex = 0; }
 
     if (document.readyState === "complete" || document.readyState === "interactive") { initializeAppSystem(); } else { document.addEventListener("DOMContentLoaded", initializeAppSystem); }
