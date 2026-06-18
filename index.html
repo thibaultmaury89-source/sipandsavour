@@ -187,7 +187,7 @@
     .admin-catalog-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 15px; max-height: 400px; overflow-y: auto; }
     .admin-catalog-card { background: rgba(17,10,5,0.3); border: 1px solid var(--border-fine); padding: 15px; border-radius: 6px; display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap;}
     .admin-catalog-card span { font-family: var(--font-serif); font-size: 1.1rem; }
-    .admin-customization-panel { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 15px; margin-bottom: 18px; }
+    .admin-customization-panel { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 15px; margin-bottom: 18px; }
     .admin-customization-panel .form-group { margin-bottom: 0; }
     .admin-help-text { font-size: 0.72rem; color: var(--text-muted); margin-bottom: 18px; }
     .admin-customization-actions { display: flex; gap: 10px; flex-wrap: wrap; }
@@ -249,7 +249,6 @@
     .item-header { display: flex; justify-content: space-between; align-items: baseline; gap: 5px; }
     .item-title { font-family: var(--font-serif); font-size: 1.35rem; font-weight: 400; color: var(--text-light); }
     .item-line-dots { flex: 1; border-bottom: 1px dotted var(--border-fine); margin: 0 4px; position: relative; top: -4px; }
-    .item-price { font-family: var(--font-serif); font-size: 1.2rem; color: var(--gold); font-weight: 600; }
     .item-description { font-size: 0.75rem; color: var(--text-muted); line-height: 1.5; min-height: 3em; }
     .item-family-tag { font-size: 0.55rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; padding: 2px 7px; border-radius: 3px; display: inline-block; margin-top: 2px; }
     .tag-cafe    { background: rgba(160,100,50,0.15); color: #c87941; border: 1px solid rgba(160,100,50,0.3); }
@@ -289,7 +288,7 @@
 
     /* ACCESSIBILITÉ CRUCIAL FONTS / SPACING */
     body.accessibility-mode { font-size: 1.15rem !important; letter-spacing: 0.08em !important; word-spacing: 0.15em !important; }
-    body.accessibility-mode p, body.accessibility-mode span:not(.item-price), body.accessibility-mode td, body.accessibility-mode label, body.accessibility-mode input, body.accessibility-mode select, body.accessibility-mode textarea { font-size: 1.05rem !important; line-height: 1.8 !important; }
+    body.accessibility-mode p, body.accessibility-mode span, body.accessibility-mode td, body.accessibility-mode label, body.accessibility-mode input, body.accessibility-mode select, body.accessibility-mode textarea { font-size: 1.05rem !important; line-height: 1.8 !important; }
     body.accessibility-mode .item-title, body.accessibility-mode h1, body.accessibility-mode h2, body.accessibility-mode h3, body.accessibility-mode h4, body.accessibility-mode .modal-title-luxe { font-size: 1.6rem !important; font-weight: bold !important; }
     body.accessibility-mode .btn-luxe, body.accessibility-mode .btn-action-split, body.accessibility-mode .btn-single-action { font-size: 0.95rem !important; padding: 14px !important; }
 
@@ -353,12 +352,10 @@
     onValue(configCardRef, (snapshot) => {
       const data = snapshot.val();
       if (data) {
-        if (data.hotPrice) document.getElementById("cfgHotPrice").value = data.hotPrice;
         if (data.milksList) document.getElementById("cfgMilksList").value = data.milksList;
         if (data.sugarsList) document.getElementById("cfgSugarsList").value = data.sugarsList;
         
         // Mettre à jour l'application en temps réel dès réception
-        window.applyHotPriceToCatalog();
         window.populateCustomOptionsSelects();
         window.renderMenuGridItems();
       }
@@ -472,14 +469,10 @@
 
         <div class="dashboard-container">
           <div class="dashboard-header">
-            <h2 class="dashboard-title">Paramètres des Boissons Chaudes & Options d'Ajouts</h2>
+            <h2 class="dashboard-title">Paramètres des Options d'Ajouts</h2>
           </div>
-          <p class="admin-help-text">Définissez le prix unique appliqué aux boissons chaudes du catalogue et listez les choix d'ajouts mis à disposition des hôtes. L'enregistrement se fait en temps réel sur Firebase.</p>
-          <div class="admin-customization-panel" style="grid-template-columns: repeat(3, 1fr);">
-            <div class="form-group">
-              <label>Prix Fixe des Boissons Chaudes (€)</label>
-              <input type="number" id="cfgHotPrice" class="form-input" step="0.1" value="6.5" />
-            </div>
+          <p class="admin-help-text">Listez les choix d'ajouts mis à disposition des hôtes. L'enregistrement se fait en temps réel sur Firebase.</p>
+          <div class="admin-customization-panel">
             <div class="form-group">
               <label>Options de Laits Élite (séparés par des virgules)</label>
               <input type="text" id="cfgMilksList" class="form-input" value="Aucun (Noir Absolu), Lait Entier Bio des Alpes, Crème d'Avoine Artisanal, Nectar d'Amande Douce" />
@@ -508,7 +501,7 @@
             <h2 class="dashboard-title">Configuration Signature du Salon</h2>
           </div>
           <p class="admin-help-text">Modifiez instantanément la boisson mise en avant dans les recommandations du sommelier.</p>
-          <div class="admin-customization-panel">
+          <div class="admin-customization-panel" style="grid-template-columns: repeat(3, minmax(0, 1fr));">
             <div class="form-group">
               <label>Nom de la Boisson Vedette</label>
               <input type="text" id="cfgBaristaTitle" class="form-input" value="Latté d'Or d'Éthiopie" />
@@ -693,7 +686,6 @@
         name: "Expresso Impérial",
         family: "café",
         temp: "hot",
-        price: 5.5,
         img: "https://images.unsplash.com/photo-1510591509382-74947dd7f288?w=600&q=80",
         desc: "Un ristretto dense et corsé, extrait d'un assemblage secret de trois grands crus d'altitude.",
         origin: "Sélection exclusive de micro-lots en Colombie (Huila) et Éthiopie (Sidamo).\nAltitude moyenne : 1900m.\nNotes de dégustation : Chocolat noir intense, écorces d'orange confite, corps sirupeux.",
@@ -704,7 +696,6 @@
         name: "Latté d'Or d'Éthiopie",
         family: "café",
         temp: "hot",
-        price: 8.5,
         img: "https://images.unsplash.com/photo-1541167760496-1628856ab772?w=600&q=80",
         desc: "Une infusion lactée onctueuse mariant un double shot de notre cru d'origine éthiopienne, sublimée par des épices douces.",
         origin: "100% Arabica variété Heirloom du terroir de Yirgacheffe.\nProcess : Lavé.\nNotes de dégustation : Jasmin, cardamome, miel de forêt et texture soyeuse.",
@@ -715,7 +706,6 @@
         name: "Matcha Émeraude Glacé",
         family: "thé",
         temp: "cold",
-        price: 9.0,
         img: "https://images.unsplash.com/photo-1536256263959-770b48d82b0a?w=600&q=80",
         desc: "Thé vert de cérémonie du Japon fouetté à la main, servi sur un lit de glace et lait d'amande douce.",
         origin: "Matcha de grade impérial provenant de Uji, Kyoto (Japon).\nFeuilles de printemps ombragées pendant 4 semaines avant récolte.\nNotes de dégustation : Umami puissant, herbe fraîche coupée, subtile rondeur végétale.",
@@ -726,7 +716,6 @@
         name: "Infusion Rubis des Bois",
         family: "infusion",
         temp: "hot",
-        price: 7.0,
         img: "https://images.unsplash.com/photo-1576092768241-dec231879fc3?w=600&q=80",
         desc: "Mélange royal de baies sauvages, hibiscus pourpre et une pointe de menthe poivrée fraîche.",
         origin: "Récolte sauvage éco-certifiée dans les sous-bois du Massif Central.\nComposition : Hibiscus sabdariffa, canneberges entières, cynorrhodon, menthe froissée.\nNotes : Acidité vive, fruits rouges profonds, finale fraîche et rafraîchissante.",
@@ -737,7 +726,6 @@
         name: "Cold Brew Signature Cascara",
         family: "café",
         temp: "cold",
-        price: 8.0,
         img: "https://images.unsplash.com/photo-1517701550927-30cf4ba1dba5?w=600&q=80",
         desc: "Café infusé à froid pendant 18 heures, clarifié et aromatisé naturellement à la pulpe de cerise de café.",
         origin: "Café Geisha du Panama (Finca Deborah) infusé à froid, assemblé avec une réduction de Cascara bio.\nNotes de dégustation : Fleur d'oranger, cerise noire, bergamote, effervescence naturelle.",
@@ -768,7 +756,6 @@
         if (data) {
           localCatalogBoissons = Array.isArray(data) ? data : Object.values(data);
         }
-        applyHotPriceToCatalog();
         renderMenuGridItems();
         renderAdminCatalogGrid();
         populateCustomOptionsSelects();
@@ -796,7 +783,6 @@
       db.ref("sip_savour_carte_config").once("value").then(snap => {
         const cfg = snap.val();
         if (cfg) {
-          if (cfg.hotPrice)   document.getElementById("cfgHotPrice").value   = cfg.hotPrice;
           if (cfg.milksList)  document.getElementById("cfgMilksList").value  = cfg.milksList;
           if (cfg.sugarsList) document.getElementById("cfgSugarsList").value = cfg.sugarsList;
         }
@@ -814,13 +800,11 @@
     }
 
     function saveHotAndOptionsConfigFirebase() {
-      const hotPriceValue = document.getElementById("cfgHotPrice").value;
       const milksListValue = document.getElementById("cfgMilksList").value;
       const sugarsListValue = document.getElementById("cfgSugarsList").value;
 
       if (window.set && window.ref && window.db) {
         window.set(window.ref(window.db, "sip_savour_carte_config"), {
-          hotPrice: hotPriceValue,
           milksList: milksListValue,
           sugarsList: sugarsListValue
         })
@@ -834,16 +818,6 @@
       } else {
         showToastNotification("Base de données en cours d'initialisation.");
       }
-    }
-
-    function applyHotPriceToCatalog() {
-      const targetPrice = parseFloat(document.getElementById("cfgHotPrice").value) || 0;
-      localCatalogBoissons.forEach(item => {
-        if (item.temp === "hot") {
-          item.price = targetPrice;
-        }
-      });
-      syncCatalogToStorage();
     }
 
     function populateCustomOptionsSelects() {
@@ -928,7 +902,6 @@
         const tagLabel = isHot ? "Chaud" : "Glacé";
         const familyClass = "tag-" + item.family;
 
-        const priceDisplayHTML = `<span class="item-price">${(item.price || 0).toFixed(2)}€</span>`;
         const dotLineHTML = `<div class="item-line-dots"></div>`;
 
         card.innerHTML = `
@@ -939,7 +912,6 @@
           <div class="item-header">
             <h3 class="item-title">${item.name}</h3>
             ${dotLineHTML}
-            ${priceDisplayHTML}
           </div>
           <p class="item-description">${item.desc}</p>
           <div><span class="item-family-tag ${familyClass}">${item.family || 'Boisson'}</span></div>
@@ -959,7 +931,6 @@
       renderMenuGridItems();
     }
 
-    window.applyHotPriceToCatalog = applyHotPriceToCatalog;
     window.populateCustomOptionsSelects = populateCustomOptionsSelects;
     window.renderMenuGridItems = renderMenuGridItems;
     window.saveHotAndOptionsConfigFirebase = saveHotAndOptionsConfigFirebase;
@@ -1147,7 +1118,6 @@
           editBtn = `<button class="btn-single-action" style="border-color:var(--gold-dim); color:var(--gold);" onclick="editRecipeAdmin('${item.id}')">Modifier</button>`;
         }
 
-        // Retrait de l'affichage du prix demandé
         div.innerHTML = `<span>${item.name} <small>(${item.temp})</small></span>
         <div style="display:flex; gap:10px;">
           ${editBtn}
@@ -1214,22 +1184,14 @@
           localCatalogBoissons[idx].desc = desc;
           localCatalogBoissons[idx].origin = origin;
           localCatalogBoissons[idx].recipe = prep;
-          
-          if (temp === "hot") {
-            localCatalogBoissons[idx].price = parseFloat(document.getElementById("cfgHotPrice").value) || 6.5;
-          }
         }
       } else {
         // Mode Création
-        let priceFallback = 0;
-        if (temp === "hot") priceFallback = parseFloat(document.getElementById("cfgHotPrice").value) || 6.5;
-
         const newDrink = { 
           id: "b_" + Date.now(), 
           name, 
           family: "café", // Par défaut car masqué dans le formulaire admin
           temp, 
-          price: priceFallback, 
           img, 
           desc, 
           origin, 
